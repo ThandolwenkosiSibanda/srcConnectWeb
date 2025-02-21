@@ -232,15 +232,23 @@ const NavBar = (props) => {
                       <ul class="cart-list">
                         {cartItems?.map((item, index) => (
                           <li key={index}>
-                            <a href="/html" class="photo">
+                            <Link
+                              to={`/products/${item?.id}`}
+                              className="photo"
+                            >
                               <img
-                                src="images/product/pro-front-02.png"
+                                src={
+                                  item?.images?.length > 0 &&
+                                  JSON.parse(JSON.stringify(item.images))[0]
+                                }
                                 class="cart-thumb"
                                 alt=""
                               />
-                            </a>
+                            </Link>
                             <h6>
-                              <a href="/html">{item.name}</a>
+                              <Link to={`/products/${item?.id}`}>
+                                {item.name}{" "}
+                              </Link>
                             </h6>
 
                             <p>

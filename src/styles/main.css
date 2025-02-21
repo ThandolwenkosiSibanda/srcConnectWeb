@@ -3485,10 +3485,9 @@ article.ttm-blog-classic blockquote:after {
 .wrap-form.ttm-contactform span.text-input input,
 .wrap-form.ttm-contactform span.text-input textarea {
   background-color: transparent;
-  border: none;
-  border-bottom: 1px solid #e9eef6;
+  border: 1px solid #e9eef6;
   border-radius: 0;
-  padding-left: 30px;
+  padding-left: 10px;
   padding-bottom: 9px;
 }
 .wrap-form.ttm-contactform input[type="submit"] {

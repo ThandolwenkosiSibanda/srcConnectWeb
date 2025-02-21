@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Orders from "./pages/Orders";
 import OrderThanks from "./pages/OrderThanks";
 import { UserContext } from "./context/user";
+import ProductNew from "./pages/ProductNew";
 
 const App = () => {
   const { user } = useContext(UserContext);
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/shop" element={<Shop />} />
           <Route path="/category/:id" element={<Shop />} />
           <Route path="/ordersucess" element={<OrderThanks />} />
+          <Route path="/newproduct" element={<ProductNew />} />
 
           {!user ? (
             <>

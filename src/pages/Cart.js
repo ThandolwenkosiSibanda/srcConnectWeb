@@ -52,19 +52,19 @@ const Home = () => {
   };
 
   const fetchData = async () => {
-    const groupedByCategory = cartItems.reduce((acc, product) => {
+    const groupedByCategory = cartItems?.reduce((acc, product) => {
       const { category } = product;
 
-      if (!acc[category.name]) {
-        acc[category.name] = {
+      if (!acc[category?.name]) {
+        acc[category?.name] = {
           items: [],
           total: 0,
         };
       }
 
-      acc[category.name].items.push(product);
-      acc[category.name].total +=
-        (category.delivery_rate / 100) *
+      acc[category?.name].items.push(product);
+      acc[category?.name].total +=
+        (category?.delivery_rate / 100) *
         (product.guest_price * product.quantity);
 
       return acc;
@@ -127,16 +127,24 @@ const Home = () => {
                         {cartItems?.map((item, index) => (
                           <tr class="cart_item" key={index}>
                             <td class="product-thumbnail">
-                              <a href="product-layout1.html">
-                                {/* <img
+                              <Link to={`/products/${item?.id}`}>
+                                <img
                                   class="img-fluid"
-                                  src={item.images[0]}
+                                  src={
+                                    item?.images?.length > 0 &&
+                                    JSON.parse(JSON.stringify(item.images))[0]
+                                  }
                                   alt="product-img"
-                                /> */}
-                              </a>
+                                />
+                              </Link>
                             </td>
                             <td class="product-name" data-title="Product">
-                              <a href="product-layout1.html">{item.name}</a>
+                              <Link
+                                className="product-title"
+                                to={`/products/${item?.id}`}
+                              >
+                                {item?.name}
+                              </Link>
                               <span>{item.shortDescription}</span>
                             </td>
                             <td class="product-price" data-title="Price">

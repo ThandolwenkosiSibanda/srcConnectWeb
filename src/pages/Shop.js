@@ -188,12 +188,22 @@ const Shop = () => {
                                     <div class="product-image-box">
                                       <img
                                         class="img-fluid pro-image-front"
-                                        src={frontImage}
+                                        src={
+                                          product?.images?.length > 0 &&
+                                          JSON.parse(
+                                            JSON.stringify(product.images)
+                                          )[0]
+                                        }
                                         alt=""
                                       />
                                       <img
                                         class="img-fluid pro-image-back"
-                                        src={backImage}
+                                        src={
+                                          product?.images?.length > 0 &&
+                                          JSON.parse(
+                                            JSON.stringify(product.images)
+                                          )[1]
+                                        }
                                         alt=""
                                       />
                                     </div>

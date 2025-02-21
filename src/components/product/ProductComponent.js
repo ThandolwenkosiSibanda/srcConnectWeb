@@ -42,12 +42,18 @@ const ProductComponent = ({ product }) => {
                           <div class="product-image-box">
                             <img
                               class="img-fluid pro-image-front"
-                              src={frontImage}
+                              src={
+                                product?.images?.length > 0 &&
+                                JSON.parse(JSON.stringify(product.images))[0]
+                              }
                               alt=""
                             />
                             <img
                               class="img-fluid pro-image-back"
-                              src={backImage}
+                              src={
+                                product?.images?.length > 0 &&
+                                JSON.parse(JSON.stringify(product.images))[1]
+                              }
                               alt=""
                             />
                           </div>
@@ -134,10 +140,9 @@ const ProductComponent = ({ product }) => {
                       className="content-inner active"
                       style={{ display: "block" }}
                     >
-                      {/* <div>{product.long_description}</div> */}
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: product.long_description,
+                          __html: product.content,
                         }}
                       />
                     </div>
