@@ -10,15 +10,15 @@ import Mainbar from "../components/mainbar/MainBar";
 const Home = () => {
   return (
     <>
-      <div class="page">
+      <div className="page">
         <NavBar />
 
-        <div class="site-main">
+        <div className="site-main">
           <Banners />
 
-          <div class="sidebar ttm-sidebar-left pt-40 pb-40 clearfix">
-            <div class="container">
-              <div class="row">
+          <div className="sidebar ttm-sidebar-left pt-40 pb-40 clearfix">
+            <div className="container">
+              <div className="row">
                 {/* Sidebar */}
                 <Sidebar />
 

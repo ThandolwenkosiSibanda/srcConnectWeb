@@ -34,19 +34,19 @@ const SignupComponent = ({
             <div classNameName="c-page-banner__icons banner_icons">
               <div className="c-page-banner__icon">
                 <span className="material-icons">
-                  <i class="fa fa-check" aria-hidden="true"></i>
+                  <i className="fa fa-check" aria-hidden="true"></i>
                 </span>
                 <span> Trade discounts</span>
               </div>
               <div className="c-page-banner__icon">
                 <span className="material-icons">
-                  <i class="fa fa-check" aria-hidden="true"></i>
+                  <i className="fa fa-check" aria-hidden="true"></i>
                 </span>
                 <span> Keep track of all queries</span>
               </div>
               <div className="c-page-banner__icon">
                 <span className="material-icons">
-                  <i class="fa fa-check" aria-hidden="true"></i>
+                  <i className="fa fa-check" aria-hidden="true"></i>
                 </span>
                 <span> Keep track of all orders</span>
               </div>

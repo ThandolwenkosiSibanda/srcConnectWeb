@@ -57,7 +57,7 @@ const ForgotPasswordComponent = ({
             marginTop: "30px",
           }}
         >
-          <div class="text--center">
+          <div className="text--center">
             Want to create a new account?{" "}
             <Link
               to={`/register`}

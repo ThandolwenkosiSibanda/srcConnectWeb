@@ -3,9 +3,6 @@ import { useParams } from "react-router-dom";
 import { addToCartAction } from "../../actions/cart";
 import { CartContext } from "../../context/cart";
 
-import frontImage from "./pro-01-plus.png";
-import backImage from "./pro-front-04.png";
-
 const ProductComponent = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
 
@@ -37,11 +34,11 @@ const ProductComponent = ({ product }) => {
                 <div className="ttm-single-product-info clearfix">
                   <div className="row">
                     <div className="col-lg-6 col-md-6 col-sm-12 ml-auto mr-auto">
-                      <div class="product-box">
-                        <div class="product-box-inner">
-                          <div class="product-image-box">
+                      <div className="product-box">
+                        <div className="product-box-inner">
+                          <div className="product-image-box">
                             <img
-                              class="img-fluid pro-image-front"
+                              className="img-fluid pro-image-front"
                               src={
                                 product?.images?.length > 0 &&
                                 JSON.parse(JSON.stringify(product.images))[0]
@@ -49,7 +46,7 @@ const ProductComponent = ({ product }) => {
                               alt=""
                             />
                             <img
-                              class="img-fluid pro-image-back"
+                              className="img-fluid pro-image-back"
                               src={
                                 product?.images?.length > 0 &&
                                 JSON.parse(JSON.stringify(product.images))[1]

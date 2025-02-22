@@ -14,6 +14,16 @@ const Mainbar = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [quantity, setQuantity] = useState(1);
+
+  const increaseQuantity = () => {
+    setQuantity((prev) => prev + 1);
+  };
+
+  const decreaseQuantity = () => {
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1)); // Prevent going below 1
+  };
+
   const fetchData = async (tableName) => {
     try {
       const { data, error } = await supabase.from(tableName).select("*");
@@ -88,12 +98,18 @@ const Mainbar = () => {
                           <div className="product-image-box">
                             <img
                               className="img-fluid pro-image-front"
-                              src={frontImage}
+                              src={
+                                product?.images?.length > 0 &&
+                                JSON.parse(JSON.stringify(product.images))[0]
+                              }
                               alt={product.name}
                             />
                             <img
                               className="img-fluid pro-image-back"
-                              src={backImage}
+                              src={
+                                product?.images?.length > 0 &&
+                                JSON.parse(JSON.stringify(product.images))[0]
+                              }
                               alt={product.name}
                             />
                           </div>
@@ -129,12 +145,12 @@ const Mainbar = () => {
                           </div>
                         </div>
                         <div className="product-content-box">
-                          <a
+                          <Link
                             className="product-title"
-                            href="product-layout1.html"
+                            to={`/products/${product?.id}`}
                           >
                             <h2>{product.name}</h2>
-                          </a>
+                          </Link>
 
                           <span className="price">
                             <span className="product-Price-amount">
@@ -260,29 +276,24 @@ const Mainbar = () => {
                         {activeProduct?.images?.map((image, index) => (
                           <li>
                             <Link to={`${image}`} data-standard={image}>
-                              <img
-                                className="img-fluid"
-                                src={frontImage}
-                                alt=""
-                              />
+                              <img className="img-fluid" src={image} alt="" />
                             </Link>
                           </li>
                         ))}
-
-                        {/* <li>
-                                        <a href="images/product/pro-02-plus.png" data-standard="images/product/pro-02-plus.png">
-                                            <img className="img-fluid" src="images/product/pro-02-plus.png" alt="" />
-                                        </a>
-                                    </li> */}
                       </ul>
                     </div>
                   </div>
                   <div className="product-look-preview-plus right">
                     <div className="pl-35 res-767-pl-15">
                       <div className="easyzoom easyzoom-model easyzoom--overlay easyzoom--with-thumbnails">
-                        <a href="images/product/pro-01-plus.png">
-                          <img className="img-fluid" src={frontImage} alt="" />
-                        </a>
+                        <img
+                          className="img-fluid"
+                          src={
+                            activeProduct?.images?.length > 0 &&
+                            JSON.parse(JSON.stringify(activeProduct.images))[0]
+                          }
+                          alt=""
+                        />
                       </div>
                     </div>
                   </div>
@@ -294,21 +305,20 @@ const Mainbar = () => {
                     {activeProduct.name}
                   </h2>
 
-                  <div className="product_in-stock">
-                    <i className="fa fa-check-circle"></i>
-                    <span> in Stock Only 14 left</span>
-                  </div>
+                  <div className="product_in-stock"></div>
                   <span className="price">
                     <ins>
                       <span className="product-Price-amount">
                         <span className="product-Price-currencySymbol">$</span>
-                        {activeProduct.guestPrice}
+                        {activeProduct.trade_account_price}
                       </span>
                     </ins>
-                    {/* <del><span className="product-Price-amount">
-                                    <span className="product-Price-currencySymbol">$</span>123.00
-                                </span>
-                            </del> */}
+                    <del>
+                      <span className="product-Price-amount">
+                        <span className="product-Price-currencySymbol">$</span>{" "}
+                        {activeProduct.guest_price}
+                      </span>
+                    </del>
                   </span>
                   <div className="product-details__short-description">
                     {activeProduct.shortDescription}
@@ -318,46 +328,41 @@ const Mainbar = () => {
                       <label>Quantity: </label>
                       <input
                         type="text"
-                        value="1"
+                        value={quantity}
                         name="quantity-number"
                         className="qty"
                       />
-                      <span className="inc quantity-button">+</span>
-                      <span className="dec quantity-button">-</span>
+                      <span
+                        className="inc quantity-button"
+                        onClick={increaseQuantity}
+                      >
+                        +
+                      </span>
+                      <span
+                        className="dec quantity-button"
+                        onClick={decreaseQuantity}
+                      >
+                        -
+                      </span>
                     </div>
                   </div>
                   <div className="actions">
                     <div
                       className="add-to-cart"
-                      onClick={() => addToCart(activeProduct)}
+                      onClick={() => addToCart(activeProduct, quantity)}
                     >
-                      <span className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor">
+                      <span
+                        style={{ cursor: "grab" }}
+                        className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
+                      >
                         Add to cart
                       </span>
                     </div>
                   </div>
 
                   <div id="block-reassurance-1" className="block-reassurance">
-                    <ul>
-                      <li>
-                        <div className="block-reassurance-item">
-                          <i className="fa fa-lock"></i>
-                          <span>Security policy </span>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="block-reassurance-item">
-                          <i className="fa fa-truck"></i>
-                          <span>Delivery policy </span>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="block-reassurance-item">
-                          <i className="fa fa-arrows-h"></i>
-                          <span>Return policy </span>
-                        </div>
-                      </li>
-                    </ul>
+                    <h6 style={{ marginTop: "20px" }}>Description</h6>
+                    <p>{activeProduct.short_description}</p>
                   </div>
                 </div>
               </div>

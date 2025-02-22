@@ -14,6 +14,8 @@ import Orders from "./pages/Orders";
 import OrderThanks from "./pages/OrderThanks";
 import { UserContext } from "./context/user";
 import ProductNew from "./pages/ProductNew";
+import NewProducts from "./pages/NewProducts";
+import ProductPromotions from "./pages/ProductPromotions";
 
 const App = () => {
   const { user } = useContext(UserContext);
@@ -25,9 +27,12 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="/products/:id" element={<Product />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/brand_new" element={<NewProducts />} />
+          <Route path="/promotions" element={<ProductPromotions />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<Orders />} />
-          <Route path="/shop" element={<Shop />} />
+
           <Route path="/category/:id" element={<Shop />} />
           <Route path="/ordersucess" element={<OrderThanks />} />
           <Route path="/newproduct" element={<ProductNew />} />

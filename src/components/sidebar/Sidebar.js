@@ -67,15 +67,15 @@ const Sidebar = () => {
 
   return (
     <>
-      <div class="col-lg-3 widget-area sidebar-left">
-        <aside class="widget widget-testimonial">
+      <div className="col-lg-3 widget-area sidebar-left">
+        <aside className="widget widget-testimonial">
           <div
-            class="testimonial_slick_slider"
+            className="testimonial_slick_slider"
             data-slick='{"slidesToShow": 1, "slidesToScroll": 1, "arrows":false, "dots":true, "autoplay":true, "infinite":true}'
           >
-            <div class="testimonials ttm-testimonial-box-view-style2">
-              <div class="testimonial-content">
-                <div class="testimonial-avatar">
+            <div className="testimonials ttm-testimonial-box-view-style2">
+              <div className="testimonial-content">
+                <div className="testimonial-avatar">
                   <div
                     style={{
                       display: "flex",
@@ -87,7 +87,7 @@ const Sidebar = () => {
                     <p style={{ fontSize: "16px", fontWeight: "400" }}>Great</p>
 
                     <div
-                      class="star-ratings"
+                      className="star-ratings"
                       style={{
                         height: "14px",
                         display: "flex",
@@ -95,21 +95,21 @@ const Sidebar = () => {
                         paddingTop: "5px",
                       }}
                     >
-                      <ul class="rating">
+                      <ul className="rating">
                         <li>
-                          <i class="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
                         </li>
                         <li>
-                          <i class="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
                         </li>
                         <li>
-                          <i class="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
                         </li>
                         <li>
-                          <i class="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
                         </li>
                         <li>
-                          <i class="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
                         </li>
                       </ul>
                     </div>
@@ -117,7 +117,7 @@ const Sidebar = () => {
                       98 Reviews on
                     </p>
                     <div
-                      class="star-ratings"
+                      className="star-ratings"
                       style={{
                         height: "14px",
                         display: "flex",
@@ -125,9 +125,9 @@ const Sidebar = () => {
                         paddingTop: "5px",
                       }}
                     >
-                      <ul class="rating">
+                      <ul className="rating">
                         <li>
-                          <i class="fa fa-star"></i>
+                          <i className="fa fa-star"></i>
                         </li>
                       </ul>
                     </div>
@@ -141,8 +141,8 @@ const Sidebar = () => {
           </div>
         </aside>
 
-        <aside class="widget widget-text">
-          <h3 class="widget-title">Special Offers</h3>
+        <aside className="widget widget-text">
+          <h3 className="widget-title">Special Offers</h3>
           <img
             alt={offer.name}
             loading="lazy"
@@ -150,27 +150,32 @@ const Sidebar = () => {
             style={{ width: "100%" }}
           />
         </aside>
-        <aside class="widget products top-rated-products">
-          <h3 class="widget-title">Featured Products</h3>
-          <ul class="product-list-widget product">
+        <aside className="widget products top-rated-products">
+          <h3 className="widget-title">Featured Products</h3>
+          <ul className="product-list-widget product">
             {products.slice(0, 5).map((product, index) => (
               <li key={index}>
-                {/* <a href="/html"><img src={product?.images?.length > 0 && product?.images[0] } alt="" /></a> */}
-
                 <Link to={`/products/${product?.id}`}>
-                  <img alt={product.name} loading="lazy" src={frontImage} />
+                  <img
+                    alt={product.name}
+                    loading="lazy"
+                    src={
+                      product?.images?.length > 0 &&
+                      JSON.parse(JSON.stringify(product.images))[0]
+                    }
+                  />
                 </Link>
 
-                <div class="product-content-box">
+                <div className="product-content-box">
                   <Link
                     className="product-title"
-                    to={`/products/${product?._id}`}
+                    to={`/products/${product?.id}`}
                   >
                     <h2>{product.name}</h2>
                   </Link>
-                  <span class="price">
-                    <span class="product-Price-amount">
-                      <span class="product-Price-currencySymbol">$</span>
+                  <span className="price">
+                    <span className="product-Price-amount">
+                      <span className="product-Price-currencySymbol">$</span>
                       {product?.guestPrice}
                     </span>
                   </span>

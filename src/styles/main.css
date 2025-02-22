@@ -2275,7 +2275,7 @@ select#search_category {
 }
 .ttm-page-title-row .align-items-center {
   display: block;
-  min-height: 50px;
+  /* min-height: 100px; */
   z-index: 1;
 }
 .title-box {

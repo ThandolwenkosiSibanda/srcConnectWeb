@@ -90,16 +90,16 @@ const Home = () => {
   return (
     <>
       <body>
-        <div class="page">
+        <div className="page">
           <NavBar />
 
-          <div class="ttm-page-title-row">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="page-title-heading">
-                      <h1 class="title">Cart</h1>
+          <div className="ttm-page-title-row">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="page-title-heading">
+                      <h1 className="title">Cart</h1>
                     </div>
                   </div>
                 </div>
@@ -107,29 +107,29 @@ const Home = () => {
             </div>
           </div>
 
-          <div class="site-main">
-            <section class="cart-section clearfix">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <table class="table cart_table shop_table_responsive">
+          <div className="site-main">
+            <section className="cart-section clearfix">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <table className="table cart_table shop_table_responsive">
                       <thead>
                         <tr>
-                          <th class="product-thumbnail">&nbsp;</th>
-                          <th class="product-name">Product</th>
-                          <th class="product-price">Price</th>
-                          <th class="product-quantity">Quantity</th>
-                          <th class="product-subtotal">Total</th>
-                          <th class="product-remove">&nbsp;</th>
+                          <th className="product-thumbnail">&nbsp;</th>
+                          <th className="product-name">Product</th>
+                          <th className="product-price">Price</th>
+                          <th className="product-quantity">Quantity</th>
+                          <th className="product-subtotal">Total</th>
+                          <th className="product-remove">&nbsp;</th>
                         </tr>
                       </thead>
                       <tbody>
                         {cartItems?.map((item, index) => (
-                          <tr class="cart_item" key={index}>
-                            <td class="product-thumbnail">
+                          <tr className="cart_item" key={index}>
+                            <td className="product-thumbnail">
                               <Link to={`/products/${item?.id}`}>
                                 <img
-                                  class="img-fluid"
+                                  className="img-fluid"
                                   src={
                                     item?.images?.length > 0 &&
                                     JSON.parse(JSON.stringify(item.images))[0]
@@ -138,7 +138,7 @@ const Home = () => {
                                 />
                               </Link>
                             </td>
-                            <td class="product-name" data-title="Product">
+                            <td className="product-name" data-title="Product">
                               <Link
                                 className="product-title"
                                 to={`/products/${item?.id}`}
@@ -147,85 +147,88 @@ const Home = () => {
                               </Link>
                               <span>{item.shortDescription}</span>
                             </td>
-                            <td class="product-price" data-title="Price">
-                              <span class="Price-amount">
-                                <span class="Price-currencySymbol">$</span>
+                            <td className="product-price" data-title="Price">
+                              <span className="Price-amount">
+                                <span className="Price-currencySymbol">$</span>
                                 {item.guest_price}
                               </span>
                             </td>
-                            <td class="product-quantity" data-title="Quantity">
-                              <div class="quantity">
+                            <td
+                              className="product-quantity"
+                              data-title="Quantity"
+                            >
+                              <div className="quantity">
                                 <input
                                   type="text"
                                   value={item.quantity}
                                   name="quantity-number"
-                                  class="qty"
+                                  className="qty"
                                   size="4"
                                 />
                                 <span
-                                  class="inc quantity-button"
+                                  className="inc quantity-button"
                                   onClick={() => addToCart(item, 1)}
                                 >
                                   +
                                 </span>
                                 <span
-                                  class="dec quantity-button"
+                                  className="dec quantity-button"
                                   onClick={() => reduceFromCart(item, 1)}
                                 >
                                   -
                                 </span>
                               </div>
                             </td>
-                            <td class="product-subtotal" data-title="Total">
-                              <span class="Price-amount">
-                                <span class="Price-currencySymbol">$</span>
+                            <td className="product-subtotal" data-title="Total">
+                              <span className="Price-amount">
+                                <span className="Price-currencySymbol">$</span>
                                 {item.quantity * item.guest_price}
                               </span>
                             </td>
                             <td
-                              class="product-remove"
+                              className="product-remove"
                               onClick={() => removeFromCart(item)}
                             >
-                              <span class="product-remove-span"> × </span>
+                              <span className="product-remove-span"> × </span>
                             </td>
                           </tr>
                         ))}
 
                         <tr>
-                          <td colSpan="6" class="actions">
-                            <div class="coupon">
+                          <td colSpan="6" className="actions">
+                            <div className="coupon">
                               <Link
                                 to={`/shop`}
                                 className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                               >
-                                <i class="ti ti-arrow-left"></i>Back To Shop
+                                <i className="ti ti-arrow-left"></i>Back To Shop
                               </Link>
                             </div>
 
                             <div
-                              class="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
+                              className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                               onClick={() => clearCart()}
                             >
-                              <i class="ti ti-close"></i>Clear All
+                              <i className="ti ti-close"></i>Clear All
                             </div>
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
-                  <div class="col-lg-12">
-                    <div class="cart-collaterals">
-                      <div class="row">
-                        <div class="col-md-6"></div>
+                  <div className="col-lg-12">
+                    <div className="cart-collaterals">
+                      <div className="row">
+                        <div className="col-md-6"></div>
 
-                        <div class="col-md-6">
-                          <div class="cart_totals res-767-mt-30">
+                        <div className="col-md-6">
+                          <div className="cart_totals res-767-mt-30">
                             <h5>
                               Order Summary
                               <span>${getCartTotal()?.toFixed(2)}</span>
                             </h5>
                             <h5>Delivery</h5>
-                            <p class="text-input">
+                            <p className="text-input">
                               <input
                                 type="radio"
                                 name="grpShipping"
@@ -243,7 +246,7 @@ const Home = () => {
                               </span>
                             </h5>
 
-                            {/* <div class="payments">
+                            {/* <div className="payments">
                               <p>Pay With</p>
                               <img
                                 src="images/supported_card/card-2.png"
@@ -261,10 +264,10 @@ const Home = () => {
                           </div>
 
                           {cartItems.length > 0 && user && (
-                            <div class="proceed-to-checkout">
+                            <div className="proceed-to-checkout">
                               <a
                                 onClick={handleSendOrder}
-                                class="checkout-button button"
+                                className="checkout-button button"
                                 style={{ cursor: "pointer" }}
                               >
                                 Send Order

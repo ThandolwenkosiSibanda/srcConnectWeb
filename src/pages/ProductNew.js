@@ -12,6 +12,7 @@ import { stateToHTML } from "draft-js-export-html";
 import axios from "axios";
 
 const ProductNew = () => {
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState({});
@@ -42,8 +43,6 @@ const ProductNew = () => {
   const [content, setContent] = useState(() => EditorState.createEmpty());
 
   console.log("editorState html", stateToHTML(editorState.getCurrentContent()));
-
-  const { id } = useParams();
 
   const types = [
     { value: "Basic", label: "Basic" },
@@ -182,7 +181,7 @@ const ProductNew = () => {
 
       const productData = {
         name: form.name,
-        category: form.category.id,
+        category: form?.category?.id,
         guest_price: form.guest_price,
         brand: form.brand,
         images: imagesUrls,
@@ -191,6 +190,7 @@ const ProductNew = () => {
         short_description: form.short_description,
         type: form.type.value,
         featured: form.featured.value,
+        best_sales: form.best_sales.value,
         trade_account_price: form.trade_account_price,
         bulk_price: form.bulk_price,
         unit_measurement: form.unit_measurement,
@@ -352,6 +352,21 @@ const ProductNew = () => {
                       value: category.id,
                       id: category.id,
                     }))}
+                  />
+                </span>
+              </label>
+            </div>
+            <div className="col-lg-3">
+              <label>
+                <h6 style={{ marginTop: "20px" }}>Best Sales</h6>
+                <span className="text-input">
+                  <Select
+                    value={form?.best_sales}
+                    onChange={(e) => handleSelect("best_sales", e)}
+                    options={[
+                      { label: "True", value: "true" },
+                      { label: "False", value: "false" },
+                    ]}
                   />
                 </span>
               </label>

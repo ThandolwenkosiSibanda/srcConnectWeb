@@ -1,16 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import NavBar from "../components/navBar/NavBar";
 import FooterPage from "../components/footer/FooterComponent";
-import { PRODUCTS_QUERY } from "../gql/Query";
-import { useQuery } from "@apollo/client";
 import { CartContext } from "../context/cart";
 import { Link } from "react-router-dom";
 
-import frontImage from "./pro-01-plus.png";
-import backImage from "./pro-front-04.png";
 import { supabase } from "../utils/supabase";
 
-const Shop = () => {
+const ProductPromotions = () => {
   const [quickViewModalStatus, setQuickViewModalStatus] = useState("");
   const [activeProduct, setActiveProduct] = useState({});
 
@@ -89,7 +85,7 @@ const Shop = () => {
                 <div className="col-md-12">
                   <div className="d-flex justify-content-between align-items-center">
                     <div className="page-title-heading">
-                      <h1 className="title">Shop</h1>
+                      <h1 className="title">Promotions</h1>
                     </div>
                   </div>
                 </div>
@@ -547,4 +543,4 @@ const Shop = () => {
   );
 };
 
-export default Shop;
+export default ProductPromotions;

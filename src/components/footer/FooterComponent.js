@@ -1,33 +1,34 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const FooterPage = () => {
   return (
     <>
-      <footer class="footer widget-footer ttm-bg ttm-bgimage-yes ttm-bgcolor-darkgrey ttm-textcolor-white clearfix">
-        <div class="ttm-row-wrapper-bg-layer ttm-bg-layer"></div>
-        <div class="first-footer">
-          <div class="container">
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 widget-area">
-                <div class="widget ttm-footer-cta-wrapper">
+      <footer className="footer widget-footer ttm-bg ttm-bgimage-yes ttm-bgcolor-darkgrey ttm-textcolor-white clearfix">
+        <div className="ttm-row-wrapper-bg-layer ttm-bg-layer"></div>
+        <div className="first-footer">
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-12 col-sm-12 col-md-12 col-lg-4 widget-area">
+                <div className="widget ttm-footer-cta-wrapper">
                   <h5>Join Our Newsletter Now!</h5>
                 </div>
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-8 col-lg-5 widget-area m-auto">
-                <div class="widget ttm-footer-cta-wrapper">
+              <div className="col-xs-12 col-sm-12 col-md-8 col-lg-5 widget-area m-auto">
+                <div className="widget ttm-footer-cta-wrapper">
                   <form
                     id="subscribe-form"
-                    class="newsletter-form"
+                    className="newsletter-form"
                     method="post"
                     action="#"
                     data-mailchimp="true"
                   >
                     <div
-                      class="mailchimp-inputbox clearfix"
+                      className="mailchimp-inputbox clearfix"
                       id="subscribe-content"
                     >
                       <p>
-                        <i class="fa fa-envelope-o"></i>
+                        <i className="fa fa-envelope-o"></i>
                         <input
                           type="email"
                           name="email"
@@ -43,51 +44,51 @@ const FooterPage = () => {
                   </form>
                 </div>
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 widget-area">
-                <div class="social-icons social-hover widget text-center">
-                  <ul class="list-inline">
-                    <li class="social-facebook">
+              <div className="col-xs-12 col-sm-12 col-md-12 col-lg-3 widget-area">
+                <div className="social-icons social-hover widget text-center">
+                  <ul className="list-inline">
+                    <li className="social-facebook">
                       <a
-                        class="tooltip-top"
+                        className="tooltip-top"
                         href="https://www.facebook.com/"
                         data-tooltip="Facebook"
                         target="_blank"
                         rel="noreferrer"
                       >
-                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                        <i className="fa fa-facebook" aria-hidden="true"></i>
                       </a>
                     </li>
-                    <li class="social-twitter">
+                    <li className="social-twitter">
                       <a
-                        class="tooltip-top"
+                        className="tooltip-top"
                         href="https://twitter.com/"
                         data-tooltip="Twitter"
                         target="_blank"
                         rel="noreferrer"
                       >
-                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                        <i className="fa fa-twitter" aria-hidden="true"></i>
                       </a>
                     </li>
-                    <li class="social-instagram">
+                    <li className="social-instagram">
                       <a
-                        class="tooltip-top"
+                        className="tooltip-top"
                         href="https://www.instagram.com/"
                         data-tooltip="instagram"
                         target="_blank"
                         rel="noreferrer"
                       >
-                        <i class="fa fa-instagram" aria-hidden="true"></i>
+                        <i className="fa fa-instagram" aria-hidden="true"></i>
                       </a>
                     </li>
-                    <li class="social-linkedin">
+                    <li className="social-linkedin">
                       <a
-                        class="tooltip-top"
+                        className="tooltip-top"
                         href="https://www.linkedin.com/in/"
                         data-tooltip="LinkedIn"
                         target="_blank"
                         rel="noreferrer"
                       >
-                        <i class="fa fa-linkedin" aria-hidden="true"></i>
+                        <i className="fa fa-linkedin" aria-hidden="true"></i>
                       </a>
                     </li>
                   </ul>
@@ -96,52 +97,52 @@ const FooterPage = () => {
             </div>
           </div>
         </div>
-        <div class="sep_holder_box">
-          <span class="sep_holder">
-            <span class="sep_line"></span>
+        <div className="sep_holder_box">
+          <span className="sep_holder">
+            <span className="sep_line"></span>
           </span>
         </div>
-        <div class="second-footer">
-          <div class="container">
-            <div class="row">
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-2 widget-area m-auto">
-                <div class="widget">
-                  <div class="footer-logo">
+        <div className="second-footer">
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-12 col-sm-6 col-md-6 col-lg-2 widget-area m-auto">
+                <div className="widget">
+                  <div className="footer-logo">
                     <img
                       id="footer-logo-img"
-                      class="img-center"
+                      className="img-center"
                       src=""
                       alt=""
                     />
                   </div>
                 </div>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 widget-area">
-                <div class="widget widget_text ml-40">
-                  <ul class="widget_info_text">
+              <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4 widget-area">
+                <div className="widget widget_text ml-40">
+                  <ul className="widget_info_text">
                     <li>
-                      <i class="fa fa-map-marker"></i>
+                      <i className="fa fa-map-marker"></i>
                       <strong>Our Main Branch</strong> <br /> Bulawayo ,
                       Zimbabwe
                     </li>
                   </ul>
                 </div>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 widget-area">
-                <div class="widget widget_text">
-                  <ul class="widget_info_text">
+              <div className="col-xs-12 col-sm-6 col-md-6 col-lg-3 widget-area">
+                <div className="widget widget_text">
+                  <ul className="widget_info_text">
                     <li>
-                      <i class="fa fa-envelope-o"></i>
+                      <i className="fa fa-envelope-o"></i>
                       <strong>Email US</strong> <br /> Info@proqitmarket.com
                     </li>
                   </ul>
                 </div>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 widget-area">
-                <div class="widget widget_text">
-                  <ul class="widget_info_text">
+              <div className="col-xs-12 col-sm-6 col-md-6 col-lg-3 widget-area">
+                <div className="widget widget_text">
+                  <ul className="widget_info_text">
                     <li>
-                      <i class="fa fa-phone"></i>
+                      <i className="fa fa-phone"></i>
                       <strong>Call Us</strong> <br /> +263-778 091 005
                     </li>
                   </ul>
@@ -150,19 +151,19 @@ const FooterPage = () => {
             </div>
           </div>
         </div>
-        <div class="sep_holder_box">
-          <span class="sep_holder">
-            <span class="sep_line"></span>
+        <div className="sep_holder_box">
+          <span className="sep_holder">
+            <span className="sep_line"></span>
           </span>
         </div>
-        <div class="third-footer">
-          <div class="container">
-            <div class="row">
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 widget-area mr-auto">
-                <div class="widget widget_text pr-25 clearfix">
-                  <h3 class="widget-title">About Us</h3>
-                  <div class="textwidget widget-text">
-                    <p class="pb-10 text-justify">
+        <div className="third-footer">
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-12 col-sm-6 col-md-4 col-lg-4 widget-area mr-auto">
+                <div className="widget widget_text pr-25 clearfix">
+                  <h3 className="widget-title">About Us</h3>
+                  <div className="textwidget widget-text">
+                    <p className="pb-10 text-justify">
                       We offer a one-stop shopping experience for all your
                       building material needs.As a leading group of specialist
                       online stores, we deliver top-quality building supplies
@@ -171,56 +172,58 @@ const FooterPage = () => {
                       roofing materials, and plumbing supplies to sand,
                       flooring, and landscaping
                     </p>
-                    <a
-                      class="ttm-btn ttm-btn-size-sm ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
+
+                    <Link
+                      to={`/contact_us`}
+                      className="ttm-btn ttm-btn-size-sm ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
                       href="/html"
                       title=""
                     >
                       Read More
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 widget-area">
-                <div class="widget widget_nav_menu clearfix">
-                  <h3 class="widget-title">Our Company</h3>
-                  <ul class="menu-footer-quick-links">
+              <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4 widget-area">
+                <div className="widget widget_nav_menu clearfix">
+                  <h3 className="widget-title">Our Company</h3>
+                  <ul className="menu-footer-quick-links">
                     <li>
-                      <a href="/html">Delivery</a>
+                      <Link to={`/delivery`}>Delivery</Link>
                     </li>
                     <li>
-                      <a href="/html">Legal Notice</a>
+                      <Link to={`/legal`}>Legal Notice</Link>
                     </li>
                     <li>
-                      <a href="/html">About Us</a>
+                      <Link to={`/privacy`}>Privacy Policy</Link>
                     </li>
                     <li>
-                      <a href="/html">Secure Payments</a>
+                      <Link to={`/payments`}>Secure Payments</Link>
                     </li>
-                    <li>
-                      <a href="/html">Stores</a>
-                    </li>
+                    {/* <li>
+                      <Link to={`/stores`}>Stores</Link>
+                    </li> */}
                   </ul>
                 </div>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 widget-area">
-                <div class="widget widget_nav_menu clearfix">
-                  <h3 class="widget-title">Products</h3>
-                  <ul class="menu-footer-quick-links">
+              <div className="col-xs-12 col-sm-6 col-md-6 col-lg-4 widget-area">
+                <div className="widget widget_nav_menu clearfix">
+                  <h3 className="widget-title">Products</h3>
+                  <ul className="menu-footer-quick-links">
                     <li>
-                      <a href="/html">Price Drops</a>
+                      <Link to={`/promotions`}>Promotions</Link>
                     </li>
                     <li>
-                      <a href="/html">New Products</a>
+                      <Link to={`/brand_new`}>New Products</Link>
                     </li>
                     <li>
-                      <a href="/html">Best Sales</a>
+                      <Link to={`/best_sales`}>Best Sales</Link>
                     </li>
                     <li>
-                      <a href="/html">Contact Us</a>
+                      <Link to={`/contact_us`}>Contact Us</Link>
                     </li>
                     <li>
-                      <a href="/html">Site Map</a>
+                      <Link to={`/sitemap`}>Site Map</Link>
                     </li>
                   </ul>
                 </div>
@@ -228,19 +231,19 @@ const FooterPage = () => {
             </div>
           </div>
         </div>
-        <div class="sep_holder_box">
-          <span class="sep_holder">
-            <span class="sep_line"></span>
+        <div className="sep_holder_box">
+          <span className="sep_holder">
+            <span className="sep_line"></span>
           </span>
         </div>
-        <div class="bottom-footer-text">
-          <div class="container">
-            <div class="row copyright">
-              <div class="col-md-12 col-lg-6 ttm-footer2-left">
+        <div className="bottom-footer-text">
+          <div className="container">
+            <div className="row copyright">
+              <div className="col-md-12 col-lg-6 ttm-footer2-left">
                 <span>Copyright © 2024 Proqit Market </span>
               </div>
-              <div class="col-md-12 col-lg-6 ttm-footer2-right">
-                <div class="supported_card-block">
+              <div className="col-md-12 col-lg-6 ttm-footer2-right">
+                <div className="supported_card-block">
                   <ul>
                     <li>
                       <img
@@ -266,7 +269,7 @@ const FooterPage = () => {
       </footer>
 
       <a id="totop" href="#top">
-        <i class="fa fa-angle-up"></i>
+        <i className="fa fa-angle-up"></i>
       </a>
     </>
   );

@@ -48,43 +48,42 @@ const NavBar = (props) => {
 
   return (
     <React.Fragment>
-      <header id="masthead" class="header ttm-header-style-01">
-        <div class="header_main">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-3 col-sm-3 col-3 order-1">
-                <div class="site-branding">
+      <header id="masthead" className="header ttm-header-style-01">
+        <div className="header_main">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-3 col-sm-3 col-3 order-1">
+                <div className="site-branding">
                   <Link to={`/`}>
                     <img
                       id="logo"
-                      class="img-center"
+                      className="img-center"
                       src="images/white-logo.png"
                       alt="logo-img"
                     />
                   </Link>
                 </div>
               </div>
-              <div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
-                <div class="header_search">
-                  <div class="header_search_content">
-                    <div id="search_block_top" class="search_block_top">
+              <div className="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
+                <div className="header_search">
+                  <div className="header_search_content">
+                    <div id="search_block_top" className="search_block_top">
                       <form id="searchbox" method="get" action="#">
                         <input
-                          class="search_query form-control"
+                          className="search_query form-control"
                           type="text"
                           id="search_query_top"
                           name="s"
                           placeholder="Lets build your home...."
                           value=""
+                          readOnly
                         />
-                        <div class="categories-block">
+                        <div className="categories-block">
                           <select
                             id="search_category"
                             name="search_category"
-                            class="form-control"
+                            className="form-control"
                           >
-                            <option value="all">All Categories</option>
-
                             {categories.map((category, index) => (
                               <option key={index} value={category.name}>
                                 {category?.name?.substring(0, 15)}
@@ -95,9 +94,9 @@ const NavBar = (props) => {
                         <button
                           type="submit"
                           name="submit_search"
-                          class="btn btn-default button-search"
+                          className="btn btn-default button-search"
                         >
-                          <i class="fa fa-search"></i>
+                          <i className="fa fa-search"></i>
                         </button>
                       </form>
                     </div>
@@ -120,15 +119,15 @@ const NavBar = (props) => {
                   MON - FRI 7:00AM to 5:00PM
                 </p>
               </div>
-              <div class="col-lg-3 col-9 order-lg-3 order-2 text-lg-left text-right">
-                <div class="header_extra d-flex flex-row align-items-center justify-content-end">
-                  <div class={`account dropdown ${signinStatus}`}>
-                    <div class="d-flex flex-row align-items-center justify-content-start">
-                      <div class="account_icon">
-                        <i class="fa fa-user"></i>
+              <div className="col-lg-3 col-9 order-lg-3 order-2 text-lg-left text-right">
+                <div className="header_extra d-flex flex-row align-items-center justify-content-end">
+                  <div className={`account dropdown ${signinStatus}`}>
+                    <div className="d-flex flex-row align-items-center justify-content-start">
+                      <div className="account_icon">
+                        <i className="fa fa-user"></i>
                       </div>
-                      <div class="account_content">
-                        <div class="account_text">
+                      <div className="account_content">
+                        <div className="account_text">
                           {user
                             ? `${
                                 user.user_metadata.name
@@ -140,7 +139,7 @@ const NavBar = (props) => {
                       </div>
                     </div>
                     <div
-                      class="account_extra dropdown_link"
+                      className="account_extra dropdown_link"
                       data-toggle="dropdown"
                       onClick={() =>
                         signinStatus === "show"
@@ -150,16 +149,16 @@ const NavBar = (props) => {
                     >
                       Account
                     </div>
-                    <aside class="widget_account dropdown_content">
-                      <div class="widget_account_content">
+                    <aside className="widget_account dropdown_content">
+                      <div className="widget_account_content">
                         {user ? (
                           <ul>
                             <li>
-                              <i class="fa fa-sign-in mr-2"></i>
+                              <i className="fa fa-sign-in mr-2"></i>
                               <Link to={`/orders`}>Orders</Link>{" "}
                             </li>
                             <li>
-                              <i class="fa fa-sign-in mr-2"></i>
+                              <i className="fa fa-sign-in mr-2"></i>
                               <Link to={`/queries`}>Queries</Link>
                             </li>
                             <li
@@ -177,11 +176,11 @@ const NavBar = (props) => {
                         ) : (
                           <ul>
                             <li>
-                              <i class="fa fa-sign-in mr-2"></i>{" "}
+                              <i className="fa fa-sign-in mr-2"></i>{" "}
                               <Link to={`/login`}>Login</Link>{" "}
                             </li>
                             <li>
-                              <i class="fa fa-sign-in mr-2"></i>
+                              <i className="fa fa-sign-in mr-2"></i>
                               <Link to={`/register`}>Register</Link>
                             </li>
                           </ul>
@@ -189,25 +188,25 @@ const NavBar = (props) => {
                       </div>
                     </aside>
                   </div>
-                  <div class={`cart dropdown ${cartStatus}`}>
+                  <div className={`cart dropdown ${cartStatus}`}>
                     <div
-                      class="dropdown_link d-flex flex-row align-items-center justify-content-end"
+                      className="dropdown_link d-flex flex-row align-items-center justify-content-end"
                       data-toggle="dropdown"
                     >
                       <div
-                        class="cart_icon"
+                        className="cart_icon"
                         onClick={() =>
                           cartStatus === "show"
                             ? setCartStatus("")
                             : setCartStatus("show")
                         }
                       >
-                        <i class="fa fa-shopping-cart"></i>
-                        <div class="cart_count">{getCartItemsTotal()}</div>
+                        <i className="fa fa-shopping-cart"></i>
+                        <div className="cart_count">{getCartItemsTotal()}</div>
                       </div>
-                      <div class="cart_content">
+                      <div className="cart_content">
                         <div
-                          class="cart_text"
+                          className="cart_text"
                           onClick={() =>
                             cartStatus === "show"
                               ? setCartStatus("")
@@ -217,7 +216,7 @@ const NavBar = (props) => {
                           My Cart
                         </div>
                         <div
-                          class="cart_price"
+                          className="cart_price"
                           onClick={() =>
                             cartStatus === "show"
                               ? setCartStatus("")
@@ -228,8 +227,8 @@ const NavBar = (props) => {
                         </div>
                       </div>
                     </div>
-                    <aside class="widget_shopping_cart dropdown_content">
-                      <ul class="cart-list">
+                    <aside className="widget_shopping_cart dropdown_content">
+                      <ul className="cart-list">
                         {cartItems?.map((item, index) => (
                           <li key={index}>
                             <Link
@@ -241,7 +240,7 @@ const NavBar = (props) => {
                                   item?.images?.length > 0 &&
                                   JSON.parse(JSON.stringify(item.images))[0]
                                 }
-                                class="cart-thumb"
+                                className="cart-thumb"
                                 alt=""
                               />
                             </Link>
@@ -253,13 +252,13 @@ const NavBar = (props) => {
 
                             <p>
                               {item.quantity} x -{" "}
-                              <span class="price">${item.guest_price}</span>
+                              <span className="price">${item.guest_price}</span>
                             </p>
                           </li>
                         ))}
 
-                        <li class="total">
-                          <span class="pull-right">
+                        <li className="total">
+                          <span className="pull-right">
                             <strong>Total</strong>: $
                             {getCartTotal()?.toFixed(2)}
                           </span>
@@ -281,32 +280,32 @@ const NavBar = (props) => {
 
         <div
           id="site-header-menu"
-          class="site-header-menu ttm-bgcolor-white clearfix"
+          className="site-header-menu ttm-bgcolor-white clearfix"
         >
-          <div class="site-header-menu-inner stickable-header">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="main_nav_content d-flex flex-row">
-                    <div class="cat_menu_container">
+          <div className="site-header-menu-inner stickable-header">
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="main_nav_content d-flex flex-row">
+                    <div className="cat_menu_container">
                       <div
-                        class="cat_menu d-flex flex-row align-items-center "
+                        className="cat_menu d-flex flex-row align-items-center "
                         onClick={() =>
                           shopByCategoryStatus === "on"
                             ? setShopByCategoryStatus("")
                             : setShopByCategoryStatus("on")
                         }
                       >
-                        <div class="cat_icon">
-                          <i class="fa fa-bars"></i>
+                        <div className="cat_icon">
+                          <i className="fa fa-bars"></i>
                         </div>
-                        <div class="cat_text">
+                        <div className="cat_text">
                           <span>Shop by</span>
                           <h4>Categories</h4>
                         </div>
                       </div>
                       <ul
-                        class={`cat_menu_list menu-vertical ${shopByCategoryStatus}`}
+                        className={`cat_menu_list menu-vertical ${shopByCategoryStatus}`}
                       >
                         {categories.map((category, index) => (
                           <li key={index}>
@@ -318,16 +317,19 @@ const NavBar = (props) => {
                       </ul>
                     </div>
 
-                    <div id="site-navigation" class="site-navigation">
-                      <div class="btn-show-menu-mobile menubar menubar--squeeze">
-                        <span class="menubar-box">
-                          <span class="menubar-inner"></span>
+                    <div id="site-navigation" className="site-navigation">
+                      <div className="btn-show-menu-mobile menubar menubar--squeeze">
+                        <span className="menubar-box">
+                          <span className="menubar-inner"></span>
                         </span>
                       </div>
-                      <nav class="menu menu-mobile" id="menu">
-                        <ul class="nav">
+                      <nav className="menu menu-mobile" id="menu">
+                        <ul className="nav">
                           {categories.map((category, index) => (
-                            <li class="mega-menu-item megamenu-fw" key={index}>
+                            <li
+                              className="mega-menu-item megamenu-fw"
+                              key={index}
+                            >
                               <Link
                                 to={`/category/${category.id}`}
                                 className="mega-menu-link"
@@ -335,19 +337,19 @@ const NavBar = (props) => {
                                 {category.name}
                               </Link>
                               <ul
-                                class="mega-submenu megamenu-content"
+                                className="mega-submenu megamenu-content"
                                 role="menu"
                               >
                                 <li>
-                                  <div class="row">
+                                  <div className="row">
                                     {category?.subCategories?.map(
                                       (subCategory) => (
-                                        <div class="col-menu col-md-3">
-                                          <h6 class="title">
+                                        <div className="col-menu col-md-3">
+                                          <h6 className="title">
                                             {subCategory.name}
                                           </h6>
-                                          <div class="content">
-                                            <ul class="menu-col">
+                                          <div className="content">
+                                            <ul className="menu-col">
                                               <li>
                                                 <a href="shop.html">
                                                   Shop Default
@@ -369,13 +371,13 @@ const NavBar = (props) => {
                                       )
                                     )}
 
-                                    <div class="col-menu col-md-3">
-                                      <div class="content">
-                                        <ul class="menu-col">
+                                    <div className="col-menu col-md-3">
+                                      <div className="content">
+                                        <ul className="menu-col">
                                           <li>
                                             <a href="shop.html">
                                               <img
-                                                class="img-fluid"
+                                                className="img-fluid"
                                                 src="images/menu-item-banner.jpg"
                                                 alt="bimg"
                                               />

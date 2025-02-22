@@ -71,16 +71,16 @@ const Home = () => {
     const groupedByCategory = cartItems.reduce((acc, product) => {
       const { category } = product;
 
-      if (!acc[category.name]) {
-        acc[category.name] = {
+      if (!acc[category?.name]) {
+        acc[category?.name] = {
           items: [],
           total: 0,
         };
       }
 
-      acc[category.name].items.push(product);
-      acc[category.name].total +=
-        (category.delivery_rate / 100) *
+      acc[category?.name].items.push(product);
+      acc[category?.name].total +=
+        (category?.delivery_rate / 100) *
         (product.guest_price * product.quantity);
 
       return acc;
@@ -106,16 +106,16 @@ const Home = () => {
   return (
     <>
       <body>
-        <div class="page">
+        <div className="page">
           <NavBar />
 
-          <div class="ttm-page-title-row">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="page-title-heading">
-                      <h1 class="title">Orders</h1>
+          <div className="ttm-page-title-row">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="page-title-heading">
+                      <h1 className="title">Orders</h1>
                     </div>
                   </div>
                 </div>
@@ -123,51 +123,51 @@ const Home = () => {
             </div>
           </div>
 
-          <div class="site-main">
-            <section class="cart-section clearfix">
-              <div class="container">
+          <div className="site-main">
+            <section className="cart-section clearfix">
+              <div className="container">
                 <Link
                   to={`/shop`}
                   style={{ marginBottom: "20px" }}
                   className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                 >
-                  <i class="ti ti-arrow-left"></i>Back To Shop
+                  <i className="ti ti-arrow-left"></i>Back To Shop
                 </Link>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <table class="table cart_table shop_table_responsive">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <table className="table cart_table shop_table_responsive">
                       <thead>
                         <tr>
-                          <th class="product-subtotal">Date</th>
-                          <th class="product-subtotal">Total Price</th>
-                          <th class="product-subtotal">Delivery Cost</th>
-                          <th class="product-subtotal">Total Cost</th>
-                          <th class="product-subtotal">Status</th>
-                          <th class="product-subtotal"></th>
+                          <th className="product-subtotal">Date</th>
+                          <th className="product-subtotal">Total Price</th>
+                          <th className="product-subtotal">Delivery Cost</th>
+                          <th className="product-subtotal">Total Cost</th>
+                          <th className="product-subtotal">Status</th>
+                          <th className="product-subtotal"></th>
                         </tr>
                       </thead>
                       <tbody>
                         {orders?.map((item, index) => (
                           <tr key={index}>
-                            <th class="product-subtotal">
+                            <th className="product-subtotal">
                               {" "}
                               {format(item.created_at, "dd-MMM-yyyy")}
                             </th>
-                            <th class="product-subtotal">
+                            <th className="product-subtotal">
                               {" "}
                               {item.total_price}
                             </th>
-                            <th class="product-subtotal">
+                            <th className="product-subtotal">
                               {" "}
                               {item.delivery_charge}
                             </th>
-                            <th class="product-subtotal">
+                            <th className="product-subtotal">
                               {" "}
                               {item.delivery_charge + item.total_price}
                             </th>
 
-                            <th class="product-subtotal"> {item.status}</th>
-                            <th class="product-subtotal">
+                            <th className="product-subtotal"> {item.status}</th>
+                            <th className="product-subtotal">
                               <span
                                 style={{ cursor: "pointer" }}
                                 onClick={() => (
@@ -182,13 +182,13 @@ const Home = () => {
                         ))}
 
                         <tr>
-                          <td colSpan="6" class="actions">
-                            <div class="coupon">
+                          <td colSpan="6" className="actions">
+                            <div className="coupon">
                               <Link
                                 to={`/shop`}
                                 className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                               >
-                                <i class="ti ti-arrow-left"></i>Back To Shop
+                                <i className="ti ti-arrow-left"></i>Back To Shop
                               </Link>
                             </div>
                           </td>
@@ -225,14 +225,14 @@ const Home = () => {
                       <div className="mt-30 mb-35">
                         <h6>Order Details</h6>
                       </div>
-                      <div class="col-lg-12">
-                        <table class="table cart_table shop_table_responsive">
+                      <div className="col-lg-12">
+                        <table className="table cart_table shop_table_responsive">
                           <thead>
                             <tr>
-                              <th class="product-subtotal">Name</th>
-                              <th class="product-subtotal">Unit Cost</th>
-                              <th class="product-subtotal">Quantity</th>
-                              <th class="product-subtotal">Total Cost</th>
+                              <th className="product-subtotal">Name</th>
+                              <th className="product-subtotal">Unit Cost</th>
+                              <th className="product-subtotal">Quantity</th>
+                              <th className="product-subtotal">Total Cost</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -240,19 +240,19 @@ const Home = () => {
                               JSON.parse(activeProduct.items)?.map(
                                 (item, index) => (
                                   <tr key={index}>
-                                    <th class="product-subtotal">
+                                    <th className="product-subtotal">
                                       {" "}
-                                      {item.name}
+                                      {item?.name}
                                     </th>
-                                    <th class="product-subtotal">
+                                    <th className="product-subtotal">
                                       {" "}
-                                      {item.guest_price}
+                                      {item?.guest_price}
                                     </th>
-                                    <th class="product-subtotal">
+                                    <th className="product-subtotal">
                                       {" "}
-                                      {item.quantity}
+                                      {item?.quantity}
                                     </th>
-                                    <th class="product-subtotal">
+                                    <th className="product-subtotal">
                                       {" "}
                                       {item.quantity + item.guest_price}
                                     </th>
@@ -261,13 +261,14 @@ const Home = () => {
                               )}
 
                             <tr>
-                              <td colSpan="6" class="actions">
-                                <div class="coupon">
+                              <td colSpan="6" className="actions">
+                                <div className="coupon">
                                   <Link
                                     to={`/shop`}
                                     className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                                   >
-                                    <i class="ti ti-arrow-left"></i>Back To Shop
+                                    <i className="ti ti-arrow-left"></i>Back To
+                                    Shop
                                   </Link>
                                 </div>
                               </td>
@@ -276,13 +277,13 @@ const Home = () => {
                         </table>
                       </div>
 
-                      <div class="col-lg-12">
-                        <div class="cart-collaterals">
-                          <div class="row">
-                            <div class="col-md-6"></div>
+                      <div className="col-lg-12">
+                        <div className="cart-collaterals">
+                          <div className="row">
+                            <div className="col-md-6"></div>
 
-                            <div class="col-md-6">
-                              <div class="cart_totals res-767-mt-30">
+                            <div className="col-md-6">
+                              <div className="cart_totals res-767-mt-30">
                                 <h5>
                                   Total Price
                                   <span>

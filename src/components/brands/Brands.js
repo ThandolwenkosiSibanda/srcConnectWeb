@@ -24,17 +24,17 @@ const Brands = () => {
   return (
     <>
       <section
-        class="banner-top-section pt-10 res-991-pt-0 clearfix"
+        className="banner-top-section pt-10 res-991-pt-0 clearfix"
         style={{ marginBottom: `20px` }}
       >
-        <div class="container">
-          <div class="row">
+        <div className="container">
+          <div className="row">
             {images.map((image, index) => (
-              <div class="col-sm-6" key={index}>
-                <div class="banner-image pt-30">
+              <div className="col-sm-6" key={index}>
+                <div className="banner-image pt-30">
                   <a href="/html">
                     <img
-                      class="img-fluid"
+                      className="img-fluid"
                       src={image}
                       alt=""
                       style={{ height: "300px", width: "100%" }}
