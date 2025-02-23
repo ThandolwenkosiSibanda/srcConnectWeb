@@ -7,7 +7,7 @@ import QuickProductView from "../components/modals/QuickProductView";
 import PageTitle from "../components/titles/PageTitle";
 import ProductsList from "../components/product/ProductsList";
 
-const NewProducts = () => {
+const BestSellers = () => {
   const [quickViewModalStatus, setQuickViewModalStatus] = useState("");
   const [activeProduct, setActiveProduct] = useState({});
 
@@ -69,7 +69,7 @@ const NewProducts = () => {
       <div className="page">
         <NavBar />
 
-        <PageTitle name={"New Products"} />
+        <PageTitle name={"Best Sellers"} />
 
         <ProductsList
           quickViewModalStatus={quickViewModalStatus}
@@ -98,4 +98,4 @@ const NewProducts = () => {
   );
 };
 
-export default NewProducts;
+export default BestSellers;

@@ -10,6 +10,7 @@ import DraftEditor from "./DraftEditor";
 import { EditorState, convertToRaw } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
 import axios from "axios";
+import PageTitle from "../components/titles/PageTitle";
 
 const ProductNew = () => {
   const { id } = useParams();
@@ -116,7 +117,7 @@ const ProductNew = () => {
 
   const handleSaveNewProduct = async () => {
     try {
-      setLoading(true); // Show loading state
+      setLoading(true);
 
       let urls = [];
       let docUrls = [];
@@ -157,25 +158,18 @@ const ProductNew = () => {
       // Wait for all uploads to complete
       await Promise.all([...imageUploaders, ...docUploaders]);
 
-      console.log("All uploads done");
-      console.log("Image URLs:", urls);
-      console.log("Document URLs:", docUrls);
-
       setImagesUrls(urls);
       setDocsUrls(docUrls);
 
-      // Submit after uploads
-      // submit();
-
-      handleSaveProduct();
+      handleSaveProduct(urls, docUrls);
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
-      setLoading(false); // Hide loading state
+      setLoading(false);
     }
   };
 
-  const handleSaveProduct = async () => {
+  const handleSaveProduct = async (imgUrls, documentsUrls) => {
     try {
       setLoading(true);
 
@@ -184,8 +178,8 @@ const ProductNew = () => {
         category: form?.category?.id,
         guest_price: form.guest_price,
         brand: form.brand,
-        images: imagesUrls,
-        technical_downloads: docsUrls,
+        images: imgUrls,
+        technical_downloads: documentsUrls,
         long_description: form.long_description,
         short_description: form.short_description,
         type: form.type.value,
@@ -208,13 +202,12 @@ const ProductNew = () => {
         content: stateToHTML(editorState.getCurrentContent()),
       };
 
-      // Insert product data into the "products" table
       const { data, error } = await supabase
         .from("products")
         .insert([productData]);
 
       if (error) {
-        throw error; // Throw error to be caught below
+        throw error;
       }
 
       console.log("Product saved successfully:", data);
@@ -223,85 +216,15 @@ const ProductNew = () => {
       console.error("Error saving product:", err);
       return { success: false, error: err };
     } finally {
-      setLoading(false); // Stop loading state
+      setLoading(false);
     }
   };
-
-  // const handleSaveNewProduct = () => {
-  //   let urls = [];
-  //   const uploaders = [...images].map((file) => {
-  //     const url = "https://api.cloudinary.com/v1_1/molowehou/upload";
-  //     // Initial FormData
-  //     const formData = new FormData();
-  //     formData.append("file", file);
-  //     formData.append("upload_preset", "y1t423pb");
-
-  //     return axios
-  //       .post(url, formData, {
-  //         headers: { "X-Requested-With": "XMLHttpRequest" },
-  //       })
-  //       .then((response) => {
-  //         const data = response.data;
-  //         const fileURL = data.secure_url;
-
-  //         console.log("imageURL", fileURL);
-  //         urls.push(fileURL);
-  //       });
-  //   });
-
-  //   let docUrls = [];
-  //   const docUploaders = [...docs].map((file) => {
-  //     const url = "https://api.cloudinary.com/v1_1/molowehou/upload";
-  //     // Initial FormData
-  //     const formData = new FormData();
-  //     formData.append("file", file);
-  //     formData.append("upload_preset", "y1t423pb");
-
-  //     return axios
-  //       .post(url, formData, {
-  //         headers: { "X-Requested-With": "XMLHttpRequest" },
-  //       })
-  //       .then((response) => {
-  //         const data = response.data;
-  //         const fileURL = data.secure_url;
-  //         console.log("docURL", fileURL);
-  //         docUrls.push(fileURL);
-  //       });
-  //   });
-
-  //   // Once all the files are uploaded
-  //   axios.all([uploaders, docUploaders]).then(() => {
-  //     console.log("axios done");
-
-  //     if (urls.length > 0 && docUrls.length > 0) {
-  //       console.log("urls", urls);
-  //       console.log("docUrls", docUrls);
-  //       setImagesUrls(urls);
-  //       setDocsUrls(docUrls);
-  //       // submit();
-  //     } else {
-  //       // submit();
-  //     }
-  //   });
-  // };
 
   return (
     <>
       <NavBar />
 
-      <div className="ttm-page-title-row">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <div className="d-flex justify-content-between align-items-center">
-                <div className="page-title-heading">
-                  <h1 className="title">New Product</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageTitle name={"New Product"} />
 
       <div className="container">
         <div

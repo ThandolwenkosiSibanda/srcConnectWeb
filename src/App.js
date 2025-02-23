@@ -16,12 +16,17 @@ import { UserContext } from "./context/user";
 import ProductNew from "./pages/ProductNew";
 import NewProducts from "./pages/NewProducts";
 import ProductPromotions from "./pages/ProductPromotions";
+import ScrollToTop from "./components/scroll/ScrollToTop";
+import BestSellers from "./pages/BestSellers";
+import QueryNew from "./pages/QueryNew";
+import Queries from "./pages/Queries";
 
 const App = () => {
   const { user } = useContext(UserContext);
 
   return (
     <div>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -30,8 +35,7 @@ const App = () => {
           <Route path="/shop" element={<Shop />} />
           <Route path="/brand_new" element={<NewProducts />} />
           <Route path="/promotions" element={<ProductPromotions />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/orders" element={<Orders />} />
+          <Route path="/best_sellers" element={<BestSellers />} />
 
           <Route path="/category/:id" element={<Shop />} />
           <Route path="/ordersucess" element={<OrderThanks />} />
@@ -42,12 +46,20 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/orders" element={<Navigate to="/login" />} />
+              <Route path="/newquery" element={<Navigate to="/login" />} />
+              <Route path="/queries" element={<Navigate to="/login" />} />
+              <Route path="/cart" element={<Navigate to="/login" />} />
             </>
           ) : (
             <>
               <Route path="/login" element={<Navigate to="/" />} />
               <Route path="/register" element={<Navigate to="/" />} />
               <Route path="/forgotpassword" element={<Navigate to="/" />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/queries" element={<Queries />} />
+              <Route path="/newquery" element={<QueryNew />} />
+              <Route path="/cart" element={<Cart />} />
             </>
           )}
         </Route>

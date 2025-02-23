@@ -10,7 +10,7 @@ import { UserContext } from "../context/user";
 import { format } from "date-fns";
 import PageTitle from "../components/titles/PageTitle";
 
-const Home = () => {
+const Queries = () => {
   const {
     cartItems,
     addToCart,
@@ -32,7 +32,7 @@ const Home = () => {
       if (!user?.id) return;
 
       const { data, error } = await supabase
-        .from("orders")
+        .from("queries")
         .select("*")
         .eq("user", user.id);
 
@@ -110,28 +110,43 @@ const Home = () => {
         <div className="page">
           <NavBar />
 
-          <PageTitle name={"Orders"} />
+          <PageTitle name={"Queries"} />
 
           <div className="site-main">
             <section className="cart-section clearfix">
               <div className="container">
-                <Link
-                  to={`/shop`}
-                  style={{ marginBottom: "20px" }}
-                  className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
                 >
-                  <i className="ti ti-arrow-left"></i>Back To Shop
-                </Link>
+                  <Link
+                    to={`/shop`}
+                    style={{ marginBottom: "20px" }}
+                    className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
+                  >
+                    <i className="ti ti-arrow-left"></i>Back To Shop
+                  </Link>
+
+                  <Link
+                    to={`/newquery`}
+                    style={{ marginBottom: "20px" }}
+                    className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
+                  >
+                    New Query
+                  </Link>
+                </div>
+
                 <div className="row">
                   <div className="col-lg-12">
                     <table className="table cart_table shop_table_responsive">
                       <thead>
                         <tr>
                           <th className="product-subtotal">Date</th>
-                          <th className="product-subtotal">Total Price</th>
-                          <th className="product-subtotal">Delivery Cost</th>
-                          <th className="product-subtotal">Total Cost</th>
-                          <th className="product-subtotal">Status</th>
+                          <th className="product-subtotal">Message</th>
+
                           <th className="product-subtotal"></th>
                         </tr>
                       </thead>
@@ -144,18 +159,9 @@ const Home = () => {
                             </th>
                             <th className="product-subtotal">
                               {" "}
-                              {item.total_price}
-                            </th>
-                            <th className="product-subtotal">
-                              {" "}
-                              {item.delivery_charge}
-                            </th>
-                            <th className="product-subtotal">
-                              {" "}
-                              {item.delivery_charge + item.total_price}
+                              {item.message}
                             </th>
 
-                            <th className="product-subtotal"> {item.status}</th>
                             <th className="product-subtotal">
                               <span
                                 style={{ cursor: "pointer" }}
@@ -212,103 +218,30 @@ const Home = () => {
                       </h6>
 
                       <div className="mt-30 mb-35">
-                        <h6>Order Details</h6>
+                        <h6>Query Details</h6>
                       </div>
                       <div className="col-lg-12">
-                        <table className="table cart_table shop_table_responsive">
-                          <thead>
-                            <tr>
-                              <th className="product-subtotal">Name</th>
-                              <th className="product-subtotal">Unit Cost</th>
-                              <th className="product-subtotal">Quantity</th>
-                              <th className="product-subtotal">Total Cost</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {activeProduct.items &&
-                              JSON.parse(activeProduct.items)?.map(
-                                (item, index) => (
-                                  <tr key={index}>
-                                    <th className="product-subtotal">
-                                      {" "}
-                                      {item?.name}
-                                    </th>
-                                    <th className="product-subtotal">
-                                      {" "}
-                                      {item?.guest_price}
-                                    </th>
-                                    <th className="product-subtotal">
-                                      {" "}
-                                      {item?.quantity}
-                                    </th>
-                                    <th className="product-subtotal">
-                                      {" "}
-                                      {item.quantity + item.guest_price}
-                                    </th>
-                                  </tr>
-                                )
+                        <p>{activeProduct.message}</p>
+
+                        <div className="row col-lg-12">
+                          {activeProduct?.documents?.map((image, index) => (
+                            <div
+                              key={index}
+                              style={{
+                                padding: "4px",
+                                borderRadius: "10px",
+                                marginBottom: "10px",
+                              }}
+                            >
+                              {image && (
+                                <img
+                                  src={image}
+                                  alt={image.message}
+                                  style={{ maxHeight: "400px" }}
+                                />
                               )}
-
-                            <tr>
-                              <td colSpan="6" className="actions">
-                                <div className="coupon">
-                                  <Link
-                                    to={`/shop`}
-                                    className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
-                                  >
-                                    <i className="ti ti-arrow-left"></i>Back To
-                                    Shop
-                                  </Link>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-
-                      <div className="col-lg-12">
-                        <div className="cart-collaterals">
-                          <div className="row">
-                            <div className="col-md-6"></div>
-
-                            <div className="col-md-6">
-                              <div className="cart_totals res-767-mt-30">
-                                <h5>
-                                  Total Price
-                                  <span>
-                                    $
-                                    {/* {(getCartTotal() + deliveryCharge)?.toFixed(
-                                      2
-                                    )} */}
-                                    {activeProduct.total_price}
-                                  </span>
-                                </h5>
-
-                                <h5>
-                                  Delivery
-                                  <span>
-                                    $
-                                    {/* {(getCartTotal() + deliveryCharge)?.toFixed(
-                                      2
-                                    )} */}
-                                    {activeProduct.delivery_charge}
-                                  </span>
-                                </h5>
-
-                                <h5>
-                                  Total Cost
-                                  <span>
-                                    $
-                                    {activeProduct.total_price +
-                                      activeProduct.delivery_charge}
-                                    {/* {(getCartTotal() + deliveryCharge)?.toFixed(
-                                      2
-                                    )} */}
-                                  </span>
-                                </h5>
-                              </div>
                             </div>
-                          </div>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -323,4 +256,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Queries;

@@ -6,6 +6,7 @@ import { json, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { supabase } from "../utils/supabase";
 import { UserContext } from "../context/user";
+import PageTitle from "../components/titles/PageTitle";
 
 const Home = () => {
   const {
@@ -93,19 +94,7 @@ const Home = () => {
         <div className="page">
           <NavBar />
 
-          <div className="ttm-page-title-row">
-            <div className="container">
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div className="page-title-heading">
-                      <h1 className="title">Cart</h1>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <PageTitle name={"Cart"} />
 
           <div className="site-main">
             <section className="cart-section clearfix">

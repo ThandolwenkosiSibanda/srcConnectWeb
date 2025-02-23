@@ -10,10 +10,17 @@ import { UserContext } from "../../context/user";
 const NavBar = (props) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cartStatus, setCartStatus] = useState("");
+  const [shopByCategoryStatus, setShopByCategoryStatus] = useState("off");
+  const [signinStatus, setSigninStatus] = useState("");
 
-  const fetchData = async (tableName) => {
+  const [menuBarStatus, setMenuBarStatus] = useState("");
+
+  const fetchData = async () => {
     try {
-      const { data, error } = await supabase.from(tableName).select("*");
+      const { data, error } = await supabase
+        .from("products")
+        .select("*, category(*)");
 
       if (error) {
         console.error("Error fetching data:", error.message);
@@ -30,21 +37,43 @@ const NavBar = (props) => {
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
-      const result = await fetchData("categories");
-      if (result) setCategories(result);
+      const result = await fetchData("products");
+
+      const groupedByCategory = result?.reduce((acc, product) => {
+        const categoryName = product.category?.name || "Uncategorized";
+        const categoryImage = product.category?.image || "";
+        const id = product.category?.id;
+
+        let categoryGroup = acc.find(
+          (group) => group.categoryName === categoryName
+        );
+
+        if (!categoryGroup) {
+          categoryGroup = { categoryName, categoryImage, id, products: [] };
+          acc.push(categoryGroup);
+        }
+
+        categoryGroup.products.push(product);
+
+        return acc;
+      }, []);
+
+      if (result) setCategories(groupedByCategory);
       setLoading(false);
     };
 
     getData();
   }, []);
 
-  const [cartStatus, setCartStatus] = useState("");
-  const [shopByCategoryStatus, setShopByCategoryStatus] = useState("off");
-  const [signinStatus, setSigninStatus] = useState("");
-
   const { cartItems, getCartTotal, getCartItemsTotal } =
     useContext(CartContext);
   const { login, user, logout } = useContext(UserContext);
+
+  const chunkArray = (array, size) => {
+    return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
+      array.slice(i * size, i * size + size)
+    );
+  };
 
   return (
     <React.Fragment>
@@ -68,7 +97,7 @@ const NavBar = (props) => {
                 <div className="header_search">
                   <div className="header_search_content">
                     <div id="search_block_top" className="search_block_top">
-                      <form id="searchbox" method="get" action="#">
+                      <div id="searchbox">
                         <input
                           className="search_query form-control"
                           type="text"
@@ -85,8 +114,8 @@ const NavBar = (props) => {
                             className="form-control"
                           >
                             {categories.map((category, index) => (
-                              <option key={index} value={category.name}>
-                                {category?.name?.substring(0, 15)}
+                              <option key={index} value={category.categoryName}>
+                                {category?.categoryName?.substring(0, 15)}
                               </option>
                             ))}
                           </select>
@@ -98,7 +127,7 @@ const NavBar = (props) => {
                         >
                           <i className="fa fa-search"></i>
                         </button>
-                      </form>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -310,7 +339,7 @@ const NavBar = (props) => {
                         {categories.map((category, index) => (
                           <li key={index}>
                             <Link to={`/category/${category._id}`}>
-                              {category.name}
+                              {category.categoryName}
                             </Link>
                           </li>
                         ))}
@@ -318,70 +347,86 @@ const NavBar = (props) => {
                     </div>
 
                     <div id="site-navigation" className="site-navigation">
-                      <div className="btn-show-menu-mobile menubar menubar--squeeze">
-                        <span className="menubar-box">
+                      <div
+                        className={`btn-show-menu-mobile menubar menubar--squeeze ${
+                          menuBarStatus ? "is-active" : ""
+                        }`}
+                      >
+                        <span
+                          className="menubar-box"
+                          onClick={() => {
+                            menuBarStatus === "block"
+                              ? setMenuBarStatus("")
+                              : setMenuBarStatus("block");
+                          }}
+                        >
                           <span className="menubar-inner"></span>
                         </span>
                       </div>
-                      <nav className="menu menu-mobile" id="menu">
+                      <nav
+                        className="menu menu-mobile"
+                        id="menu"
+                        style={{ display: menuBarStatus, zIndex: 1000 }}
+                      >
                         <ul className="nav">
                           {categories.map((category, index) => (
                             <li
                               className="mega-menu-item megamenu-fw"
+                              style={{ zIndex: 1000 }}
                               key={index}
                             >
                               <Link
                                 to={`/category/${category.id}`}
                                 className="mega-menu-link"
                               >
-                                {category.name}
+                                {category.categoryName}
                               </Link>
                               <ul
                                 className="mega-submenu megamenu-content"
                                 role="menu"
                               >
                                 <li>
-                                  <div className="row">
-                                    {category?.subCategories?.map(
-                                      (subCategory) => (
-                                        <div className="col-menu col-md-3">
-                                          <h6 className="title">
-                                            {subCategory.name}
-                                          </h6>
+                                  <div className="row d-flex justify-content-between">
+                                    {category?.products &&
+                                      chunkArray(
+                                        category.products.slice(0, 12),
+                                        4
+                                      ).map((productChunk, index) => (
+                                        <div
+                                          key={index}
+                                          className="col-menu col-md-3"
+                                        >
                                           <div className="content">
                                             <ul className="menu-col">
-                                              <li>
-                                                <a href="shop.html">
-                                                  Shop Default
-                                                </a>
-                                              </li>
-                                              <li>
-                                                <a href="left-sidebar.html">
-                                                  Shop Left Sidebar
-                                                </a>
-                                              </li>
-                                              <li>
-                                                <a href="right-sidebar.html">
-                                                  Shop Right Sidebar
-                                                </a>
-                                              </li>
+                                              {productChunk.map((product) => (
+                                                <li key={product.id}>
+                                                  <Link
+                                                    to={`/products/${product?.id}`}
+                                                  >
+                                                    {product.name}
+                                                  </Link>
+                                                </li>
+                                              ))}
                                             </ul>
                                           </div>
                                         </div>
-                                      )
-                                    )}
+                                      ))}
 
                                     <div className="col-menu col-md-3">
                                       <div className="content">
                                         <ul className="menu-col">
                                           <li>
-                                            <a href="shop.html">
-                                              <img
-                                                className="img-fluid"
-                                                src="images/menu-item-banner.jpg"
-                                                alt="bimg"
-                                              />
-                                            </a>
+                                            <Link
+                                              to={`/categories/${category?.id}`}
+                                            >
+                                              {category.categoryImage && (
+                                                <img
+                                                  className="img-fluid"
+                                                  src={category.categoryImage}
+                                                  alt={category.categoryName}
+                                                />
+                                              )}
+                                            </Link>
                                           </li>
                                         </ul>
                                       </div>

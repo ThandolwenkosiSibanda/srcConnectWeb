@@ -5,6 +5,7 @@ import ProductComponent from "../components/product/ProductComponent";
 import FooterPage from "../components/footer/FooterComponent";
 import { useParams } from "react-router";
 import { supabase } from "../utils/supabase";
+import ProductTitle from "../components/titles/ProductTitle";
 
 const Product = () => {
   const [product, setProduct] = useState({});
@@ -34,10 +35,9 @@ const Product = () => {
   return (
     <>
       <NavBar />
+      <ProductTitle name={`${product.name}`} />
 
-      <div className="container">
-        <ProductComponent product={product} />
-      </div>
+      <ProductComponent product={product} />
 
       <FooterPage />
     </>

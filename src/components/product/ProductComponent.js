@@ -26,127 +26,128 @@ const ProductComponent = ({ product }) => {
   };
   return (
     <>
-      <section className="single-product-section layout-1 clearfix">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="ttm-single-product-details">
-                <div className="ttm-single-product-info clearfix">
-                  <div className="row">
-                    <div className="col-lg-6 col-md-6 col-sm-12 ml-auto mr-auto">
-                      <div className="product-box">
-                        <div className="product-box-inner">
-                          <div className="product-image-box">
-                            <img
-                              className="img-fluid pro-image-front"
-                              src={
-                                product?.images?.length > 0 &&
-                                JSON.parse(JSON.stringify(product.images))[0]
-                              }
-                              alt=""
-                            />
-                            <img
-                              className="img-fluid pro-image-back"
-                              src={
-                                product?.images?.length > 0 &&
-                                JSON.parse(JSON.stringify(product.images))[1]
-                              }
-                              alt=""
-                            />
+      <div className="container">
+        <section className="single-product-section layout-1 clearfix">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="ttm-single-product-details">
+                  <div className="ttm-single-product-info clearfix">
+                    <div className="row">
+                      <div className="col-lg-6 col-md-6 col-sm-12 ml-auto mr-auto">
+                        <div className="product-box">
+                          <div className="product-box-inner">
+                            <div className="product-image-box">
+                              <img
+                                className="img-fluid pro-image-front"
+                                src={
+                                  product?.images?.length > 0 &&
+                                  JSON.parse(JSON.stringify(product.images))[0]
+                                }
+                                alt=""
+                              />
+                              <img
+                                className="img-fluid pro-image-back"
+                                src={
+                                  product?.images?.length > 0 &&
+                                  JSON.parse(JSON.stringify(product.images))[1]
+                                }
+                                alt=""
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-lg-6">
-                      <div className="summary entry-summary pl-30 res-991-pl-0 res-991-pt-40">
-                        <h2 className="product_title entry-title">
-                          {product.name}
-                        </h2>
+                      <div className="col-lg-6">
+                        <div className="summary entry-summary pl-30 res-991-pl-0 res-991-pt-40">
+                          <h2 className="product_title entry-title">
+                            {product.name}
+                          </h2>
 
-                        <span className="price">
-                          <ins>
-                            <span className="product-Price-amount">
-                              <span className="product-Price-currencySymbol">
-                                $
+                          <span className="price">
+                            <ins>
+                              <span className="product-Price-amount">
+                                <span className="product-Price-currencySymbol">
+                                  $
+                                </span>
+                                {product.trade_account_price}
                               </span>
-                              {product.trade_account_price}
-                            </span>
-                          </ins>
-                          <del>
-                            <span className="product-Price-amount">
-                              <span className="product-Price-currencySymbol">
-                                $
+                            </ins>
+                            <del>
+                              <span className="product-Price-amount">
+                                <span className="product-Price-currencySymbol">
+                                  $
+                                </span>
+                                {product.guest_price}
                               </span>
-                              {product.guest_price}
-                            </span>
-                          </del>
-                        </span>
-                        <div className="product-details__short-description">
-                          {product.short_description}
-                        </div>
-                        <div className="mt-15 mb-25">
-                          <div className="quantity">
-                            <label>Quantity: </label>
-                            <input
-                              type="text"
-                              value={quantity}
-                              name="quantity-number"
-                              className="qty"
-                            />
-                            <span
-                              className="inc quantity-button"
-                              onClick={() => updateQuantity("Add")}
-                            >
-                              +
-                            </span>
-                            <span
-                              className="dec quantity-button"
-                              onClick={() => updateQuantity("Minus")}
-                            >
-                              -
-                            </span>
+                            </del>
+                          </span>
+                          <div className="product-details__short-description">
+                            {product.short_description}
                           </div>
-                        </div>
-                        <div className="actions">
-                          <div className="add-to-cart">
-                            <span
-                              className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
-                              style={{ cursor: "pointer" }}
-                              onClick={() => addToCart(product, quantity)}
-                            >
-                              Add to cart
-                            </span>
+                          <div className="mt-15 mb-25">
+                            <div className="quantity">
+                              <label>Quantity: </label>
+                              <input
+                                type="text"
+                                value={quantity}
+                                name="quantity-number"
+                                className="qty"
+                              />
+                              <span
+                                className="inc quantity-button"
+                                onClick={() => updateQuantity("Add")}
+                              >
+                                +
+                              </span>
+                              <span
+                                className="dec quantity-button"
+                                onClick={() => updateQuantity("Minus")}
+                              >
+                                -
+                              </span>
+                            </div>
+                          </div>
+                          <div className="actions">
+                            <div className="add-to-cart">
+                              <span
+                                className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
+                                style={{ cursor: "pointer" }}
+                                onClick={() => addToCart(product, quantity)}
+                              >
+                                Add to cart
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div
-                  className="ttm-tabs tabs-for-single-products"
-                  data-effect="fadeIn"
-                >
-                  <ul className="tabs clearfix">
-                    <li className="tab active">
-                      <a href="#">Product description</a>
-                    </li>
-                  </ul>
-                  <div className="content-tab">
-                    <div
-                      className="content-inner active"
-                      style={{ display: "block" }}
-                    >
+                  <div
+                    className="ttm-tabs tabs-for-single-products"
+                    data-effect="fadeIn"
+                  >
+                    <ul className="tabs clearfix">
+                      <li className="tab active">
+                        <a href="#">Product description</a>
+                      </li>
+                    </ul>
+                    <div className="content-tab">
                       <div
-                        dangerouslySetInnerHTML={{
-                          __html: product.content,
-                        }}
-                      />
+                        className="content-inner active"
+                        style={{ display: "block" }}
+                      >
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: product.content,
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              {/* <div className="pt-35 related products">
+                {/* <div className="pt-35 related products">
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="content-sec-head-style">
@@ -1040,10 +1041,11 @@ const ProductComponent = ({ product }) => {
                   </div>
                 </div>
               </div> */}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </>
   );
 };

@@ -2271,7 +2271,7 @@ select#search_category {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 .ttm-page-title-row .align-items-center {
   display: block;

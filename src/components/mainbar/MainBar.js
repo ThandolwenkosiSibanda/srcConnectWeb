@@ -16,6 +16,15 @@ const Mainbar = () => {
 
   const [quantity, setQuantity] = useState(1);
 
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= Math.ceil(products.length / itemsPerPage)) {
+      setCurrentPage(page);
+    }
+  };
+
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
   };
@@ -73,97 +82,131 @@ const Mainbar = () => {
               <div className="content-area-sec-title">
                 <h5>Our Top Selling Products</h5>
               </div>
-              <ul className="tabs text-right">
-                <li className="tab active">
-                  <a href="a">Bulk Deals</a>
-                </li>
-                <li className="tab">
-                  <a href="n">Brands</a>
-                </li>
-                <li className="tab">
-                  <a href="c">Special Offers</a>
-                </li>
-              </ul>
             </div>
             <div className="content-tab">
               <div className="content-inner active">
                 <div className="products row">
-                  {products.slice(0, 100).map((product, index) => (
-                    <div
-                      className="product col-md-3 col-sm-6 col-xs-12"
-                      key={index}
-                    >
-                      <div className="product-box">
-                        <div className="product-box-inner">
-                          <div className="product-image-box">
-                            <img
-                              className="img-fluid pro-image-front"
-                              src={
-                                product?.images?.length > 0 &&
-                                JSON.parse(JSON.stringify(product.images))[0]
-                              }
-                              alt={product.name}
-                            />
-                            <img
-                              className="img-fluid pro-image-back"
-                              src={
-                                product?.images?.length > 0 &&
-                                JSON.parse(JSON.stringify(product.images))[0]
-                              }
-                              alt={product.name}
-                            />
-                          </div>
-                          <div className="product-btn-links-wrapper">
-                            <div className="product-btn">
-                              <div
-                                className="add-to-cart-btn tooltip-top"
-                                data-tooltip="Add To Cart"
-                                onClick={() => addToCart(product, 1)}
-                              >
-                                <i className="ti ti-shopping-cart"></i>
-                              </div>
-                            </div>
-                            <div className="product-btn">
-                              <div
-                                className="quick-view-btn js-show-modal1 tooltip-top"
-                                data-tooltip="Quick View"
-                                onClick={() =>
-                                  quickViewModalStatus === "show-modal1"
-                                    ? [
-                                        setQuickViewModalStatus(""),
-                                        setActiveProduct({}),
-                                      ]
-                                    : [
-                                        setActiveProduct(product),
-                                        setQuickViewModalStatus("show-modal1"),
-                                      ]
+                  {products
+                    .slice(
+                      (currentPage - 1) * itemsPerPage,
+                      currentPage * itemsPerPage
+                    )
+                    .map((product, index) => (
+                      <div
+                        className="product col-md-3 col-sm-6 col-xs-12"
+                        key={index}
+                      >
+                        <div className="product-box">
+                          <div className="product-box-inner">
+                            <div className="product-image-box">
+                              <img
+                                className="img-fluid pro-image-front"
+                                src={
+                                  product?.images?.length > 0 &&
+                                  JSON.parse(JSON.stringify(product.images))[0]
                                 }
-                              >
-                                <i className="ti ti-search"></i>
+                                alt={product.name}
+                              />
+                              <img
+                                className="img-fluid pro-image-back"
+                                src={
+                                  product?.images?.length > 0 &&
+                                  JSON.parse(JSON.stringify(product.images))[0]
+                                }
+                                alt={product.name}
+                              />
+                            </div>
+                            <div className="product-btn-links-wrapper">
+                              <div className="product-btn">
+                                <div
+                                  className="add-to-cart-btn tooltip-top"
+                                  data-tooltip="Add To Cart"
+                                  onClick={() => addToCart(product, 1)}
+                                >
+                                  <i className="ti ti-shopping-cart"></i>
+                                </div>
+                              </div>
+                              <div className="product-btn">
+                                <div
+                                  className="quick-view-btn js-show-modal1 tooltip-top"
+                                  data-tooltip="Quick View"
+                                  onClick={() =>
+                                    quickViewModalStatus === "show-modal1"
+                                      ? [
+                                          setQuickViewModalStatus(""),
+                                          setActiveProduct({}),
+                                        ]
+                                      : [
+                                          setActiveProduct(product),
+                                          setQuickViewModalStatus(
+                                            "show-modal1"
+                                          ),
+                                        ]
+                                  }
+                                >
+                                  <i className="ti ti-search"></i>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="product-content-box">
-                          <Link
-                            className="product-title"
-                            to={`/products/${product?.id}`}
-                          >
-                            <h2>{product.name}</h2>
-                          </Link>
+                          <div className="product-content-box">
+                            <Link
+                              className="product-title"
+                              to={`/products/${product?.id}`}
+                            >
+                              <h2>{product.name}</h2>
+                            </Link>
 
-                          <span className="price">
-                            <span className="product-Price-amount">
-                              <span className="product-Price-currencySymbol">
-                                $
+                            <span className="price">
+                              <span className="product-Price-amount">
+                                <span className="product-Price-currencySymbol">
+                                  $
+                                </span>
+                                {product.guest_price}
                               </span>
-                              {product.guest_price}
                             </span>
-                          </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                </div>
+
+                <div className="col-lg-12">
+                  <div className="pagination-block">
+                    {currentPage > 1 && (
+                      <span
+                        className="prev page-numbers"
+                        onClick={() => goToPage(currentPage - 1)}
+                      >
+                        <i className="ti ti-arrow-left"></i>
+                      </span>
+                    )}
+
+                    {Array.from(
+                      { length: Math.ceil(products.length / itemsPerPage) },
+                      (_, i) => i + 1
+                    ).map((page) => (
+                      <span
+                        key={page}
+                        className={`page-numbers ${
+                          currentPage === page ? "current" : ""
+                        }`}
+                        onClick={() => goToPage(page)}
+                      >
+                        {page}
+                      </span>
+                    ))}
+
+                    {currentPage <
+                      Math.ceil(products.length / itemsPerPage) && (
+                      <span
+                        className="next page-numbers"
+                        onClick={() => goToPage(currentPage + 1)}
+                      >
+                        <i className="ti ti-arrow-right"></i>
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
 
