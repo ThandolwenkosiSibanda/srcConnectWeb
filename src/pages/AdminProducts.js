@@ -12,49 +12,77 @@ import PageTitle from "../components/titles/PageTitle";
 import ErrorMessage from "../components/spinners/ErrorMessage";
 import BigLoading from "../components/spinners/Loading";
 
-const Queries = () => {
+const AdminProducts = () => {
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
   const [quickViewModalStatus, setQuickViewModalStatus] = useState("");
   const [activeProduct, setActiveProduct] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError("");
+  console.log("data", data);
 
-        if (!user?.id) return;
+  const fetchData = async () => {
+    setError("");
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*, category(*)");
 
-        const { data, error } = await supabase
-          .from("queries")
-          .select("*")
-          .eq("user", user.id);
-
-        if (error) throw error;
-
-        setData(data);
-      } catch (err) {
+      if (error) {
+        console.error("Error fetching data:", error.message);
         setError({
           message:
-            "An error occurred while fetching queries. Please check your internet and refresh the page",
+            "Error fetching products, please check your internet and refresh the page",
         });
-      } finally {
-        setLoading(false);
+        return null;
       }
+
+      return data;
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      setError(err);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      const result = await fetchData("products");
+
+      if (result) {
+        let sortedData = [...result];
+
+        sortedData.sort((a, b) => {
+          if (sortBy === "name") {
+            return sortOrder === "asc"
+              ? a.name.localeCompare(b.name)
+              : b.name.localeCompare(a.name);
+          } else if (sortBy === "guest_price") {
+            return sortOrder === "asc"
+              ? a.guest_price - b.guest_price
+              : b.guest_price - a.guest_price;
+          }
+        });
+
+        setData(sortedData);
+      }
+
+      setLoading(false);
     };
 
-    fetchData();
-  }, [user?.id]);
+    getData();
+  }, [sortBy, sortOrder]);
 
   return (
     <>
       <div className="page">
         <NavBar />
 
-        <PageTitle name={"Queries"} />
+        <PageTitle name={"Products"} />
         {error && !loading && <ErrorMessage message={error.message} />}
 
         {loading ? (
@@ -79,11 +107,11 @@ const Queries = () => {
                   </Link>
 
                   <Link
-                    to={`/newquery`}
+                    to={`/newproduct`}
                     style={{ marginBottom: "20px" }}
                     className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                   >
-                    New Query
+                    New Product
                   </Link>
                 </div>
 
@@ -92,8 +120,14 @@ const Queries = () => {
                     <table className="table cart_table shop_table_responsive">
                       <thead>
                         <tr>
-                          <th className="product-subtotal">Date</th>
-                          <th className="product-subtotal">Message</th>
+                          <th className="product-subtotal">Created</th>
+                          <th className="product-subtotal">Name</th>
+                          <th className="product-subtotal">Guest Price</th>
+                          <th className="product-subtotal">
+                            Trade Account Price
+                          </th>
+                          <th className="product-subtotal">Bulk Price</th>
+                          <th className="product-subtotal">Category</th>
 
                           <th className="product-subtotal"></th>
                         </tr>
@@ -105,9 +139,24 @@ const Queries = () => {
                               {" "}
                               {format(item.created_at, "dd-MMM-yyyy")}
                             </th>
+                            <th className="product-subtotal"> {item.name}</th>
                             <th className="product-subtotal">
                               {" "}
-                              {item.message}
+                              {item.guest_price}
+                            </th>
+
+                            <th className="product-subtotal">
+                              {" "}
+                              {item.trade_account_price}
+                            </th>
+
+                            <th className="product-subtotal">
+                              {" "}
+                              {item.bulk_price}
+                            </th>
+                            <th className="product-subtotal">
+                              {" "}
+                              {item.category?.name}
                             </th>
 
                             <th className="product-subtotal">
@@ -204,4 +253,4 @@ const Queries = () => {
   );
 };
 
-export default Queries;
+export default AdminProducts;

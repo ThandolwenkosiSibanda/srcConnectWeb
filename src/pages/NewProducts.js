@@ -6,6 +6,8 @@ import { supabase } from "../utils/supabase";
 import QuickProductView from "../components/modals/QuickProductView";
 import PageTitle from "../components/titles/PageTitle";
 import ProductsList from "../components/product/ProductsList";
+import BigLoading from "../components/spinners/Loading";
+import ErrorMessage from "../components/spinners/ErrorMessage";
 
 const NewProducts = () => {
   const [quickViewModalStatus, setQuickViewModalStatus] = useState("");
@@ -16,8 +18,10 @@ const NewProducts = () => {
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const fetchData = async () => {
+    setError("");
     try {
       const { data, error } = await supabase
         .from("products")
@@ -25,12 +29,17 @@ const NewProducts = () => {
 
       if (error) {
         console.error("Error fetching data:", error.message);
+        setError({
+          message:
+            "Error fetching products, please check your internet and refresh the page",
+        });
         return null;
       }
 
       return data;
     } catch (err) {
       console.error("Unexpected error:", err);
+      setError(err);
       return null;
     }
   };
@@ -70,20 +79,25 @@ const NewProducts = () => {
         <NavBar />
 
         <PageTitle name={"New Products"} />
+        {error.message && !loading && <ErrorMessage message={error.message} />}
 
-        <ProductsList
-          quickViewModalStatus={quickViewModalStatus}
-          setQuickViewModalStatus={setQuickViewModalStatus}
-          activeProduct={activeProduct}
-          setActiveProduct={setActiveProduct}
-          products={products}
-          setProducts={setProducts}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          sortOrder={sortOrder}
-          setSortOrder={setSortOrder}
-          loading={loading}
-        />
+        {loading ? (
+          <BigLoading />
+        ) : (
+          <ProductsList
+            quickViewModalStatus={quickViewModalStatus}
+            setQuickViewModalStatus={setQuickViewModalStatus}
+            activeProduct={activeProduct}
+            setActiveProduct={setActiveProduct}
+            products={products}
+            setProducts={setProducts}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            loading={loading}
+          />
+        )}
 
         <QuickProductView
           quickViewModalStatus={quickViewModalStatus}

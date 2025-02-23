@@ -189,10 +189,10 @@ const FooterPage = () => {
                   <h3 className="widget-title">Our Company</h3>
                   <ul className="menu-footer-quick-links">
                     <li>
-                      <Link to={`/delivery`}>Delivery</Link>
+                      <Link to={`/delivery`}>Delivery Policy</Link>
                     </li>
                     <li>
-                      <Link to={`/legal`}>Legal Notice</Link>
+                      <Link to={`/legal`}>Legal Policy</Link>
                     </li>
                     <li>
                       <Link to={`/privacy`}>Privacy Policy</Link>
@@ -219,12 +219,12 @@ const FooterPage = () => {
                     <li>
                       <Link to={`/best_sellers`}>Best Sales</Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link to={`/contact_us`}>Contact Us</Link>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                       <Link to={`/sitemap`}>Site Map</Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
               </div>

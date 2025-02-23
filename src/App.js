@@ -20,6 +20,7 @@ import ScrollToTop from "./components/scroll/ScrollToTop";
 import BestSellers from "./pages/BestSellers";
 import QueryNew from "./pages/QueryNew";
 import Queries from "./pages/Queries";
+import AdminProducts from "./pages/AdminProducts";
 
 const App = () => {
   const { user } = useContext(UserContext);
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/category/:id" element={<Shop />} />
           <Route path="/ordersucess" element={<OrderThanks />} />
           <Route path="/newproduct" element={<ProductNew />} />
+          <Route path="/admin_products" element={<AdminProducts />} />
 
           {!user ? (
             <>

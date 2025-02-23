@@ -3,7 +3,7 @@ import NavBannerTop from "../components/navBannerTop/NavBannerTop";
 import NavBar from "../components/navBar/NavBar";
 import ProductComponent from "../components/product/ProductComponent";
 import FooterPage from "../components/footer/FooterComponent";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { supabase } from "../utils/supabase";
 import Select from "react-select";
 import DraftEditor from "./DraftEditor";
@@ -11,10 +11,13 @@ import { EditorState, convertToRaw } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
 import axios from "axios";
 import PageTitle from "../components/titles/PageTitle";
+import BigLoading from "../components/spinners/Loading";
+import ErrorMessage from "../components/spinners/ErrorMessage";
 
 const ProductNew = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState({});
   const [form, setForm] = useState({ type: "Basic", featured: "false" });
@@ -22,6 +25,8 @@ const ProductNew = () => {
   const [imagesUrls, setImagesUrls] = useState([]);
   const [docs, setDocs] = useState([]);
   const [docsUrls, setDocsUrls] = useState([]);
+
+  const navigate = useNavigate();
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -96,12 +101,17 @@ const ProductNew = () => {
 
       if (error) {
         console.error("Error fetching data:", error.message);
+        setError({
+          message:
+            "Error fetching categories, please check your internet and refresh the page",
+        });
         return null;
       }
 
       return data;
     } catch (err) {
       console.error("Unexpected error:", err);
+      setError(error);
       return null;
     }
   };
@@ -118,6 +128,7 @@ const ProductNew = () => {
   const handleSaveNewProduct = async () => {
     try {
       setLoading(true);
+      setError("");
 
       let urls = [];
       let docUrls = [];
@@ -210,10 +221,11 @@ const ProductNew = () => {
         throw error;
       }
 
-      console.log("Product saved successfully:", data);
+      navigate("/admin_products");
       return { success: true, data };
     } catch (err) {
       console.error("Error saving product:", err);
+      setError(err);
       return { success: false, error: err };
     } finally {
       setLoading(false);
@@ -225,185 +237,189 @@ const ProductNew = () => {
       <NavBar />
 
       <PageTitle name={"New Product"} />
+      {error.message && <ErrorMessage message={error.message} />}
 
-      <div className="container">
-        <div
-          id="ttm-contactform"
-          className="ttm-contactform wrap-form clearfix"
-        >
-          <div className="row">
-            <div className="col-lg-3">
-              <label>
-                <h6 style={{ marginTop: "20px" }}>Type</h6>
-                <span className="text-input">
-                  <Select
-                    defaultValue={{ label: "Basic", value: "Basic" }}
-                    value={form?.type}
-                    onChange={(e) => handleSelect("type", e)}
-                    options={types.map((category) => ({
-                      label: category.label,
-                      value: category.value,
-                    }))}
-                  />
-                </span>
-              </label>
+      {loading ? (
+        <BigLoading />
+      ) : (
+        <div className="container">
+          <div
+            id="ttm-contactform"
+            className="ttm-contactform wrap-form clearfix"
+          >
+            <div className="row">
+              <div className="col-lg-3">
+                <label>
+                  <h6 style={{ marginTop: "20px" }}>Type</h6>
+                  <span className="text-input">
+                    <Select
+                      defaultValue={{ label: "Basic", value: "Basic" }}
+                      value={form?.type}
+                      onChange={(e) => handleSelect("type", e)}
+                      options={types.map((category) => ({
+                        label: category.label,
+                        value: category.value,
+                      }))}
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-3">
+                <label>
+                  <h6 style={{ marginTop: "20px" }}>Featured</h6>
+                  <span className="text-input">
+                    <Select
+                      value={form?.featured}
+                      onChange={(e) => handleSelect("featured", e)}
+                      options={[
+                        { label: "True", value: "True" },
+                        { label: "False", value: "False" },
+                      ]}
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-3">
+                <label>
+                  <h6 style={{ marginTop: "20px" }}>Category</h6>
+                  <span className="text-input">
+                    <Select
+                      value={form?.category}
+                      onChange={(e) => handleSelect("category", e)}
+                      options={categories.map((category) => ({
+                        label: category.name,
+                        value: category.id,
+                        id: category.id,
+                      }))}
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-3">
+                <label>
+                  <h6 style={{ marginTop: "20px" }}>Best Sales</h6>
+                  <span className="text-input">
+                    <Select
+                      value={form?.best_sales}
+                      onChange={(e) => handleSelect("best_sales", e)}
+                      options={[
+                        { label: "True", value: "true" },
+                        { label: "False", value: "false" },
+                      ]}
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-12">
+                <h6 style={{ marginTop: "20px" }}>Name</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      required="required"
+                      name={"name"}
+                      value={form?.name}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-4">
+                <h6 style={{ marginTop: "20px" }}>Guest price</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Guest Price"
+                      required="required"
+                      name={"guest_price"}
+                      value={form?.guest_price}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-4">
+                <h6 style={{ marginTop: "20px" }}>Trade Account Price</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Trade Account Price"
+                      required="required"
+                      name={"trade_account_price"}
+                      value={form?.trade_account_price}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-4">
+                <h6 style={{ marginTop: "20px" }}>Bulk Price</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Bulk Price"
+                      required="required"
+                      name={"bulk_price"}
+                      value={form?.bulk_price}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </label>
+              </div>
             </div>
-            <div className="col-lg-3">
-              <label>
-                <h6 style={{ marginTop: "20px" }}>Featured</h6>
-                <span className="text-input">
-                  <Select
-                    value={form?.featured}
-                    onChange={(e) => handleSelect("featured", e)}
-                    options={[
-                      { label: "True", value: "True" },
-                      { label: "False", value: "False" },
-                    ]}
-                  />
-                </span>
-              </label>
-            </div>
-            <div className="col-lg-3">
-              <label>
-                <h6 style={{ marginTop: "20px" }}>Category</h6>
-                <span className="text-input">
-                  <Select
-                    value={form?.category}
-                    onChange={(e) => handleSelect("category", e)}
-                    options={categories.map((category) => ({
-                      label: category.name,
-                      value: category.id,
-                      id: category.id,
-                    }))}
-                  />
-                </span>
-              </label>
-            </div>
-            <div className="col-lg-3">
-              <label>
-                <h6 style={{ marginTop: "20px" }}>Best Sales</h6>
-                <span className="text-input">
-                  <Select
-                    value={form?.best_sales}
-                    onChange={(e) => handleSelect("best_sales", e)}
-                    options={[
-                      { label: "True", value: "true" },
-                      { label: "False", value: "false" },
-                    ]}
-                  />
-                </span>
-              </label>
-            </div>
-            <div className="col-lg-12">
-              <h6 style={{ marginTop: "20px" }}>Name</h6>
-              <label>
-                <span className="text-input">
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    required="required"
-                    name={"name"}
-                    value={form?.name}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label>
-            </div>
-            <div className="col-lg-4">
-              <h6 style={{ marginTop: "20px" }}>Guest price</h6>
-              <label>
-                <span className="text-input">
-                  <input
-                    type="text"
-                    placeholder="Guest Price"
-                    required="required"
-                    name={"guest_price"}
-                    value={form?.guest_price}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label>
-            </div>
-            <div className="col-lg-4">
-              <h6 style={{ marginTop: "20px" }}>Trade Account Price</h6>
-              <label>
-                <span className="text-input">
-                  <input
-                    type="text"
-                    placeholder="Trade Account Price"
-                    required="required"
-                    name={"trade_account_price"}
-                    value={form?.trade_account_price}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label>
-            </div>
-            <div className="col-lg-4">
-              <h6 style={{ marginTop: "20px" }}>Bulk Price</h6>
-              <label>
-                <span className="text-input">
-                  <input
-                    type="text"
-                    placeholder="Bulk Price"
-                    required="required"
-                    name={"bulk_price"}
-                    value={form?.bulk_price}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-lg-4">
-              <h6 style={{ marginTop: "20px" }}>Unit Measurement</h6>
-              <label>
-                <span className="text-input">
-                  <input
-                    type="text"
-                    placeholder="Unit measuremnet"
-                    required="required"
-                    name={"unit_measurement"}
-                    value={form?.unit_measurement}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label>
-            </div>
-            <div className="col-lg-4">
-              <h6 style={{ marginTop: "20px" }}>Average Delivery Time</h6>
-              <label>
-                <span className="text-input">
-                  <input
-                    type="text"
-                    placeholder="Average Delivery Hours"
-                    required="required"
-                    name={"average_delivery_hours"}
-                    value={form?.average_delivery_hours}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label>
-            </div>
+            <div className="row">
+              <div className="col-lg-4">
+                <h6 style={{ marginTop: "20px" }}>Unit Measurement</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Unit measuremnet"
+                      required="required"
+                      name={"unit_measurement"}
+                      value={form?.unit_measurement}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-4">
+                <h6 style={{ marginTop: "20px" }}>Average Delivery Time</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Average Delivery Hours"
+                      required="required"
+                      name={"average_delivery_hours"}
+                      value={form?.average_delivery_hours}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </label>
+              </div>
 
-            <div className="col-lg-4">
-              <h6 style={{ marginTop: "20px" }}>Brand</h6>
-              <label>
-                <span className="text-input">
-                  <input
-                    type="text"
-                    placeholder="Brand"
-                    required="required"
-                    name={"brand"}
-                    value={form?.brand}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label>
-            </div>
+              <div className="col-lg-4">
+                <h6 style={{ marginTop: "20px" }}>Brand</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Brand"
+                      required="required"
+                      name={"brand"}
+                      value={form?.brand}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </label>
+              </div>
 
-            {/* <div className="col-lg-12">
+              {/* <div className="col-lg-12">
               <label>
                 <span className="text-input">
                   <input
@@ -418,33 +434,33 @@ const ProductNew = () => {
               </label>
             </div> */}
 
-            <div className="col-lg-12">
-              <h6 style={{ marginTop: "20px" }}>Description</h6>
-              <label>
-                <span className="text-input">
-                  <textarea
-                    rows="3"
-                    cols="40"
-                    type="text"
-                    placeholder="Short description"
-                    required="required"
-                    name={"short_description"}
-                    value={form?.short_description}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label>
-            </div>
+              <div className="col-lg-12">
+                <h6 style={{ marginTop: "20px" }}>Description</h6>
+                <label>
+                  <span className="text-input">
+                    <textarea
+                      rows="3"
+                      cols="40"
+                      type="text"
+                      placeholder="Short description"
+                      required="required"
+                      name={"short_description"}
+                      value={form?.short_description}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </label>
+              </div>
 
-            <div className="col-lg-12">
-              <h6 style={{ marginTop: "20px" }}>
-                Pricing Additional Information
-              </h6>
-              <DraftEditor
-                editorState={pricingAdditionalInformation}
-                setEditorState={setPricingAdditionalInformation}
-              />
-              {/* <label>
+              <div className="col-lg-12">
+                <h6 style={{ marginTop: "20px" }}>
+                  Pricing Additional Information
+                </h6>
+                <DraftEditor
+                  editorState={pricingAdditionalInformation}
+                  setEditorState={setPricingAdditionalInformation}
+                />
+                {/* <label>
                 <span className="text-input">
                   <textarea
                     rows="3"
@@ -458,15 +474,15 @@ const ProductNew = () => {
                   />
                 </span>
               </label> */}
-            </div>
+              </div>
 
-            <div className="col-lg-12">
-              <h6 style={{ marginTop: "20px" }}>Delivery Information</h6>
-              <DraftEditor
-                editorState={deliveryInformation}
-                setEditorState={setDeliveryInformation}
-              />
-              {/* <label>
+              <div className="col-lg-12">
+                <h6 style={{ marginTop: "20px" }}>Delivery Information</h6>
+                <DraftEditor
+                  editorState={deliveryInformation}
+                  setEditorState={setDeliveryInformation}
+                />
+                {/* <label>
                 <span className="text-input">
                   <textarea
                     rows="3"
@@ -480,14 +496,14 @@ const ProductNew = () => {
                   />
                 </span>
               </label> */}
-            </div>
-            <div className="col-lg-12">
-              <h6 style={{ marginTop: "20px" }}>Technical Specifications</h6>
-              <DraftEditor
-                editorState={technicalSpecifications}
-                setEditorState={setTechnicalSpecifications}
-              />
-              {/* <label>
+              </div>
+              <div className="col-lg-12">
+                <h6 style={{ marginTop: "20px" }}>Technical Specifications</h6>
+                <DraftEditor
+                  editorState={technicalSpecifications}
+                  setEditorState={setTechnicalSpecifications}
+                />
+                {/* <label>
                 <span className="text-input">
                   <textarea
                     rows="3"
@@ -501,14 +517,14 @@ const ProductNew = () => {
                   />
                 </span>
               </label> */}
-            </div>
-            <div className="col-lg-12">
-              <h6 style={{ marginTop: "20px" }}>Key Features</h6>
-              <DraftEditor
-                editorState={keyFeatures}
-                setEditorState={setKeyFeatures}
-              />
-              {/* <label>
+              </div>
+              <div className="col-lg-12">
+                <h6 style={{ marginTop: "20px" }}>Key Features</h6>
+                <DraftEditor
+                  editorState={keyFeatures}
+                  setEditorState={setKeyFeatures}
+                />
+                {/* <label>
                 <span className="text-input">
                   <textarea
                     rows="3"
@@ -522,103 +538,104 @@ const ProductNew = () => {
                   />
                 </span>
               </label> */}
-            </div>
+              </div>
 
-            <div className="col-lg-12">
-              <h6 style={{ marginTop: "20px" }}>Content</h6>
-              <DraftEditor
-                editorState={editorState}
-                setEditorState={setEditorState}
-              />
-            </div>
+              <div className="col-lg-12">
+                <h6 style={{ marginTop: "20px" }}>Content</h6>
+                <DraftEditor
+                  editorState={editorState}
+                  setEditorState={setEditorState}
+                />
+              </div>
 
-            <div className="col-lg-12">
-              <input
-                type="file"
-                accept="image/*"
-                id="fileInput"
-                multiple
-                style={{ display: "none" }}
-                onChange={handleImageChange}
-              />
+              <div className="col-lg-12">
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="fileInput"
+                  multiple
+                  style={{ display: "none" }}
+                  onChange={handleImageChange}
+                />
 
-              <h6>Images</h6>
-              <button
-                style={{ marginBottom: "20px" }}
-                onClick={() => document.getElementById("fileInput").click()}
-              >
-                Select Images
-              </button>
+                <h6>Images</h6>
+                <button
+                  style={{ marginBottom: "20px" }}
+                  onClick={() => document.getElementById("fileInput").click()}
+                >
+                  Select Images
+                </button>
 
-              <div className="row">
-                {[...images].map((image, index) => (
-                  <div
-                    className="col-lg-3"
-                    key={index}
-                    style={{
-                      padding: "4px",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    <img
-                      src={URL.createObjectURL(image)}
-                      style={{ height: "130px" }}
-                      alt={"name of the"}
-                    />
-                  </div>
-                ))}
+                <div className="row">
+                  {[...images].map((image, index) => (
+                    <div
+                      className="col-lg-3"
+                      key={index}
+                      style={{
+                        padding: "4px",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      <img
+                        src={URL.createObjectURL(image)}
+                        style={{ height: "130px" }}
+                        alt={"name of the"}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="col-lg-12" style={{ marginTop: "20px" }}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="docInput"
+                  multiple
+                  style={{ display: "none" }}
+                  onChange={handleDocChange}
+                />
+
+                <h6>Technical Downloads</h6>
+                <button
+                  style={{ marginBottom: "20px" }}
+                  onClick={() => document.getElementById("docInput").click()}
+                >
+                  Select Documents
+                </button>
+
+                <div className="row">
+                  {[...docs].map((image, index) => (
+                    <div
+                      className="col-lg-3"
+                      key={index}
+                      style={{
+                        padding: "4px",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      <img
+                        src={URL.createObjectURL(image)}
+                        style={{ height: "130px" }}
+                        alt={"name of the"}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="col-lg-12" style={{ marginTop: "20px" }}>
-              <input
-                type="file"
-                accept="image/*"
-                id="docInput"
-                multiple
-                style={{ display: "none" }}
-                onChange={handleDocChange}
-              />
 
-              <h6>Technical Downloads</h6>
-              <button
-                style={{ marginBottom: "20px" }}
-                onClick={() => document.getElementById("docInput").click()}
-              >
-                Select Documents
-              </button>
-
-              <div className="row">
-                {[...docs].map((image, index) => (
-                  <div
-                    className="col-lg-3"
-                    key={index}
-                    style={{
-                      padding: "4px",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    <img
-                      src={URL.createObjectURL(image)}
-                      style={{ height: "130px" }}
-                      alt={"name of the"}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
+            <input
+              style={{ marginBottom: "20px" }}
+              name="submit"
+              type="submit"
+              id="submit"
+              className="submit ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
+              value="Save New Product"
+              onClick={handleSaveNewProduct}
+            />
           </div>
-
-          <input
-            style={{ marginBottom: "20px" }}
-            name="submit"
-            type="submit"
-            id="submit"
-            className="submit ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
-            value="Save New Product"
-            onClick={handleSaveNewProduct}
-          />
         </div>
-      </div>
+      )}
 
       <FooterPage />
     </>

@@ -141,9 +141,9 @@ const NavBar = (props) => {
                   }}
                 >
                   ISSUE WITH MATERIALS ESTIMATES ? or a SPECIFIC REQUIREMENT?{" "}
-                  <a href="/html" style={{ color: "#ffa500" }}>
+                  <Link to={`/newquery`} style={{ color: "#ffa500" }}>
                     CLICK HERE
-                  </a>{" "}
+                  </Link>{" "}
                   AND SEND YOUR QUERY THROUGH CALL /APP NOW: +263 778 091 005 |
                   MON - FRI 7:00AM to 5:00PM
                 </p>
