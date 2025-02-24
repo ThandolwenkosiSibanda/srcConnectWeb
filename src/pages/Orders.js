@@ -31,9 +31,16 @@ const Home = () => {
           .select("*")
           .eq("user", user.id);
 
-        if (error) throw error;
+        if (data) {
+          let sortedData = [...data];
 
-        setOrders(data);
+          sortedData.sort((a, b) => {
+            return b.created_at - a.created_at;
+          });
+          setOrders(sortedData);
+        }
+
+        if (error) throw error;
       } catch (err) {
         setError({
           message:

@@ -64,8 +64,8 @@ const AdminProducts = () => {
         sortedData.sort((a, b) => {
           if (sortBy === "name") {
             return sortOrder === "asc"
-              ? a.name.localeCompare(b.name)
-              : b.name.localeCompare(a.name);
+              ? a?.name.localeCompare(b?.name)
+              : b?.name.localeCompare(a?.name);
           } else if (sortBy === "guest_price") {
             return sortOrder === "asc"
               ? a.guest_price - b.guest_price

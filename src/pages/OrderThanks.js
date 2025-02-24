@@ -8,6 +8,7 @@ import { supabase } from "../utils/supabase";
 import { UserContext } from "../context/user";
 
 import { format } from "date-fns";
+import PageTitle from "../components/titles/PageTitle";
 
 const Home = () => {
   const {
@@ -50,21 +51,7 @@ const Home = () => {
       <body>
         <div className="page">
           <NavBar />
-
-          <div className="ttm-page-title-row">
-            <div className="container">
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div className="page-title-heading">
-                      <h1 className="title">Thank You</h1>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <PageTitle name={"Thank you"} />
           <div className="site-main">
             <section className="cart-section clearfix">
               <div className="container">

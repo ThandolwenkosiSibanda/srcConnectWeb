@@ -66,19 +66,6 @@ const SignupComponent = ({
             <div className="c-page-banner__form">
               <div className="account--log-in">
                 <div className="row">
-                  <div className="col l12 s12">
-                    <span className="text--highlighter">
-                      Do not have an account have an account ?{" "}
-                      <Link
-                        to={`/register`}
-                        style={{ color: "#ffc107", marginLeft: "10px" }}
-                      >
-                        Sign Up
-                      </Link>
-                    </span>
-                  </div>
-                </div>
-                <div className="row">
                   <div className="col s12" style={{ marginTop: "20px" }}>
                     <h5>Login details</h5>
 
@@ -110,7 +97,7 @@ const SignupComponent = ({
 
                   <div
                     className="row"
-                    style={{ marginTop: "20px", marginBottom: "100px" }}
+                    style={{ marginTop: "20px", marginBottom: "20px" }}
                   >
                     <div className="col s12">
                       <button
@@ -126,6 +113,22 @@ const SignupComponent = ({
                         Login
                       </button>
                     </div>
+                  </div>
+                </div>
+                <div
+                  className="row"
+                  style={{ marginTop: "20px", marginBottom: "100px" }}
+                >
+                  <div className="col l12 s12">
+                    <span className="text--highlighter">
+                      Do not have an account have an account ?{" "}
+                      <Link
+                        to={`/register`}
+                        style={{ color: "#ffc107", marginLeft: "10px" }}
+                      >
+                        Sign Up
+                      </Link>
+                    </span>
                   </div>
                 </div>
               </div>

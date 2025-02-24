@@ -99,13 +99,7 @@ const AdminOrders = () => {
                     </span>
                   </label>
                 </div>
-                {/* <Link
-                  to={`/shop`}
-                  style={{ marginBottom: "20px" }}
-                  className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
-                >
-                  <i className="ti ti-arrow-left"></i>Back To Shop
-                </Link> */}
+
                 <div className="row">
                   <div className="col-lg-12">
                     <table className="table cart_table shop_table_responsive">
