@@ -7,7 +7,13 @@ import { useNavigate, useParams } from "react-router";
 import { supabase } from "../utils/supabase";
 import Select from "react-select";
 import DraftEditor from "./DraftEditor";
-import { EditorState, convertToRaw } from "draft-js";
+import {
+  ContentState,
+  EditorState,
+  convertFromHTML,
+  convertFromRaw,
+  convertToRaw,
+} from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
 import axios from "axios";
 import PageTitle from "../components/titles/PageTitle";
@@ -53,8 +59,6 @@ const ProductNew = () => {
 
   const [content, setContent] = useState(() => EditorState.createEmpty());
 
-  console.log("editorState html", stateToHTML(editorState.getCurrentContent()));
-
   const types = [
     { value: "Basic", label: "Basic" },
     { value: "Premium", label: "Premium" },
@@ -80,20 +84,75 @@ const ProductNew = () => {
     }
   };
 
+  const getEditorStateFromHTML = (htmlContent) => {
+    const blocksFromHTML = convertFromHTML(htmlContent);
+    const contentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    return EditorState.createWithContent(contentState);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (!id) return;
 
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("id", id)
-        .single();
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*, category(*)")
+          .eq("id", id)
+          .single();
 
-      if (error) {
-        console.error("Error:", error);
-      } else {
+        if (error) {
+          throw error;
+        }
+
+        const newContentEditorState = getEditorStateFromHTML(data.content);
+        const newKeyFeaturesEditorState = getEditorStateFromHTML(
+          data.key_features
+        );
+        const newDeliveryInformationEditorState = getEditorStateFromHTML(
+          data.delivery_information
+        );
+        const newTechnicalSpecificationsEditorState = getEditorStateFromHTML(
+          data.technical_specifications
+        );
+        const newPricingAdditionalInforEditorState = getEditorStateFromHTML(
+          data.pricing_additional_info
+        );
+
+        setEditorState(newContentEditorState);
+        setPricingAdditionalInformation(newPricingAdditionalInforEditorState);
+        setDeliveryInformation(newDeliveryInformationEditorState);
+        setTechnicalSpecifications(newTechnicalSpecificationsEditorState);
+        setKeyFeatures(newKeyFeaturesEditorState);
+
+        setForm({
+          ...form,
+          ...data,
+          status: { label: `${data?.status}`, value: `${data?.status}` },
+          featured: { label: `${data?.featured}`, value: `${data?.featured}` },
+          type: { label: `${data?.type}`, value: `${data?.type}` },
+          category: {
+            label: `${data?.category?.name}`,
+            value: `${data?.category?.id}`,
+          },
+          best_sales: {
+            label: `${data?.best_sales}`,
+            value: `${data?.best_sales}`,
+          },
+        });
         setProduct(data);
+      } catch (error) {
+        console.log("error", error);
+        setError({
+          message:
+            "Error fetching product, please check your internet and refresh the page",
+        });
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -105,7 +164,6 @@ const ProductNew = () => {
       const { data, error } = await supabase.from(tableName).select("*");
 
       if (error) {
-        console.error("Error fetching data:", error.message);
         setError({
           message:
             "Error fetching categories, please check your internet and refresh the page",
@@ -194,12 +252,11 @@ const ProductNew = () => {
         category: form?.category?.id,
         guest_price: form.guest_price,
         brand: form.brand,
-        images: imgUrls,
-        technical_downloads: documentsUrls,
         long_description: form.long_description,
         short_description: form.short_description,
         type: form.type.value,
         featured: form.featured.value,
+        status: form.status.value,
         best_sales: form.best_sales.value,
         trade_account_price: form.trade_account_price,
         bulk_price: form.bulk_price,
@@ -218,9 +275,20 @@ const ProductNew = () => {
         content: stateToHTML(editorState.getCurrentContent()),
       };
 
+      // Conditionally add images if URLs are available
+      if (imgUrls && imgUrls.length > 0) {
+        productData.images = imgUrls;
+      }
+
+      // Conditionally add technical_downloads if URLs are available
+      if (documentsUrls && documentsUrls.length > 0) {
+        productData.technical_downloads = documentsUrls;
+      }
+
       const { data, error } = await supabase
         .from("products")
-        .insert([productData]);
+        .update(productData)
+        .eq("id", id);
 
       if (error) {
         throw error;
@@ -241,7 +309,7 @@ const ProductNew = () => {
     <>
       <NavBar />
 
-      <PageTitle name={"New Product"} />
+      <PageTitle name={"Product Update"} />
       {error.message && <ErrorMessage message={error.message} />}
 
       {loading ? (
@@ -258,7 +326,7 @@ const ProductNew = () => {
           >
             <Link
               to={`/admin_products`}
-              style={{ marginBottom: "20px" }}
+              style={{ marginBottom: "10px" }}
               className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
             >
               <i className="ti ti-arrow-left"></i>Back To Products
@@ -269,6 +337,21 @@ const ProductNew = () => {
             className="ttm-contactform wrap-form clearfix"
           >
             <div className="row">
+              <div className="col-lg-3">
+                <label>
+                  <h6 style={{ marginTop: "20px" }}>Status</h6>
+                  <span className="text-input">
+                    <Select
+                      value={form?.status}
+                      onChange={(e) => handleSelect("status", e)}
+                      options={[
+                        { label: "Active", value: "active" },
+                        { label: "Inactive", value: "inactive" },
+                      ]}
+                    />
+                  </span>
+                </label>
+              </div>
               <div className="col-lg-3">
                 <label>
                   <h6 style={{ marginTop: "20px" }}>Type</h6>
@@ -290,6 +373,7 @@ const ProductNew = () => {
                   <h6 style={{ marginTop: "20px" }}>Featured</h6>
                   <span className="text-input">
                     <Select
+                      defaultValue={{ label: "True", value: "True" }}
                       value={form?.featured}
                       onChange={(e) => handleSelect("featured", e)}
                       options={[
@@ -440,21 +524,6 @@ const ProductNew = () => {
                 </label>
               </div>
 
-              {/* <div className="col-lg-12">
-              <label>
-                <span className="text-input">
-                  <input
-                    type="text"
-                    placeholder="Short description"
-                    required="required"
-                    name={"short_description"}
-                    value={form?.short_description}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label>
-            </div> */}
-
               <div className="col-lg-12">
                 <h6 style={{ marginTop: "20px" }}>Description</h6>
                 <label>
@@ -481,20 +550,6 @@ const ProductNew = () => {
                   editorState={pricingAdditionalInformation}
                   setEditorState={setPricingAdditionalInformation}
                 />
-                {/* <label>
-                <span className="text-input">
-                  <textarea
-                    rows="3"
-                    cols="40"
-                    type="text"
-                    placeholder="Pricing Additional Information"
-                    required="required"
-                    name={"pricing_additional_info"}
-                    value={form?.pricing_additional_info}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label> */}
               </div>
 
               <div className="col-lg-12">
@@ -503,20 +558,6 @@ const ProductNew = () => {
                   editorState={deliveryInformation}
                   setEditorState={setDeliveryInformation}
                 />
-                {/* <label>
-                <span className="text-input">
-                  <textarea
-                    rows="3"
-                    cols="40"
-                    type="text"
-                    placeholder="Delivery Information"
-                    required="required"
-                    name={"delivery_information"}
-                    value={form?.delivery_information}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label> */}
               </div>
               <div className="col-lg-12">
                 <h6 style={{ marginTop: "20px" }}>Technical Specifications</h6>
@@ -524,20 +565,6 @@ const ProductNew = () => {
                   editorState={technicalSpecifications}
                   setEditorState={setTechnicalSpecifications}
                 />
-                {/* <label>
-                <span className="text-input">
-                  <textarea
-                    rows="3"
-                    cols="40"
-                    type="text"
-                    placeholder="Technical Specifications"
-                    required="required"
-                    name={"technical_specifications"}
-                    value={form?.technical_specifications}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label> */}
               </div>
               <div className="col-lg-12">
                 <h6 style={{ marginTop: "20px" }}>Key Features</h6>
@@ -545,20 +572,6 @@ const ProductNew = () => {
                   editorState={keyFeatures}
                   setEditorState={setKeyFeatures}
                 />
-                {/* <label>
-                <span className="text-input">
-                  <textarea
-                    rows="3"
-                    cols="40"
-                    type="text"
-                    placeholder="Key Features"
-                    required="required"
-                    name={"key_features"}
-                    value={form?.key_features}
-                    onChange={handleChange}
-                  />
-                </span>
-              </label> */}
               </div>
 
               <div className="col-lg-12">
@@ -579,14 +592,32 @@ const ProductNew = () => {
                   onChange={handleImageChange}
                 />
 
-                <h6>Images</h6>
+                <h6>Old Images</h6>
+                <div className="row">
+                  {form.images?.map((image, index) => (
+                    <div
+                      className="col-lg-3"
+                      key={index}
+                      style={{
+                        padding: "4px",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      <img
+                        src={image}
+                        style={{ height: "150px" }}
+                        alt={"name of the"}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <h6 style={{ marginTop: "20px" }}>New Images</h6>
                 <button
                   style={{ marginBottom: "20px" }}
                   onClick={() => document.getElementById("fileInput").click()}
                 >
                   Select Images
                 </button>
-
                 <div className="row">
                   {[...images].map((image, index) => (
                     <div
@@ -599,7 +630,7 @@ const ProductNew = () => {
                     >
                       <img
                         src={URL.createObjectURL(image)}
-                        style={{ height: "130px" }}
+                        style={{ height: "150px" }}
                         alt={"name of the"}
                       />
                     </div>
@@ -616,7 +647,28 @@ const ProductNew = () => {
                   onChange={handleDocChange}
                 />
 
-                <h6>Technical Downloads</h6>
+                <h6>Old Technical Downloads</h6>
+
+                <div className="row">
+                  {form.technical_downloads?.map((image, index) => (
+                    <div
+                      className="col-lg-3"
+                      key={index}
+                      style={{
+                        padding: "4px",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      <img
+                        src={image}
+                        style={{ height: "130px" }}
+                        alt={"name of the"}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <h6 style={{ marginTop: "20px" }}>New Technical Downloads</h6>
                 <button
                   style={{ marginBottom: "20px" }}
                   onClick={() => document.getElementById("docInput").click()}
@@ -651,7 +703,7 @@ const ProductNew = () => {
               type="submit"
               id="submit"
               className="submit ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
-              value="Save New Product"
+              value="Update Product"
               onClick={handleSaveNewProduct}
             />
           </div>

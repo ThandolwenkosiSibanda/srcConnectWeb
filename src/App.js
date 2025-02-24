@@ -21,6 +21,12 @@ import BestSellers from "./pages/BestSellers";
 import QueryNew from "./pages/QueryNew";
 import Queries from "./pages/Queries";
 import AdminProducts from "./pages/AdminProducts";
+import AdminProduct from "./pages/AdminProduct";
+import AdminCategories from "./pages/AdminCategories";
+import AdminCategory from "./pages/AdminCategory";
+import AdminCategoryNew from "./pages/AdminCategoryNew";
+import AdminOrders from "./pages/AdminOrders";
+import AdminOrder from "./pages/AdminOrder";
 
 const App = () => {
   const { user } = useContext(UserContext);
@@ -42,6 +48,12 @@ const App = () => {
           <Route path="/ordersucess" element={<OrderThanks />} />
           <Route path="/newproduct" element={<ProductNew />} />
           <Route path="/admin_products" element={<AdminProducts />} />
+          <Route path="/admin_products/:id" element={<AdminProduct />} />
+          <Route path="/admin_categories" element={<AdminCategories />} />
+          <Route path="/admin_categories/:id" element={<AdminCategory />} />
+          <Route path="/admin_newcategory" element={<AdminCategoryNew />} />
+          <Route path="/admin_orders" element={<AdminOrders />} />
+          <Route path="/admin_orders/:id" element={<AdminOrder />} />
 
           {!user ? (
             <>
