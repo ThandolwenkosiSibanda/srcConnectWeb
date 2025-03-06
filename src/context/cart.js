@@ -17,12 +17,21 @@ export const CartProvider = ({ children }) => {
       setCartItems(
         cartItems.map((cartItem) =>
           cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + quantity }
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + quantity,
+              }
             : cartItem
         )
       );
     } else {
-      setCartItems([...cartItems, { ...item, quantity: quantity }]);
+      setCartItems([
+        ...cartItems,
+        {
+          ...item,
+          quantity: quantity,
+        },
+      ]);
     }
   };
 

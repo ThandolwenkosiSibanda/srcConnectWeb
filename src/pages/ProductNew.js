@@ -25,6 +25,7 @@ const ProductNew = () => {
     type: { value: "Basic", label: "Basic" },
     featured: { label: "True", value: "True" },
     best_sales: { label: "True", value: "True" },
+    lay_by_availability_status: { label: "False", value: "false" },
   });
   const [images, setImages] = useState([]);
   const [imagesUrls, setImagesUrls] = useState([]);
@@ -204,6 +205,8 @@ const ProductNew = () => {
         trade_account_price: form.trade_account_price,
         bulk_price: form.bulk_price,
         unit_measurement: form.unit_measurement,
+        lay_by_availability_status: form.lay_by_availability_status.value,
+        bulk_price_minimum_quantity: form.bulk_price_minimum_quantity,
         average_delivery_hours: form.average_delivery_hours,
         pricing_additional_info: stateToHTML(
           pricingAdditionalInformation.getCurrentContent()
@@ -281,6 +284,24 @@ const ProductNew = () => {
                         label: category.label,
                         value: category.value,
                       }))}
+                    />
+                  </span>
+                </label>
+              </div>
+
+              <div className="col-lg-3">
+                <label>
+                  <h6 style={{ marginTop: "20px" }}>Layby Status</h6>
+                  <span className="text-input">
+                    <Select
+                      value={form?.lay_by_availability_status}
+                      onChange={(e) =>
+                        handleSelect("lay_by_availability_status", e)
+                      }
+                      options={[
+                        { label: "True", value: "true" },
+                        { label: "False", value: "false" },
+                      ]}
                     />
                   </span>
                 </label>
@@ -393,6 +414,23 @@ const ProductNew = () => {
               </div>
             </div>
             <div className="row">
+              <div className="col-lg-4">
+                <h6 style={{ marginTop: "20px" }}>
+                  Bulk Price Minimum Quantity
+                </h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Bulk Price Minimum Quantity"
+                      required="required"
+                      name={"bulk_price_minimum_quantity"}
+                      value={form?.bulk_price_minimum_quantity}
+                      onChange={handleChange}
+                    />
+                  </span>
+                </label>
+              </div>
               <div className="col-lg-4">
                 <h6 style={{ marginTop: "20px" }}>Unit Measurement</h6>
                 <label>

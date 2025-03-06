@@ -1,19 +1,26 @@
-import React, { useContext, useState } from "react";
-import { useParams } from "react-router-dom";
-import { addToCartAction } from "../../actions/cart";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
+
 import { CartContext } from "../../context/cart";
+import { UserContext } from "../../context/user";
 
-const ProductComponent = ({ product }) => {
+const ProductComponent = ({ product, setCartModalStatus, setCartItem }) => {
+  const { user } = useContext(UserContext);
   const [quantity, setQuantity] = useState(1);
+  const [activeTab, setActiveTab] = useState(1);
 
-  const {
-    cartItems,
-    addToCart,
-    removeFromCart,
-    clearCart,
-    getCartTotal,
-    getCartItemsTotal,
-  } = useContext(CartContext);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
+
+  const { addToCart } = useContext(CartContext);
 
   const updateQuantity = (type) => {
     if (type === "Add") {
@@ -24,6 +31,13 @@ const ProductComponent = ({ product }) => {
       }
     }
   };
+
+  const addToBasket = (product, quantity) => {
+    addToCart(product, quantity);
+    setCartModalStatus("show-modal1");
+    setCartItem({ ...product, quantity: quantity });
+  };
+
   return (
     <>
       <div className="container">
@@ -70,20 +84,34 @@ const ProductComponent = ({ product }) => {
                                 <span className="product-Price-currencySymbol">
                                   $
                                 </span>
-                                {product.trade_account_price}
+
+                                {user?.id
+                                  ? product.trade_account_price
+                                  : product.guest_price}
                               </span>
                             </ins>
-                            <del>
-                              <span className="product-Price-amount">
-                                <span className="product-Price-currencySymbol">
-                                  $
+
+                            {user?.id && (
+                              <del>
+                                <span className="product-Price-amount">
+                                  <span className="product-Price-currencySymbol">
+                                    $
+                                  </span>
+                                  {product.guest_price}
                                 </span>
-                                {product.guest_price}
-                              </span>
-                            </del>
+                              </del>
+                            )}
                           </span>
                           <div className="product-details__short-description">
                             {product.short_description}
+                            <p style={{ marginTop: "10px" }}>
+                              <Link
+                                to={`#description`}
+                                style={{ color: "#ffd200" }}
+                              >
+                                Read Full Product Information
+                              </Link>
+                            </p>
                           </div>
                           <div className="mt-15 mb-25">
                             <div className="quantity">
@@ -113,10 +141,288 @@ const ProductComponent = ({ product }) => {
                               <span
                                 className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
                                 style={{ cursor: "pointer" }}
-                                onClick={() => addToCart(product, quantity)}
+                                onClick={() => addToBasket(product, quantity)}
                               >
                                 Add to cart
                               </span>
+                            </div>
+                          </div>
+
+                          <div className="row">
+                            <div
+                              className=""
+                              style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                marginTop: "20px",
+                                width: "100%",
+                                alignItems: "center",
+                                gap: "10px",
+                                backgroundColor: "#F2F2F2",
+                                padding: "10px",
+                                borderRadius: "5px",
+                              }}
+                            >
+                              <div
+                                className="circle"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  backgroundColor: "#ffd200",
+                                  maxWidth: "63px",
+                                  maxWidth: "63px",
+                                  height: "63px",
+                                  textAlign: "center",
+                                  alignItems: "center",
+                                  borderRadius: "50%",
+                                  padding: "10px",
+                                }}
+                              >
+                                <p
+                                  style={{
+                                    fontSize: "11px",
+                                    fontWeight: "800",
+                                    color: "#02112b",
+                                    lineHeight: "18px",
+                                    paddingTop: "12px",
+                                  }}
+                                >
+                                  BULK SAVING
+                                </p>
+                              </div>
+                              <div className="">
+                                <span
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() =>
+                                    addToBasket(
+                                      product,
+                                      product.bulk_price_minimum_quantity
+                                    )
+                                  }
+                                >
+                                  <div>
+                                    Get {product.unit_measurement} for{" "}
+                                    <span
+                                      data-product-price-per-unit="21.34"
+                                      data-product-price-per-unit-inc-vat="25.61"
+                                    >
+                                      ${product.bulk_price}
+                                    </span>{" "}
+                                    when you buy at least{" "}
+                                    {product.bulk_price_minimum_quantity}{" "}
+                                  </div>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {!user?.id && (
+                            <div className="row">
+                              <div
+                                className=""
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                  paddingRight: "20px",
+                                  marginTop: "20px",
+                                  alignItems: "center",
+                                  gap: "10px",
+                                  backgroundColor: "#F2F2F2",
+                                  padding: "10px",
+                                  borderRadius: "5px",
+                                  width: "100%",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    gap: "10px",
+                                  }}
+                                >
+                                  <div
+                                    className="circle"
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      backgroundColor: "#ffd200",
+                                      width: "4px",
+                                      height: "40px",
+                                      textAlign: "center",
+                                      alignItems: "center",
+                                    }}
+                                  />
+                                  <div style={{ fontStyle: "" }}>
+                                    Save $
+                                    {product.guest_price -
+                                      product.trade_account_price}{" "}
+                                    on {product.unit_measurement} with a trade{" "}
+                                    account
+                                  </div>
+                                </div>
+
+                                <div className="row">
+                                  <div
+                                    className="col-sm-12"
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: "100%",
+                                      gap: "70px",
+                                    }}
+                                  >
+                                    <div>
+                                      <Link
+                                        to={`/login`}
+                                        style={{ color: "#ffd200" }}
+                                      >
+                                        Login
+                                      </Link>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="row">
+                            <div
+                              className=""
+                              style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                paddingRight: "20px",
+                                marginTop: "20px",
+                                alignItems: "center",
+                                gap: "10px",
+                                backgroundColor: "#F2F2F2",
+                                padding: "10px",
+                                borderRadius: "5px",
+                                width: "100%",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  gap: "10px",
+                                }}
+                              >
+                                <div
+                                  className="circle"
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    backgroundColor: "#ffd200",
+                                    width: "4px",
+                                    height: "40px",
+                                    textAlign: "center",
+                                    alignItems: "center",
+                                  }}
+                                />
+                                <div style={{ fontStyle: "" }}>
+                                  Buy On Lay Bye
+                                </div>
+                              </div>
+
+                              <div className="row">
+                                <div
+                                  className="col-sm-12"
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    gap: "70px",
+                                  }}
+                                >
+                                  <div>
+                                    {!user?.id && (
+                                      <Link
+                                        to={`/login`}
+                                        style={{ color: "#ffd200" }}
+                                      >
+                                        Login
+                                      </Link>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row">
+                            <div
+                              className=""
+                              style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                paddingRight: "20px",
+                                marginTop: "20px",
+                                alignItems: "center",
+                                gap: "10px",
+                                backgroundColor: "#F2F2F2",
+                                padding: "10px",
+                                borderRadius: "5px",
+                                width: "100%",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  gap: "10px",
+                                }}
+                              >
+                                <div
+                                  className="circle"
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    backgroundColor: "#ffd200",
+                                    width: "4px",
+                                    height: "40px",
+                                    textAlign: "center",
+                                    alignItems: "center",
+                                  }}
+                                />
+                                <div style={{ fontStyle: "" }}>
+                                  Build Now Pay Later.
+                                </div>
+                              </div>
+
+                              <div className="row">
+                                <div
+                                  className="col-sm-12"
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                    gap: "70px",
+                                  }}
+                                >
+                                  <div>
+                                    <Link
+                                      to={`/application_credit_facility`}
+                                      style={{ color: "#ffd200" }}
+                                    >
+                                      Apply For Materials Pro Credit
+                                    </Link>{" "}
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -129,21 +435,98 @@ const ProductComponent = ({ product }) => {
                     data-effect="fadeIn"
                   >
                     <ul className="tabs clearfix">
-                      <li className="tab active">
-                        <a href="#">Product description</a>
+                      <li
+                        className={`tab ${activeTab === 1 && "active"}`}
+                        id="description"
+                      >
+                        <a onClick={() => setActiveTab(1)}>
+                          Product description
+                        </a>
+                      </li>
+                      <li className={`tab ${activeTab === 2 && "active"}`}>
+                        <a onClick={() => setActiveTab(2)}>
+                          Technical Specifications
+                        </a>
+                      </li>
+                      <li className={`tab ${activeTab === 3 && "active"}`}>
+                        <a onClick={() => setActiveTab(3)}>Key Features</a>
+                      </li>
+                      <li className={`tab ${activeTab === 4 && "active"}`}>
+                        <a onClick={() => setActiveTab(4)}>
+                          Technical Downloads
+                        </a>
                       </li>
                     </ul>
                     <div className="content-tab">
-                      <div
-                        className="content-inner active"
-                        style={{ display: "block" }}
-                      >
+                      {activeTab === 1 && (
                         <div
-                          dangerouslySetInnerHTML={{
-                            __html: product.content,
+                          className="content-inner active"
+                          style={{ display: "block" }}
+                        >
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: product.content,
+                            }}
+                          />
+                        </div>
+                      )}
+                      {activeTab === 2 && (
+                        <div
+                          className="content-inner active"
+                          style={{ display: "block" }}
+                        >
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: product.technical_specifications,
+                            }}
+                          />
+                        </div>
+                      )}
+                      {activeTab === 3 && (
+                        <div
+                          className="content-inner active"
+                          style={{ display: "block" }}
+                        >
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: product.key_features,
+                            }}
+                          />
+                        </div>
+                      )}
+                      {activeTab === 4 && (
+                        <div
+                          className="content-inner active"
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
                           }}
-                        />
-                      </div>
+                        >
+                          {product.technical_downloads &&
+                            product.technical_downloads?.map((item, index) => (
+                              <div
+                                key={index}
+                                style={{
+                                  backgroundColor: "lightgrey",
+                                  width: "100%",
+                                  padding: "10px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                {product.name}
+                                {"_"}
+                                {"technical specifications"}
+                              </div>
+                            ))}
+
+                          {/* <div
+                            dangerouslySetInnerHTML={{
+                              __html: product.content,
+                            }}
+                          /> */}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

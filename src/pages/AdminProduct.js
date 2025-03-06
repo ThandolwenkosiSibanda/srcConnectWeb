@@ -135,6 +135,10 @@ const ProductNew = () => {
           status: { label: `${data?.status}`, value: `${data?.status}` },
           featured: { label: `${data?.featured}`, value: `${data?.featured}` },
           type: { label: `${data?.type}`, value: `${data?.type}` },
+          lay_by_availability_status: {
+            label: `${data?.lay_by_availability_status}`,
+            value: `${data?.lay_by_availability_status}`,
+          },
           category: {
             label: `${data?.category?.name}`,
             value: `${data?.category?.id}`,
@@ -261,6 +265,7 @@ const ProductNew = () => {
         trade_account_price: form.trade_account_price,
         bulk_price: form.bulk_price,
         unit_measurement: form.unit_measurement,
+        lay_by_availability_status: form.lay_by_availability_status.value,
         average_delivery_hours: form.average_delivery_hours,
         pricing_additional_info: stateToHTML(
           pricingAdditionalInformation.getCurrentContent()
@@ -347,6 +352,23 @@ const ProductNew = () => {
                       options={[
                         { label: "Active", value: "active" },
                         { label: "Inactive", value: "inactive" },
+                      ]}
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-3">
+                <label>
+                  <h6 style={{ marginTop: "20px" }}>Layby Status</h6>
+                  <span className="text-input">
+                    <Select
+                      value={form?.lay_by_availability_status}
+                      onChange={(e) =>
+                        handleSelect("lay_by_availability_status", e)
+                      }
+                      options={[
+                        { label: "True", value: "true" },
+                        { label: "False", value: "false" },
                       ]}
                     />
                   </span>

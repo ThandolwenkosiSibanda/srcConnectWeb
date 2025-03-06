@@ -179,7 +179,10 @@ const NavBar = (props) => {
                       Account
                     </div>
                     <aside className="widget_account dropdown_content">
-                      <div className="widget_account_content">
+                      <div
+                        className="widget_account_content"
+                        style={{ zIndex: "1000000" }}
+                      >
                         {user ? (
                           <ul>
                             <li>
@@ -194,7 +197,7 @@ const NavBar = (props) => {
                               onClick={logout}
                               style={{
                                 cursor: "pointer",
-                                marginTop: "20px",
+                                // marginTop: "20px",
                                 color: "red",
                               }}
                             >
@@ -256,7 +259,10 @@ const NavBar = (props) => {
                         </div>
                       </div>
                     </div>
-                    <aside className="widget_shopping_cart dropdown_content">
+                    <aside
+                      className="widget_shopping_cart dropdown_content"
+                      style={{ zIndex: 100000 }}
+                    >
                       <ul className="cart-list">
                         {cartItems?.map((item, index) => (
                           <li key={index}>
@@ -294,6 +300,7 @@ const NavBar = (props) => {
                           <Link
                             to={`/cart`}
                             className="btn btn-default btn-cart"
+                            style={{ zIndex: 100000 }}
                           >
                             Cart
                           </Link>

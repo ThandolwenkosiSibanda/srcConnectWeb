@@ -57,6 +57,8 @@ const Home = () => {
     const groupedByCategory = cartItems?.reduce((acc, product) => {
       const { category } = product;
 
+      console.log("product", product);
+
       if (!acc[category?.name]) {
         acc[category?.name] = {
           items: [],
@@ -71,6 +73,8 @@ const Home = () => {
 
       return acc;
     }, {});
+
+    console.log("groupedByCategory", groupedByCategory);
 
     // Calculate total for all categories
     const grandTotal = Object.values(groupedByCategory).reduce(
@@ -108,7 +112,7 @@ const Home = () => {
                       <table className="table cart_table shop_table_responsive">
                         <thead>
                           <tr>
-                            <th className="product-thumbnail">&nbsp;</th>
+                            {/* <th className="product-thumbnail">&nbsp;</th> */}
                             <th className="product-name">Product</th>
                             <th className="product-price">Price</th>
                             <th className="product-quantity">Quantity</th>
@@ -118,80 +122,127 @@ const Home = () => {
                         </thead>
                         <tbody>
                           {cartItems?.map((item, index) => (
-                            <tr className="cart_item" key={index}>
-                              <td className="product-thumbnail">
-                                <Link to={`/products/${item?.id}`}>
-                                  <img
-                                    className="img-fluid"
-                                    src={
-                                      item?.images?.length > 0 &&
-                                      JSON.parse(JSON.stringify(item.images))[0]
-                                    }
-                                    alt="product-img"
-                                  />
-                                </Link>
-                              </td>
-                              <td className="product-name" data-title="Product">
-                                <Link
-                                  className="product-title"
-                                  to={`/products/${item?.id}`}
+                            <>
+                              <tr className="cart_item" key={index}>
+                                {/* <td className="product-thumbnail">
+                                  <Link to={`/products/${item?.id}`}>
+                                    <img
+                                      className="img-fluid"
+                                      src={
+                                        item?.images?.length > 0 &&
+                                        JSON.parse(
+                                          JSON.stringify(item.images)
+                                        )[0]
+                                      }
+                                      alt="product-img"
+                                    />
+                                  </Link>
+                                </td> */}
+                                <td
+                                  className="product-name"
+                                  data-title="Product"
                                 >
-                                  {item?.name}
-                                </Link>
-                                <span>{item.shortDescription}</span>
-                              </td>
-                              <td className="product-price" data-title="Price">
-                                <span className="Price-amount">
-                                  <span className="Price-currencySymbol">
-                                    $
-                                  </span>
-                                  {item.guest_price}
-                                </span>
-                              </td>
-                              <td
-                                className="product-quantity"
-                                data-title="Quantity"
-                              >
-                                <div className="quantity">
-                                  <input
-                                    type="text"
-                                    value={item.quantity}
-                                    name="quantity-number"
-                                    className="qty"
-                                    size="4"
-                                  />
-                                  <span
-                                    className="inc quantity-button"
-                                    onClick={() => addToCart(item, 1)}
+                                  <Link
+                                    className="product-title"
+                                    to={`/products/${item?.id}`}
                                   >
-                                    +
+                                    {item?.name}
+                                  </Link>
+                                  <span>{item.shortDescription}</span>
+                                </td>
+                                <td
+                                  className="product-price"
+                                  data-title="Price"
+                                >
+                                  <span className="Price-amount">
+                                    <span className="Price-currencySymbol">
+                                      $
+                                    </span>
+
+                                    {item.quantity >=
+                                    item.bulk_price_minimum_quantity
+                                      ? item.bulk_price
+                                      : item.guest_price}
                                   </span>
-                                  <span
-                                    className="dec quantity-button"
-                                    onClick={() => reduceFromCart(item, 1)}
-                                  >
-                                    -
+                                </td>
+                                <td
+                                  className="product-quantity"
+                                  data-title="Quantity"
+                                >
+                                  <div className="quantity">
+                                    <input
+                                      type="text"
+                                      value={item.quantity}
+                                      name="quantity-number"
+                                      className="qty"
+                                      size="4"
+                                    />
+                                    <span
+                                      className="inc quantity-button"
+                                      onClick={() => addToCart(item, 1)}
+                                    >
+                                      +
+                                    </span>
+                                    <span
+                                      className="dec quantity-button"
+                                      onClick={() => reduceFromCart(item, 1)}
+                                    >
+                                      -
+                                    </span>
+                                  </div>
+
+                                  {item.quantity <
+                                  item.bulk_price_minimum_quantity ? (
+                                    <p
+                                      style={{
+                                        fontSize: "8px",
+                                        marginLeft: "20px",
+                                        color: "#02112b",
+                                      }}
+                                    >
+                                      You are{" "}
+                                      {item.bulk_price_minimum_quantity -
+                                        item.quantity}{" "}
+                                      item(s) away from getting the bulk price
+                                    </p>
+                                  ) : (
+                                    <p
+                                      style={{
+                                        fontSize: "8px",
+                                        marginLeft: "20px",
+                                        color: "#02112b",
+                                      }}
+                                    >
+                                      Bulk price
+                                    </p>
+                                  )}
+                                </td>
+                                <td
+                                  className="product-subtotal"
+                                  data-title="Total"
+                                >
+                                  <span className="Price-amount">
+                                    <span className="Price-currencySymbol">
+                                      $
+                                    </span>
+                                    {item.quantity *
+                                      (item.quantity >=
+                                      item.bulk_price_minimum_quantity
+                                        ? item.bulk_price
+                                        : item.guest_price)}
                                   </span>
-                                </div>
-                              </td>
-                              <td
-                                className="product-subtotal"
-                                data-title="Total"
-                              >
-                                <span className="Price-amount">
-                                  <span className="Price-currencySymbol">
-                                    $
+                                </td>
+                                <td
+                                  className="product-remove"
+                                  onClick={() => removeFromCart(item)}
+                                >
+                                  <span className="product-remove-span">
+                                    {" "}
+                                    ×{" "}
                                   </span>
-                                  {item.quantity * item.guest_price}
-                                </span>
-                              </td>
-                              <td
-                                className="product-remove"
-                                onClick={() => removeFromCart(item)}
-                              >
-                                <span className="product-remove-span"> × </span>
-                              </td>
-                            </tr>
+                                </td>
+                              </tr>
+                            </>
                           ))}
 
                           <tr>

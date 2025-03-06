@@ -35,7 +35,10 @@ const Mainbar = () => {
 
   const fetchData = async (tableName) => {
     try {
-      const { data, error } = await supabase.from(tableName).select("*");
+      // const { data, error } = await supabase.from(tableName).select("*");
+      const { data, error } = await supabase
+        .from("products")
+        .select("*, category(*)");
       if (error) {
         console.error("Error fetching data:", error.message);
         return null;

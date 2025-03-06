@@ -2279,7 +2279,7 @@ ul.ttm-recent-post-list li:after {
   opacity: 0;
 }
 .modal1-content {
-  display: inline-block;
+  /* display: inline-block; */
   text-align: left;
   vertical-align: middle;
   transition: transform 0.3s ease-out;
