@@ -219,6 +219,17 @@ const FooterPage = () => {
                     <li>
                       <Link to={`/best_sellers`}>Best Sales</Link>
                     </li>
+
+                    <li>
+                      <Link to={`/admin_products`}>Admin Products</Link>
+                    </li>
+
+                    <li>
+                      <Link to={`/admin_categories`}>Admin Categories</Link>
+                    </li>
+                    <li>
+                      <Link to={`/admin_orders`}>Admin Orders</Link>
+                    </li>
                     {/* <li>
                       <Link to={`/contact_us`}>Contact Us</Link>
                     </li> */}
