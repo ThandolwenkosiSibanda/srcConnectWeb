@@ -123,15 +123,17 @@ const AdminOrders = () => {
                             </th>
                             <th className="product-subtotal">{}</th>
                             <th className="product-subtotal">
-                              {item.total_price}
+                              {item.total_price.toFixed(2)}
                             </th>
                             <th className="product-subtotal">
                               {" "}
-                              {item.delivery_charge}
+                              {item.delivery_charge.toFixed(2)}
                             </th>
                             <th className="product-subtotal">
                               {" "}
-                              {item.delivery_charge + item.total_price}
+                              {(
+                                item.delivery_charge + item.total_price
+                              ).toFixed(2)}
                             </th>
 
                             <th className="product-subtotal"> {item.status}</th>
@@ -207,15 +209,17 @@ const AdminOrders = () => {
                                   </th>
                                   <th className="product-subtotal">
                                     {" "}
-                                    {item?.guest_price}
+                                    {(item?.guest_price).toFixed(2)}
                                   </th>
                                   <th className="product-subtotal">
                                     {" "}
-                                    {item?.quantity}
+                                    {(item?.quantity).toFixed(2)}
                                   </th>
                                   <th className="product-subtotal">
                                     {" "}
-                                    {item.quantity + item.guest_price}
+                                    {(
+                                      item.quantity + item.guest_price
+                                    )?.toFixed(2)}
                                   </th>
                                 </tr>
                               )

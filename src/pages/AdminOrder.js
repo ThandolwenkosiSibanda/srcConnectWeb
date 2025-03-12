@@ -260,11 +260,11 @@ const AdminOrder = () => {
                           </th>
                           <th className="product-subtotal">
                             {" "}
-                            {(item?.quantity).toFixed(2)}
+                            {item?.quantity?.toFixed(2)}
                           </th>
                           <th className="product-subtotal">
                             {" "}
-                            {(item.quantity + item.guest_price).toFixed(2)}
+                            {(item.quantity + item.guest_price)?.toFixed(2)}
                           </th>
                         </tr>
                       ))}
@@ -281,18 +281,12 @@ const AdminOrder = () => {
                       <div className="cart_totals res-767-mt-30">
                         <h5>
                           Total Price
-                          <span>
-                            $
-                            {/* {(getCartTotal() + deliveryCharge)?.toFixed(
-                                      2
-                                    )} */}
-                            {order.total_price.toFixed(2)}
-                          </span>
+                          <span>${order.total_price?.toFixed(2)}</span>
                         </h5>
 
                         <h5>
                           Delivery
-                          <span>${order.delivery_charge.toFixed(2)}</span>
+                          <span>${order.delivery_charge?.toFixed(2)}</span>
                         </h5>
 
                         <h5>
@@ -301,7 +295,7 @@ const AdminOrder = () => {
                             $
                             {(
                               order.total_price + order.delivery_charge
-                            ).toFixed(2)}
+                            )?.toFixed(2)}
                           </span>
                         </h5>
                       </div>

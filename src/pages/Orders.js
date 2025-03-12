@@ -97,15 +97,17 @@ const Home = () => {
                             </th>
                             <th className="product-subtotal">
                               {" "}
-                              {item.total_price}
+                              {item.total_price?.toFixed(2)}
                             </th>
                             <th className="product-subtotal">
                               {" "}
-                              {item.delivery_charge}
+                              {item.delivery_charge?.toFixed(2)}
                             </th>
                             <th className="product-subtotal">
                               {" "}
-                              {item.delivery_charge + item.total_price}
+                              {(
+                                item.delivery_charge + item.total_price
+                              )?.toFixed(2)}
                             </th>
 
                             <th className="product-subtotal"> {item.status}</th>
@@ -173,7 +175,7 @@ const Home = () => {
                         <thead>
                           <tr>
                             <th className="product-subtotal">Name</th>
-                            <th className="product-subtotal">Unit Cost</th>
+                            <th className="product-subtotal">Units Cost</th>
                             <th className="product-subtotal">Quantity</th>
                             <th className="product-subtotal">Total Cost</th>
                           </tr>
@@ -189,15 +191,17 @@ const Home = () => {
                                   </th>
                                   <th className="product-subtotal">
                                     {" "}
-                                    {item?.guest_price}
+                                    {item?.guest_price?.toFixed(2)}
                                   </th>
                                   <th className="product-subtotal">
                                     {" "}
-                                    {item?.quantity}
+                                    {item?.quantity?.toFixed(2)}
                                   </th>
                                   <th className="product-subtotal">
                                     {" "}
-                                    {item.quantity + item.guest_price}
+                                    {(
+                                      item.quantity + item.guest_price
+                                    )?.toFixed(2)}
                                   </th>
                                 </tr>
                               )
@@ -234,7 +238,7 @@ const Home = () => {
                                   {/* {(getCartTotal() + deliveryCharge)?.toFixed(
                                       2
                                     )} */}
-                                  {activeProduct.total_price}
+                                  {activeProduct.total_price?.toFixed(2)}
                                 </span>
                               </h5>
 
@@ -245,7 +249,7 @@ const Home = () => {
                                   {/* {(getCartTotal() + deliveryCharge)?.toFixed(
                                       2
                                     )} */}
-                                  {activeProduct.delivery_charge}
+                                  {activeProduct.delivery_charge?.toFixed(2)}
                                 </span>
                               </h5>
 
@@ -253,8 +257,10 @@ const Home = () => {
                                 Total Cost
                                 <span>
                                   $
-                                  {activeProduct.total_price +
-                                    activeProduct.delivery_charge}
+                                  {(
+                                    activeProduct.total_price +
+                                    activeProduct.delivery_charge
+                                  )?.toFixed(2)}
                                   {/* {(getCartTotal() + deliveryCharge)?.toFixed(
                                       2
                                     )} */}
