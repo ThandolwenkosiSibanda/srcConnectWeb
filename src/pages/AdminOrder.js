@@ -158,7 +158,7 @@ const AdminOrder = () => {
                 </label>
               </div>
               <div className="col-lg-3">
-                <h6 style={{ marginTop: "20px" }}>Name</h6>
+                <h6 style={{ marginTop: "20px" }}>Email</h6>
                 <label>
                   <span className="text-input">
                     <input

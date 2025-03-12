@@ -16,7 +16,9 @@ const SignupComponent = ({
 }) => {
   const [value, setValue] = useState("ZW");
 
-  console.log("value", value);
+  const handlePhone = (value) => {
+    setForm({ ...form, phone: value });
+  };
 
   return (
     <div className="container" style={{ maxWidth: "500px" }}>
@@ -132,14 +134,14 @@ const SignupComponent = ({
                   <div className="row">
                     <div className="col l12 s12">
                       <Form.Label>
-                        Phone<sup>*</sup>
+                        Phone<sup>* include country code</sup>
                       </Form.Label>
 
                       <PhoneInput
                         defaultCode="ZW"
                         country="ZW"
-                        value={value}
-                        onChange={setValue}
+                        value={form.phone}
+                        onChange={handlePhone}
                       />
 
                       <sub>
@@ -183,7 +185,7 @@ const SignupComponent = ({
                         Password<sup>*</sup>
                       </Form.Label>
                       <Form.Control
-                        type="text"
+                        type="password"
                         placeholder=""
                         name={"password"}
                         onChange={handleChange}
@@ -201,7 +203,7 @@ const SignupComponent = ({
                         Password Confirmation<sup>*</sup>
                       </Form.Label>
                       <Form.Control
-                        type="text"
+                        type="password"
                         placeholder=""
                         name={"password2"}
                         onChange={handleChange}

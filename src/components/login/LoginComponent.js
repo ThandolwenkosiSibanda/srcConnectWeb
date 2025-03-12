@@ -88,7 +88,7 @@ const SignupComponent = ({
                   <Form.Group className="mb-3" controlId="">
                     <Form.Label>Password</Form.Label>
                     <Form.Control
-                      type="text"
+                      type="password"
                       placeholder=""
                       name={"password"}
                       onChange={handleChange}
