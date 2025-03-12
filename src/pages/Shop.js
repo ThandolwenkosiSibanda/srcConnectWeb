@@ -25,7 +25,8 @@ const Shop = () => {
     try {
       const { data, error } = await supabase
         .from("products")
-        .select("*, category(*)");
+        .select("*, category(*)")
+        .eq("status", "active");
 
       if (error) {
         console.error("Error fetching data:", error.message);

@@ -17,7 +17,8 @@ const Sidebar = () => {
       const { data, error } = await supabase
         .from(tableName)
         .select("*")
-        .eq("featured", true);
+        .eq("featured", true)
+        .eq("status", "active");
 
       if (error) {
         console.error("Error fetching data:", error.message);

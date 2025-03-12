@@ -38,7 +38,16 @@ const Mainbar = () => {
       // const { data, error } = await supabase.from(tableName).select("*");
       const { data, error } = await supabase
         .from("products")
-        .select("*, category(*)");
+        .select(
+          `
+        *,
+        category:categories (
+          *
+        )
+      `
+        )
+        .eq("status", "active");
+
       if (error) {
         console.error("Error fetching data:", error.message);
         return null;
