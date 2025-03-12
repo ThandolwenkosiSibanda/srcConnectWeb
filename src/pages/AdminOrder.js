@@ -48,9 +48,25 @@ const AdminOrder = () => {
 
       setLoading(true);
       try {
+        // const { data, error } = await supabase
+        //   .from("orders")
+        //   .select("*")
+        //   .eq("id", id)
+        //   .single();
+
         const { data, error } = await supabase
           .from("orders")
-          .select("*")
+          .select(
+            `
+    *,
+    user:users (
+      email,
+      phone,
+      name,
+      surname
+    )
+  `
+          )
           .eq("id", id)
           .single();
 
@@ -157,7 +173,7 @@ const AdminOrder = () => {
                   </span>
                 </label>
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-4">
                 <h6 style={{ marginTop: "20px" }}>Email</h6>
                 <label>
                   <span className="text-input">
@@ -166,8 +182,58 @@ const AdminOrder = () => {
                       placeholder="Name"
                       required="required"
                       name={"name"}
-                      value={form?.name}
+                      value={form?.user?.email}
                       onChange={handleChange}
+                      readOnly
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-3">
+                <h6 style={{ marginTop: "20px" }}>Phone</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      required="required"
+                      name={"name"}
+                      value={form?.user?.phone}
+                      onChange={handleChange}
+                      readOnly
+                    />
+                  </span>
+                </label>
+              </div>
+              <div className="col-lg-3">
+                <h6 style={{ marginTop: "20px" }}>Name</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      required="required"
+                      name={"name"}
+                      value={form?.user?.name}
+                      onChange={handleChange}
+                      readOnly
+                    />
+                  </span>
+                </label>
+              </div>
+
+              <div className="col-lg-3">
+                <h6 style={{ marginTop: "20px" }}>Surname</h6>
+                <label>
+                  <span className="text-input">
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      required="required"
+                      name={"name"}
+                      value={form?.user?.surname}
+                      onChange={handleChange}
+                      readOnly
                     />
                   </span>
                 </label>
@@ -194,11 +260,11 @@ const AdminOrder = () => {
                           </th>
                           <th className="product-subtotal">
                             {" "}
-                            {item?.quantity}
+                            {(item?.quantity).toFixed(2)}
                           </th>
                           <th className="product-subtotal">
                             {" "}
-                            {item.quantity + item.guest_price}
+                            {(item.quantity + item.guest_price).toFixed(2)}
                           </th>
                         </tr>
                       ))}
@@ -220,19 +286,22 @@ const AdminOrder = () => {
                             {/* {(getCartTotal() + deliveryCharge)?.toFixed(
                                       2
                                     )} */}
-                            {order.total_price}
+                            {order.total_price.toFixed(2)}
                           </span>
                         </h5>
 
                         <h5>
                           Delivery
-                          <span>${order.delivery_charge}</span>
+                          <span>${order.delivery_charge.toFixed(2)}</span>
                         </h5>
 
                         <h5>
                           Total Cost
                           <span>
-                            ${order.total_price + order.delivery_charge}
+                            $
+                            {(
+                              order.total_price + order.delivery_charge
+                            ).toFixed(2)}
                           </span>
                         </h5>
                       </div>
