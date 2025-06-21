@@ -27,9 +27,24 @@ import AdminCategory from "./pages/AdminCategory";
 import AdminCategoryNew from "./pages/AdminCategoryNew";
 import AdminOrders from "./pages/AdminOrders";
 import AdminOrder from "./pages/AdminOrder";
+import AdminBanners from "./pages/AdminBanners";
+import AdminBanner from "./pages/AdminBanner";
+import AdminBannerNew from "./pages/AdminBannerNew";
+import CustomerNew from "./pages/CustomerNew";
+import Customers from "./pages/Customers";
+import Customer from "./pages/Customer";
+import Jobs from "./pages/Jobs";
+import Job from "./pages/Job";
+import JobEdit from "./pages/JobEdit";
+import JobNew from "./pages/JobNew";
+
+const ProtectedRoute = ({ user, loading, children }) => {
+  if (loading) return null; // or a loader/spinner
+  return user ? children : <Navigate to="/login" replace />;
+};
 
 const App = () => {
-  const { user } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
 
   return (
     <div>
@@ -37,45 +52,87 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="/products/:id" element={<Product />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/brand_new" element={<NewProducts />} />
-          <Route path="/promotions" element={<ProductPromotions />} />
-          <Route path="/best_sellers" element={<BestSellers />} />
 
-          <Route path="/category/:id" element={<Shop />} />
-          <Route path="/ordersucess" element={<OrderThanks />} />
-          <Route path="/newproduct" element={<ProductNew />} />
-          <Route path="/admin_products" element={<AdminProducts />} />
-          <Route path="/admin_products/:id" element={<AdminProduct />} />
-          <Route path="/admin_categories" element={<AdminCategories />} />
-          <Route path="/admin_categories/:id" element={<AdminCategory />} />
-          <Route path="/admin_newcategory" element={<AdminCategoryNew />} />
-          <Route path="/admin_orders" element={<AdminOrders />} />
-          <Route path="/admin_orders/:id" element={<AdminOrder />} />
+          <Route
+            path="login"
+            element={
+              loading ? null : user ? <Navigate to="/" replace /> : <Login />
+            }
+          />
 
-          {!user ? (
+          {/* Protected Routes */}
+          <Route
+            path="customers"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <Customers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="customers/:id"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <Customer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="newcustomer"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <CustomerNew />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="jobs"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <Jobs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="jobs/:id"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <Job />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="jobs/:id/edit"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <JobEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="newjob"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <JobNew />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* {!user ? (
             <>
               <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgotpassword" element={<ForgotPassword />} />
-              <Route path="/orders" element={<Navigate to="/login" />} />
-              <Route path="/newquery" element={<Navigate to="/login" />} />
-              <Route path="/queries" element={<Navigate to="/login" />} />
-              <Route path="/cart" element={<Navigate to="/login" />} />
             </>
           ) : (
             <>
-              <Route path="/login" element={<Navigate to="/" />} />
-              <Route path="/register" element={<Navigate to="/" />} />
-              <Route path="/forgotpassword" element={<Navigate to="/" />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/queries" element={<Queries />} />
-              <Route path="/newquery" element={<QueryNew />} />
-              <Route path="/cart" element={<Cart />} />
+              <Route path="/customers" element={<Customers />} />
+              <Route path="/customers/:id" element={<Customer />} />
+              <Route path="/newcustomer" element={<CustomerNew />} />
+              <Route path="/jobs" element={<Jobs />} />
+              <Route path="/jobs/:id" element={<Job />} />
+              <Route path="/jobs/:id/edit" element={<JobEdit />} />
+              <Route path="/newjob" element={<JobNew />} />
             </>
-          )}
+          )} */}
         </Route>
       </Routes>
     </div>

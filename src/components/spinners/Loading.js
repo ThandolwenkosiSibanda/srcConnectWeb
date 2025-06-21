@@ -9,7 +9,7 @@ const BigLoading = () => {
           width: "6rem",
           height: "6rem",
           borderWidth: "0.5rem",
-          borderColor: "#ffd200",
+          borderColor: "#bd2a2b",
           borderRightColor: "transparent", // Creates the spinning effect
         }}
         role="status"

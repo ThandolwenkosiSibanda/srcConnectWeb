@@ -8,16 +8,11 @@ const NavBar = () => {
         <div className="header_main">
           <div className="container">
             <div className="row">
-              <div className="col-lg-3 col-sm-3 col-3 order-1">
+              <div className="col-lg-6 col-sm-6 col-6 order-1">
                 <div className="site-branding">
-                  <Link to={`/`}>
-                    <img
-                      id="logo"
-                      className="img-center"
-                      src="images/white-logo.png"
-                      alt="logo-img"
-                    />
-                  </Link>
+                  <h5 style={{ color: "#fff" }}>
+                    Auto ECU Job Management System
+                  </h5>
                 </div>
               </div>
             </div>

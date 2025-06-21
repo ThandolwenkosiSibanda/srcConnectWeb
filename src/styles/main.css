@@ -934,7 +934,7 @@ header a:hover,
 .footer .widget ul.widget_info_text > li i,
 .footer .social-icons li > a:hover,
 .footer-nav-menu a:hover {
-  color: #ffd200;
+  color: #bd2a2b;
 }
 
 /** highlight-bg-color **/
@@ -953,7 +953,7 @@ header a:hover,
 .ttm-highlight-fid:before,
 a.checkout-button,
 #totop.top-visible {
-  background-color: #ffd200;
+  background-color: #bd2a2b;
 }
 
 nav.menu {
@@ -3695,4 +3695,8 @@ section.error-404 .page-content p {
   font-size: 14px;
   font-weight: 400;
   color: #fff;
+}
+
+.datepicker-zindex {
+  z-index: 9999 !important;
 }

@@ -78,7 +78,7 @@ const NewProducts = () => {
       <div className="page">
         <NavBar />
 
-        <PageTitle name={"New Products"} />
+        <PageTitle name={"New Customer"} />
         {error.message && !loading && <ErrorMessage message={error.message} />}
 
         {loading ? (

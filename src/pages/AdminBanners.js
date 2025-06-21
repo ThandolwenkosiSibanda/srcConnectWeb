@@ -12,7 +12,7 @@ import PageTitle from "../components/titles/PageTitle";
 import ErrorMessage from "../components/spinners/ErrorMessage";
 import BigLoading from "../components/spinners/Loading";
 
-const AdminProducts = () => {
+const AdminBanners = () => {
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -27,7 +27,7 @@ const AdminProducts = () => {
   const fetchData = async () => {
     setError("");
     try {
-      const { data, error } = await supabase.from("customers").select("*");
+      const { data, error } = await supabase.from("banners").select("*");
 
       console.log("error", error);
 
@@ -35,7 +35,7 @@ const AdminProducts = () => {
         console.error("Error fetching data:", error.message);
         setError({
           message:
-            "Error fetching customers, please check your internet and refresh the page",
+            "Error fetching products, please check your internet and refresh the page",
         });
         return null;
       }
@@ -52,7 +52,7 @@ const AdminProducts = () => {
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
-      const result = await fetchData();
+      const result = await fetchData("products");
 
       if (result) {
         let sortedData = [...result];
@@ -60,12 +60,12 @@ const AdminProducts = () => {
         sortedData.sort((a, b) => {
           if (sortBy === "name") {
             return sortOrder === "asc"
-              ? a?.name.localeCompare(b?.name)
-              : b?.name.localeCompare(a?.name);
-          } else if (sortBy === "surname") {
+              ? a.name.localeCompare(b.name)
+              : b.name.localeCompare(a.name);
+          } else if (sortBy === "guest_price") {
             return sortOrder === "asc"
-              ? a.surname - b.surname
-              : b.surname - a.surname;
+              ? a.guest_price - b.guest_price
+              : b.guest_price - a.guest_price;
           }
         });
 
@@ -97,7 +97,7 @@ const AdminProducts = () => {
       <div className="page">
         <NavBar />
 
-        <PageTitle name={"Customers"} />
+        <PageTitle name={"Admin Banners"} />
         {error && !loading && <ErrorMessage message={error.message} />}
 
         {loading ? (
@@ -118,7 +118,7 @@ const AdminProducts = () => {
                     style={{ marginBottom: "20px" }}
                     className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                   >
-                    <i className="ti ti-arrow-left"></i>Back To Home
+                    <i className="ti ti-arrow-left"></i>Back To Shop
                   </Link>
 
                   <div className="col-lg-6 col-12 ">
@@ -136,11 +136,11 @@ const AdminProducts = () => {
                   </div>
 
                   <Link
-                    to={`/newcustomer`}
+                    to={`/admin_new_banner`}
                     style={{ marginBottom: "20px" }}
                     className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                   >
-                    New Customer
+                    New Banner
                   </Link>
                 </div>
 
@@ -150,13 +150,7 @@ const AdminProducts = () => {
                       <thead>
                         <tr>
                           <th className="product-subtotal">Created</th>
-                          <th className="product-subtotal">Title</th>
                           <th className="product-subtotal">Name</th>
-                          <th className="product-subtotal">Surname</th>
-                          <th className="product-subtotal">Phone</th>
-                          <th className="product-subtotal">Email</th>
-                          <th className="product-subtotal">Status</th>
-
                           <th className="product-subtotal"></th>
                         </tr>
                       </thead>
@@ -167,21 +161,10 @@ const AdminProducts = () => {
                               {" "}
                               {format(item.created_at, "dd-MMM-yyyy")}
                             </th>
-                            <th className="product-subtotal"> {item.title}</th>
                             <th className="product-subtotal"> {item.name}</th>
 
                             <th className="product-subtotal">
-                              {" "}
-                              {item.surname}
-                            </th>
-
-                            <th className="product-subtotal"> {item.phone}</th>
-                            <th className="product-subtotal"> {item.email}</th>
-
-                            {/* <th className="product-subtotal"> {item.status}</th> */}
-
-                            <th className="product-subtotal">
-                              <Link to={`/customers/${item.id}`}>View</Link>
+                              <Link to={`/admin_banners/${item.id}`}>View</Link>
                             </th>
                           </tr>
                         ))}
@@ -193,7 +176,7 @@ const AdminProducts = () => {
                                 to={`/shop`}
                                 className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                               >
-                                <i className="ti ti-arrow-left"></i>Back To Home
+                                <i className="ti ti-arrow-left"></i>Back To Shop
                               </Link>
                             </div>
                           </td>
@@ -213,4 +196,4 @@ const AdminProducts = () => {
   );
 };
 
-export default AdminProducts;
+export default AdminBanners;

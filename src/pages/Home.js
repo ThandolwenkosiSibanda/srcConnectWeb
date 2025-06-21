@@ -13,25 +13,10 @@ const Home = () => {
       <div className="page">
         <NavBar />
 
-        <div className="site-main">
+        <div className="site-main" style={{ minHeight: "80vh" }}>
           <Banners />
 
-          <div className="sidebar ttm-sidebar-left pt-40 pb-40 clearfix">
-            <div className="container">
-              <div className="row">
-                {/* Sidebar */}
-                <Sidebar />
-
-                {/* Main container */}
-
-                <Mainbar />
-
-                <Brands />
-
-                <Story />
-              </div>
-            </div>
-          </div>
+          <div className="sidebar ttm-sidebar-left pt-40 pb-40 clearfix"></div>
         </div>
 
         {/* Footer */}

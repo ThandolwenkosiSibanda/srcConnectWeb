@@ -32,8 +32,11 @@ const Home = () => {
     });
 
     if (error) {
+      console.log("error", error);
+
       setErrorMessage(error.message);
     } else {
+      console.log("data", data);
       if (data.user) {
         // Save user in global state and localStorage
         login(data.user);

@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import NavBar from "../components/navBar/NavBar";
 import FooterPage from "../components/footer/FooterComponent";
-import { CartContext } from "../context/cart";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { supabase } from "../utils/supabase";
 import { UserContext } from "../context/user";
 
@@ -12,7 +10,7 @@ import PageTitle from "../components/titles/PageTitle";
 import ErrorMessage from "../components/spinners/ErrorMessage";
 import BigLoading from "../components/spinners/Loading";
 
-const AdminProducts = () => {
+const Jobs = () => {
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -27,7 +25,7 @@ const AdminProducts = () => {
   const fetchData = async () => {
     setError("");
     try {
-      const { data, error } = await supabase.from("customers").select("*");
+      const { data, error } = await supabase.from("jobs").select("*");
 
       console.log("error", error);
 
@@ -35,7 +33,7 @@ const AdminProducts = () => {
         console.error("Error fetching data:", error.message);
         setError({
           message:
-            "Error fetching customers, please check your internet and refresh the page",
+            "Error fetching jobs, please check your internet and refresh the page",
         });
         return null;
       }
@@ -58,14 +56,18 @@ const AdminProducts = () => {
         let sortedData = [...result];
 
         sortedData.sort((a, b) => {
-          if (sortBy === "name") {
+          if (sortBy === "vehicle_registration_number") {
             return sortOrder === "asc"
-              ? a?.name.localeCompare(b?.name)
-              : b?.name.localeCompare(a?.name);
-          } else if (sortBy === "surname") {
+              ? a?.vehicle_registration_number.localeCompare(
+                  b?.vehicle_registration_number
+                )
+              : b?.vehicle_registration_number.localeCompare(
+                  a?.vehicle_registration_number
+                );
+          } else if (sortBy === "vehicle_registration_number") {
             return sortOrder === "asc"
-              ? a.surname - b.surname
-              : b.surname - a.surname;
+              ? a.vehicle_registration_number - b.vehicle_registration_number
+              : b.vehicle_registration_number - a.vehicle_registration_number;
           }
         });
 
@@ -85,7 +87,9 @@ const AdminProducts = () => {
       if (!searchQuery) return items; // Return all items if search query is empty
 
       return items.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        item.vehicle_registration_number
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
       );
     };
 
@@ -97,13 +101,13 @@ const AdminProducts = () => {
       <div className="page">
         <NavBar />
 
-        <PageTitle name={"Customers"} />
+        <PageTitle name={"Jobs"} />
         {error && !loading && <ErrorMessage message={error.message} />}
 
         {loading ? (
           <BigLoading />
         ) : (
-          <div className="site-main">
+          <div className="site-main" style={{ minHeight: "80vh" }}>
             <section className="cart-section clearfix">
               <div className="container">
                 <div
@@ -128,7 +132,7 @@ const AdminProducts = () => {
                         className="form-control"
                         type="text"
                         name="s"
-                        placeholder="Search by name"
+                        placeholder="Search by Vehicle Registration Number"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
@@ -136,11 +140,11 @@ const AdminProducts = () => {
                   </div>
 
                   <Link
-                    to={`/newcustomer`}
+                    to={`/newjob`}
                     style={{ marginBottom: "20px" }}
                     className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                   >
-                    New Customer
+                    New Job
                   </Link>
                 </div>
 
@@ -150,13 +154,12 @@ const AdminProducts = () => {
                       <thead>
                         <tr>
                           <th className="product-subtotal">Created</th>
-                          <th className="product-subtotal">Title</th>
-                          <th className="product-subtotal">Name</th>
-                          <th className="product-subtotal">Surname</th>
-                          <th className="product-subtotal">Phone</th>
-                          <th className="product-subtotal">Email</th>
+                          <th className="product-subtotal">VRN</th>
+                          <th className="product-subtotal">Make</th>
+                          <th className="product-subtotal">Model</th>
                           <th className="product-subtotal">Status</th>
 
+                          <th className="product-subtotal"></th>
                           <th className="product-subtotal"></th>
                         </tr>
                       </thead>
@@ -167,21 +170,39 @@ const AdminProducts = () => {
                               {" "}
                               {format(item.created_at, "dd-MMM-yyyy")}
                             </th>
-                            <th className="product-subtotal"> {item.title}</th>
-                            <th className="product-subtotal"> {item.name}</th>
-
                             <th className="product-subtotal">
                               {" "}
-                              {item.surname}
+                              {item.vehicle_registration_number}
+                            </th>
+                            <th className="product-subtotal">
+                              {" "}
+                              {item.vehicle_make}
                             </th>
 
-                            <th className="product-subtotal"> {item.phone}</th>
-                            <th className="product-subtotal"> {item.email}</th>
+                            <th className="product-subtotal">
+                              {item.vehicle_model}
+                            </th>
+                            {/* <th className="product-subtotal">
+                              {format(
+                                item.expected_delivery_time,
+                                "dd-MMM-yyyy HH:mm"
+                              )}
+                            </th> */}
+                            {/* <th className="product-subtotal">
+                              {item.delivery_time &&
+                                format(item.delivery_time, "dd-MMM-yyyy")}
+                              <br />
+                              {item.delivery_time &&
+                                format(item.delivery_time, "HH:mm")}
+                            </th> */}
 
-                            {/* <th className="product-subtotal"> {item.status}</th> */}
+                            <th className="product-subtotal"> {item.status}</th>
 
                             <th className="product-subtotal">
-                              <Link to={`/customers/${item.id}`}>View</Link>
+                              <Link to={`/jobs/${item.id}`}>View</Link>
+                            </th>
+                            <th className="product-subtotal">
+                              <Link to={`/jobs/${item.id}/edit`}>Edit</Link>
                             </th>
                           </tr>
                         ))}
@@ -213,4 +234,4 @@ const AdminProducts = () => {
   );
 };
 
-export default AdminProducts;
+export default Jobs;

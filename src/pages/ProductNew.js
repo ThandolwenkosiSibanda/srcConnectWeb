@@ -244,7 +244,7 @@ const ProductNew = () => {
     <>
       <NavBar />
 
-      <PageTitle name={"New Product"} />
+      <PageTitle name={"New Customer"} />
       {error.message && <ErrorMessage message={error.message} />}
 
       {loading ? (
@@ -264,7 +264,8 @@ const ProductNew = () => {
               style={{ marginBottom: "20px" }}
               className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
             >
-              <i className="ti ti-arrow-left"></i>Back To Products
+              <i className="ti ti-arrow-left"></i>Back To Customers
+              <i className="ti ti-arrow-left"></i>Back To Customers
             </Link>
           </div>
           <div

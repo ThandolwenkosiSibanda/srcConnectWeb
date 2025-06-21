@@ -18,56 +18,29 @@ const SignupComponent = ({
   console.log("value", value);
 
   return (
-    <div className="container" style={{ maxWidth: "500px" }}>
+    <div className="container" style={{ maxWidth: "500px", minHeight: "80vh" }}>
       <div className="c-page-banner">
         <div
           className="sign-up-banner c-page-banner__header row background-primary"
           data-stretch-type="full"
         >
           <div className="col l9 offset-l1 s9">
-            <h4 className=" " style={{ marginTop: "20px" }}>
-              Sign In To Your Account
+            <h4
+              className=" "
+              style={{ marginTop: "20px", textAlign: "center" }}
+            >
+              Welcome Back
             </h4>
-            <h5 className="c-page-banner__subheading">
-              Benefits of signing into your account
-            </h5>
-            <div classNameName="c-page-banner__icons banner_icons">
-              <div className="c-page-banner__icon">
-                <span className="material-icons">
-                  <i className="fa fa-check" aria-hidden="true"></i>
-                </span>
-                <span> Trade discounts</span>
-              </div>
-              <div className="c-page-banner__icon">
-                <span className="material-icons">
-                  <i className="fa fa-check" aria-hidden="true"></i>
-                </span>
-                <span> Keep track of all queries</span>
-              </div>
-              <div className="c-page-banner__icon">
-                <span className="material-icons">
-                  <i className="fa fa-check" aria-hidden="true"></i>
-                </span>
-                <span> Keep track of all orders</span>
-              </div>
-            </div>
           </div>
           <div className="c-page-banner__header-background"></div>
         </div>
         <div className="c-page-banner__content row">
           <div className="col l7 offset-l1 background-greyscale-10">
-            <div className="c-trade-credit__text">
-              <p>
-                In order to get access to trade prices, all you need to do is
-                create an account and one of our Key Accounts Managers will be
-                in touch.
-              </p>
-            </div>
             <div className="c-page-banner__form">
               <div className="account--log-in">
                 <div className="row">
                   <div className="col s12" style={{ marginTop: "20px" }}>
-                    <h5>Login details</h5>
+                    <h5 style={{ textAlign: "center" }}>Login details</h5>
 
                     <p style={{ textAlign: "center", color: "red" }}>
                       {errorMessage}
@@ -103,8 +76,8 @@ const SignupComponent = ({
                       <button
                         style={{
                           width: "100%",
-                          backgroundColor: "#ffc107",
-                          borderColor: "#ffc107",
+                          backgroundColor: "#bd2a2b",
+                          borderColor: "#bd2a2b",
                           color: "#fff",
                         }}
                         classNameName="btn btn-primary"
@@ -113,22 +86,6 @@ const SignupComponent = ({
                         Login
                       </button>
                     </div>
-                  </div>
-                </div>
-                <div
-                  className="row"
-                  style={{ marginTop: "20px", marginBottom: "100px" }}
-                >
-                  <div className="col l12 s12">
-                    <span className="text--highlighter">
-                      Do not have an account have an account ?{" "}
-                      <Link
-                        to={`/register`}
-                        style={{ color: "#ffc107", marginLeft: "10px" }}
-                      >
-                        Sign Up
-                      </Link>
-                    </span>
                   </div>
                 </div>
               </div>

@@ -8,7 +8,7 @@ const PageTitle = ({ name }) => {
       <div
         className="ttm-page-title-row"
         style={{
-          backgroundColor: "#ffd200",
+          backgroundColor: "#bd2a2b",
           height: "40px",
           display: "flex",
           alignItems: "center",
@@ -29,27 +29,6 @@ const PageTitle = ({ name }) => {
                   >
                     {name}
                   </h1>
-                </div>
-                <div className="breadcrumb-wrapper">
-                  <span className="mr-1" style={{ color: "#fff" }}>
-                    <i className="ti ti-home"></i>
-                  </span>
-                  <Link to={`/`} style={{ color: "#fff", fontSize: "13px" }}>
-                    Home
-                  </Link>
-
-                  <span
-                    className="ttm-bread-sep"
-                    style={{ color: "#fff", fontSize: "13px" }}
-                  >
-                    &nbsp;/&nbsp;
-                  </span>
-                  <span
-                    className="ttm-textcolor-skincolor"
-                    style={{ color: "#fff", fontSize: "13px" }}
-                  >
-                    {name}
-                  </span>
                 </div>
               </div>
             </div>

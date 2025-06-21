@@ -88,7 +88,7 @@ const DraftContainer = styled.div`
   }
 `;
 
-const DraftEditor = ({ editorState, setEditorState }) => {
+const DraftEditor = ({ editorState, setEditorState, readOnly = false }) => {
   const [active, setActive] = useState("");
 
   const _onBoldMouseDown = (e) => {
@@ -128,65 +128,77 @@ const DraftEditor = ({ editorState, setEditorState }) => {
 
   return (
     <DraftContainer>
-      <button
-        className="toolBarButton"
-        onMouseDown={(e) => {
-          _onBoldMouseDown(e);
-        }}
-      >
-        <FontAwesomeIcon icon={faBold} />
-      </button>
+      {!readOnly && (
+        <button
+          className="toolBarButton"
+          onMouseDown={(e) => {
+            _onBoldMouseDown(e);
+          }}
+        >
+          <FontAwesomeIcon icon={faBold} />
+        </button>
+      )}
 
-      <button
-        className="toolBarButton"
-        onMouseDown={(e) => {
-          _onItalicMouseDown(e);
-        }}
-      >
-        <FontAwesomeIcon icon={faItalic} />
-      </button>
+      {!readOnly && (
+        <button
+          className="toolBarButton"
+          onMouseDown={(e) => {
+            _onItalicMouseDown(e);
+          }}
+        >
+          <FontAwesomeIcon icon={faItalic} />
+        </button>
+      )}
 
-      <button
-        className="toolBarButton"
-        onMouseDown={(e) => {
-          _onUnderlineMouseDown(e);
-        }}
-      >
-        <FontAwesomeIcon icon={faUnderline} />
-      </button>
+      {!readOnly && (
+        <button
+          className="toolBarButton"
+          onMouseDown={(e) => {
+            _onUnderlineMouseDown(e);
+          }}
+        >
+          <FontAwesomeIcon icon={faUnderline} />
+        </button>
+      )}
 
-      <select
-        value={active}
-        onChange={(e) => {
-          onToggleBlock(e);
-        }}
-        style={{ maxWidth: "200px" }}
-      >
-        <option value={"header-one"}> {"Heading One"}</option>
-        <option value={"header-two"}> {"Heading Two"}</option>
-        <option value={"header-three"}> {"Heading Three"}</option>
-        <option value={"header-four"}> {"Heading Four"}</option>
-        <option value={"header-five"}> {"Heading Five"}</option>
-        <option value={"header-six"}> {"Heading Six"}</option>
-      </select>
+      {!readOnly && (
+        <select
+          value={active}
+          onChange={(e) => {
+            onToggleBlock(e);
+          }}
+          style={{ maxWidth: "200px" }}
+        >
+          <option value={"header-one"}> {"Heading One"}</option>
+          <option value={"header-two"}> {"Heading Two"}</option>
+          <option value={"header-three"}> {"Heading Three"}</option>
+          <option value={"header-four"}> {"Heading Four"}</option>
+          <option value={"header-five"}> {"Heading Five"}</option>
+          <option value={"header-six"}> {"Heading Six"}</option>
+        </select>
+      )}
 
-      <button
-        className="toolBarButton"
-        onMouseDown={(e) => {
-          _onNewBlockDown(e, "ordered-list-item");
-        }}
-      >
-        <FontAwesomeIcon icon={faListOl} />
-      </button>
+      {!readOnly && (
+        <button
+          className="toolBarButton"
+          onMouseDown={(e) => {
+            _onNewBlockDown(e, "ordered-list-item");
+          }}
+        >
+          <FontAwesomeIcon icon={faListOl} />
+        </button>
+      )}
 
-      <button
-        className="toolBarButton"
-        onMouseDown={(e) => {
-          _onNewBlockDown(e, "unordered-list-item");
-        }}
-      >
-        <FontAwesomeIcon icon={faListUl} />
-      </button>
+      {!readOnly && (
+        <button
+          className="toolBarButton"
+          onMouseDown={(e) => {
+            _onNewBlockDown(e, "unordered-list-item");
+          }}
+        >
+          <FontAwesomeIcon icon={faListUl} />
+        </button>
+      )}
 
       {/* <button
         className="toolBarButton"
@@ -234,7 +246,11 @@ const DraftEditor = ({ editorState, setEditorState }) => {
         <FontAwesomeIcon icon={faAt} />
       </button> */}
 
-      <Editor editorState={editorState} onChange={setEditorState} />
+      <Editor
+        editorState={editorState}
+        onChange={setEditorState}
+        readOnly={readOnly}
+      />
     </DraftContainer>
   );
 };
