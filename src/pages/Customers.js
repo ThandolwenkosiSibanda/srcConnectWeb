@@ -51,13 +51,15 @@ const Customers = () => {
         sortedData.sort((a, b) => {
           if (sortBy === "name") {
             return sortOrder === "asc"
-              ? a?.name.localeCompare(b?.name)
-              : b?.name.localeCompare(a?.name);
+              ? a?.name?.localeCompare(b?.name)
+              : b?.name?.localeCompare(a?.name);
           } else if (sortBy === "surname") {
             return sortOrder === "asc"
-              ? a.surname - b.surname
-              : b.surname - a.surname;
+              ? a?.surname?.localeCompare(b?.surname)
+              : b?.surname?.localeCompare(a?.surname);
           }
+
+          return 0; // Default return to avoid lint warning
         });
 
         setData(sortedData);
