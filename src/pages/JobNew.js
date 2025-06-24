@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import NavBar from "../components/navBar/NavBar";
 
@@ -81,34 +81,23 @@ const JobNew = () => {
     }));
   };
 
-  const fetchCustomers = async () => {
+  const fetchCustomers = useCallback(async () => {
     try {
       const { data, error } = await supabase.from("customers").select("*");
-
-      if (error) {
-        setError({
-          message:
-            "Error fetching customers, please check your internet and refresh the page",
-        });
-        return null;
-      }
-
-      return data;
+      if (error) throw error;
+      setCustomers(data);
     } catch (err) {
       console.error("Unexpected error:", err);
-      setError(error);
-      return null;
+      setError({
+        message:
+          "Error fetching customers, please check your internet and refresh the page",
+      });
     }
-  };
+  }, []);
 
   useEffect(() => {
-    const getData = async () => {
-      const result = await fetchCustomers();
-      if (result) setCustomers(result);
-    };
-
-    getData();
-  }, []);
+    fetchCustomers();
+  }, [fetchCustomers]);
 
   const handleSave = async () => {
     try {

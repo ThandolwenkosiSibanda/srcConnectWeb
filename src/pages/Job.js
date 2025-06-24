@@ -111,11 +111,12 @@ const Job = () => {
         setCompletedAction(newCompletedActionEditorState);
         setComplaints(newComplaintsEditorState);
 
-        setForm({
-          ...form,
+        // ✅ functional update to avoid depending on `form`
+        setForm((prev) => ({
+          ...prev,
           ...data,
           status: { label: `${data?.status}`, value: `${data?.status}` },
-        });
+        }));
       } catch (error) {
         console.log("error", error);
         setError({

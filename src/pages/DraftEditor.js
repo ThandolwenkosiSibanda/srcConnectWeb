@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import {
-  convertFromRaw,
-  convertToRaw,
+  // convertFromRaw,
+  // convertToRaw,
   Editor,
-  EditorState,
+  // EditorState,
   RichUtils,
 } from "draft-js";
 import "draft-js/dist/Draft.css";
@@ -16,13 +16,13 @@ import {
   // faPaperclip,
   faListOl,
   faListUl,
-  faAt,
+  // faAt,
   faUnderline,
   faItalic,
   faBold,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { stateToHTML } from "draft-js-export-html";
+// import { stateToHTML } from "draft-js-export-html";
 
 const DraftContainer = styled.div`
   background-color: #fff;
@@ -117,14 +117,14 @@ const DraftEditor = ({ editorState, setEditorState, readOnly = false }) => {
     setEditorState(RichUtils.toggleBlockType(editorState, e.target.value));
   };
 
-  const dataToBeSaved = JSON.stringify(
-    convertToRaw(editorState.getCurrentContent())
-  );
+  // const dataToBeSaved = JSON.stringify(
+  //   convertToRaw(editorState.getCurrentContent())
+  // );
 
-  const contentState = convertFromRaw(JSON.parse(dataToBeSaved));
-  const editorStateNow = EditorState.createWithContent(contentState);
+  // const contentState = convertFromRaw(JSON.parse(dataToBeSaved));
+  // const editorStateNow = EditorState.createWithContent(contentState);
 
-  let html = stateToHTML(contentState);
+  // let html = stateToHTML(contentState);
 
   return (
     <DraftContainer>

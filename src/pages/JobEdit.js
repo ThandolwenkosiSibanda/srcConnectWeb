@@ -80,7 +80,6 @@ const JobEdit = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (!id) return;
-
       setLoading(true);
       try {
         const { data, error } = await supabase
@@ -89,35 +88,21 @@ const JobEdit = () => {
           .eq("id", id)
           .single();
 
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
 
-        const newDiagnosticsReportEditorState = getEditorStateFromHTML(
-          data.diagnostics_report || ""
+        setDiagnosticsReport(
+          getEditorStateFromHTML(data.diagnostics_report || "")
         );
-        const newReportedDefectsEditorState = getEditorStateFromHTML(
-          data.reported_defects || ""
-        );
-        const newCompletedActionEditorState = getEditorStateFromHTML(
-          data.completed_action || ""
-        );
-        const newComplaintsEditorState = getEditorStateFromHTML(
-          data.complaints || ""
-        );
-
-        setDiagnosticsReport(newDiagnosticsReportEditorState);
-        setReportedDefects(newReportedDefectsEditorState);
-        setCompletedAction(newCompletedActionEditorState);
-        setComplaints(newComplaintsEditorState);
+        setReportedDefects(getEditorStateFromHTML(data.reported_defects || ""));
+        setCompletedAction(getEditorStateFromHTML(data.completed_action || ""));
+        setComplaints(getEditorStateFromHTML(data.complaints || ""));
 
         setForm({
-          ...form,
           ...data,
           status: { label: `${data?.status}`, value: `${data?.status}` },
         });
       } catch (error) {
-        console.log("error", error);
+        console.error("error", error);
         setError({
           message:
             "Error fetching job, please check your internet and refresh the page",
@@ -130,33 +115,22 @@ const JobEdit = () => {
     fetchData();
   }, [id]);
 
-  const fetchCustomers = async () => {
-    try {
-      const { data, error } = await supabase.from("customers").select("*");
-
-      if (error) {
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const { data, error } = await supabase.from("customers").select("*");
+        if (error) throw error;
+        setCustomers(data);
+      } catch (err) {
+        console.error("Unexpected error:", err);
         setError({
           message:
             "Error fetching customers, please check your internet and refresh the page",
         });
-        return null;
       }
-
-      return data;
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      setError(error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const getData = async () => {
-      const result = await fetchCustomers();
-      if (result) setCustomers(result);
     };
 
-    getData();
+    fetchCustomers();
   }, []);
 
   const handleSave = async (imgUrls, documentsUrls) => {
