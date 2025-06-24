@@ -1,80 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import { CATEGORIES_QUERY } from "../../gql/Query";
-import { useQuery } from "@apollo/client";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import SmallCart from "../cart/SmallCart";
-import { CartContext } from "../../context/cart";
-import { supabase } from "../../utils/supabase";
+
 import { UserContext } from "../../context/user";
 
-const NavBar = (props) => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [cartStatus, setCartStatus] = useState("");
+const NavBar = () => {
   const [shopByCategoryStatus, setShopByCategoryStatus] = useState("off");
   const [signinStatus, setSigninStatus] = useState("");
 
   const [menuBarStatus, setMenuBarStatus] = useState("");
 
-  const fetchData = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*, category(*)")
-        .eq("status", "active");
-
-      if (error) {
-        console.error("Error fetching data:", error.message);
-        return null;
-      }
-
-      return data;
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      const result = await fetchData("products");
-
-      const groupedByCategory = result?.reduce((acc, product) => {
-        const categoryName = product.category?.name || "Uncategorized";
-        const categoryImage = product.category?.image || "";
-        const id = product.category?.id;
-
-        let categoryGroup = acc.find(
-          (group) => group.categoryName === categoryName
-        );
-
-        if (!categoryGroup) {
-          categoryGroup = { categoryName, categoryImage, id, products: [] };
-          acc.push(categoryGroup);
-        }
-
-        categoryGroup.products.push(product);
-
-        return acc;
-      }, []);
-
-      if (result) setCategories(groupedByCategory);
-      setLoading(false);
-    };
-
-    getData();
-  }, []);
-
-  const { cartItems, getCartTotal, getCartItemsTotal } =
-    useContext(CartContext);
-  const { login, user, logout } = useContext(UserContext);
-
-  const chunkArray = (array, size) => {
-    return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
-      array.slice(i * size, i * size + size)
-    );
-  };
+  const { user, logout } = useContext(UserContext);
 
   return (
     <React.Fragment>
@@ -84,14 +19,6 @@ const NavBar = (props) => {
             <div className="row">
               <div className="col-lg-6 col-sm-6 col-6 order-1">
                 <div className="site-branding">
-                  {/* <Link to={`/`}>
-                    <img
-                      id="logo"
-                      className="img-center"
-                      src="/logo.png"
-                      alt="logo-img"
-                    />
-                  </Link> */}
                   <h5 style={{ color: "#fff" }}>
                     Auto ECU Job Management System
                   </h5>

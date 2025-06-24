@@ -1,21 +1,9 @@
-import React, { useEffect, useState } from "react";
-import NavBannerTop from "../components/navBannerTop/NavBannerTop";
+import { useEffect, useState } from "react";
+
 import NavBar from "../components/navBar/NavBar";
-import ProductComponent from "../components/product/ProductComponent";
 import FooterPage from "../components/footer/FooterComponent";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { supabase } from "../utils/supabase";
-import Select from "react-select";
-import DraftEditor from "./DraftEditor";
-import {
-  ContentState,
-  EditorState,
-  convertFromHTML,
-  convertFromRaw,
-  convertToRaw,
-} from "draft-js";
-import { stateToHTML } from "draft-js-export-html";
-import axios from "axios";
 import PageTitle from "../components/titles/PageTitle";
 import BigLoading from "../components/spinners/Loading";
 import ErrorMessage from "../components/spinners/ErrorMessage";
@@ -29,40 +17,26 @@ const Customer = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [product, setProduct] = useState({});
-
-  const [images, setImages] = useState([]);
-  const [imagesUrls, setImagesUrls] = useState([]);
-  const [docs, setDocs] = useState([]);
-  const [docsUrls, setDocsUrls] = useState([]);
-
-  const navigate = useNavigate();
-
-  const types = [
-    { value: "Basic", label: "Basic" },
-    { value: "Premium", label: "Premium" },
-  ];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSelect = (field, value) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
+  // const handleSelect = (field, value) => {
+  //   setForm((prev) => ({ ...prev, [field]: value }));
+  // };
 
-  const handleImageChange = (e) => {
-    if (e.target.files) {
-      setImages(e.target.files);
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   if (e.target.files) {
+  //     setImages(e.target.files);
+  //   }
+  // };
 
-  const handleDocChange = (e) => {
-    if (e.target.files) {
-      setDocs(e.target.files);
-    }
-  };
+  // const handleDocChange = (e) => {
+  //   if (e.target.files) {
+  //     setDocs(e.target.files);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchData = async () => {

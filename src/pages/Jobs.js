@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/navBar/NavBar";
 import FooterPage from "../components/footer/FooterComponent";
 import { Link } from "react-router-dom";
 import { supabase } from "../utils/supabase";
-import { UserContext } from "../context/user";
 
 import { format } from "date-fns";
 import PageTitle from "../components/titles/PageTitle";
@@ -11,23 +10,19 @@ import ErrorMessage from "../components/spinners/ErrorMessage";
 import BigLoading from "../components/spinners/Loading";
 
 const Jobs = () => {
-  const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [quickViewModalStatus, setQuickViewModalStatus] = useState("");
-  const [activeProduct, setActiveProduct] = useState({});
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [sortBy, setSortBy] = useState("name");
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortBy] = useState("name");
+  const [sortOrder] = useState("asc");
   const [searchQuery, setSearchQuery] = useState("");
 
   const fetchData = async () => {
     setError("");
     try {
       const { data, error } = await supabase.from("jobs").select("*");
-
-      console.log("error", error);
 
       if (error) {
         console.error("Error fetching data:", error.message);
@@ -40,8 +35,6 @@ const Jobs = () => {
 
       return data;
     } catch (err) {
-      console.log("error", error);
-      console.error("Unexpected error:", err);
       setError(err);
       return null;
     }
@@ -58,17 +51,16 @@ const Jobs = () => {
         sortedData.sort((a, b) => {
           if (sortBy === "vehicle_registration_number") {
             return sortOrder === "asc"
-              ? a?.vehicle_registration_number.localeCompare(
+              ? a?.vehicle_registration_number?.localeCompare(
                   b?.vehicle_registration_number
                 )
-              : b?.vehicle_registration_number.localeCompare(
+              : b?.vehicle_registration_number?.localeCompare(
                   a?.vehicle_registration_number
                 );
-          } else if (sortBy === "vehicle_registration_number") {
-            return sortOrder === "asc"
-              ? a.vehicle_registration_number - b.vehicle_registration_number
-              : b.vehicle_registration_number - a.vehicle_registration_number;
           }
+
+          // Add additional sorting logic for other fields if needed here
+          return 0; // no sorting if field is not matched
         });
 
         setData(sortedData);

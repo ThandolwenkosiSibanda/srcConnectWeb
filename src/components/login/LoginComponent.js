@@ -1,22 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./index.css";
 import Form from "react-bootstrap/Form";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-phone-number-input/style.css";
 
-import { Link } from "react-router-dom";
-
-const SignupComponent = ({
-  form,
-  setForm,
-  handleChange,
-  errorMessage,
-  handleLogin,
-}) => {
-  const [value, setValue] = useState("ZW");
-
-  console.log("value", value);
-
+const SignupComponent = ({ handleChange, errorMessage, handleLogin }) => {
   return (
     <div className="container" style={{ maxWidth: "500px", minHeight: "80vh" }}>
       <div className="c-page-banner">

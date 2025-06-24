@@ -1,34 +1,26 @@
-import React, { useEffect, useState } from "react";
-import NavBannerTop from "../components/navBannerTop/NavBannerTop";
+import { useEffect, useState } from "react";
+
 import NavBar from "../components/navBar/NavBar";
-import ProductComponent from "../components/product/ProductComponent";
+
 import FooterPage from "../components/footer/FooterComponent";
-import { useNavigate, useParams, useNavigationType } from "react-router";
+import { useNavigate, useNavigationType } from "react-router";
 import { supabase } from "../utils/supabase";
 import Select from "react-select";
 import DraftEditor from "./DraftEditor";
-import {
-  ContentState,
-  EditorState,
-  convertFromHTML,
-  convertFromRaw,
-  convertToRaw,
-} from "draft-js";
+import { EditorState } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
-import axios from "axios";
+
 import PageTitle from "../components/titles/PageTitle";
 import BigLoading from "../components/spinners/Loading";
 import ErrorMessage from "../components/spinners/ErrorMessage";
-import { Link } from "react-router-dom";
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const JobNew = () => {
-  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [product, setProduct] = useState({});
+
   const [form, setForm] = useState({
     customer_id: null,
     vehicle_registration_number: "",
@@ -44,13 +36,8 @@ const JobNew = () => {
     completed_action: "",
     complaints: "",
   });
-  const [images, setImages] = useState([]);
-  const [imagesUrls, setImagesUrls] = useState([]);
-  const [docs, setDocs] = useState([]);
-  const [docsUrls, setDocsUrls] = useState([]);
 
   const [customers, setCustomers] = useState([]);
-  const [expiryDate, setExpiryDate] = useState(new Date());
 
   const [diagnosticsReport, setDiagnosticsReport] = useState(() =>
     EditorState.createEmpty()
@@ -94,81 +81,6 @@ const JobNew = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    if (e.target.files) {
-      setImages(e.target.files);
-    }
-  };
-
-  const handleDocChange = (e) => {
-    if (e.target.files) {
-      setDocs(e.target.files);
-    }
-  };
-
-  const getEditorStateFromHTML = (htmlContent) => {
-    const blocksFromHTML = convertFromHTML(htmlContent);
-    const contentState = ContentState.createFromBlockArray(
-      blocksFromHTML.contentBlocks,
-      blocksFromHTML.entityMap
-    );
-    return EditorState.createWithContent(contentState);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!id) return;
-
-      setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from("jobs")
-          .select("*, customer_id(*)")
-          .eq("id", id)
-          .single();
-
-        if (error) {
-          throw error;
-        }
-
-        const newDiagnosticsReportEditorState = getEditorStateFromHTML(
-          data.diagnostics_report || ""
-        );
-        const newReportedDefectsEditorState = getEditorStateFromHTML(
-          data.reported_defects || ""
-        );
-        const newCompletedActionEditorState = getEditorStateFromHTML(
-          data.completed_action || ""
-        );
-        const newComplaintsEditorState = getEditorStateFromHTML(
-          data.complaints || ""
-        );
-
-        setDiagnosticsReport(newDiagnosticsReportEditorState);
-        setReportedDefects(newReportedDefectsEditorState);
-        setCompletedAction(newCompletedActionEditorState);
-        setComplaints(newComplaintsEditorState);
-
-        setForm({
-          ...form,
-          ...data,
-          status: { label: `${data?.status}`, value: `${data?.status}` },
-        });
-        setProduct(data);
-      } catch (error) {
-        console.log("error", error);
-        setError({
-          message:
-            "Error fetching job, please check your internet and refresh the page",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id]);
-
   const fetchCustomers = async () => {
     try {
       const { data, error } = await supabase.from("customers").select("*");
@@ -198,7 +110,7 @@ const JobNew = () => {
     getData();
   }, []);
 
-  const handleSave = async (imgUrls, documentsUrls) => {
+  const handleSave = async () => {
     try {
       setLoading(true);
 

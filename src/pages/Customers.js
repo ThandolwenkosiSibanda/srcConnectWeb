@@ -3,7 +3,6 @@ import NavBar from "../components/navBar/NavBar";
 import FooterPage from "../components/footer/FooterComponent";
 import { Link } from "react-router-dom";
 import { supabase } from "../utils/supabase";
-import { UserContext } from "../context/user";
 
 import { format } from "date-fns";
 import PageTitle from "../components/titles/PageTitle";
@@ -11,23 +10,19 @@ import ErrorMessage from "../components/spinners/ErrorMessage";
 import BigLoading from "../components/spinners/Loading";
 
 const Customers = () => {
-  const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [quickViewModalStatus, setQuickViewModalStatus] = useState("");
-  const [activeProduct, setActiveProduct] = useState({});
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [sortBy, setSortBy] = useState("name");
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortBy] = useState("name");
+  const [sortOrder] = useState("asc");
   const [searchQuery, setSearchQuery] = useState("");
 
   const fetchData = async () => {
     setError("");
     try {
       const { data, error } = await supabase.from("customers").select("*");
-
-      console.log("error", error);
 
       if (error) {
         console.error("Error fetching data:", error.message);
@@ -40,8 +35,6 @@ const Customers = () => {
 
       return data;
     } catch (err) {
-      console.log("error", error);
-      console.error("Unexpected error:", err);
       setError(err);
       return null;
     }
@@ -152,8 +145,6 @@ const Customers = () => {
                           <th className="product-subtotal">Name</th>
                           <th className="product-subtotal">Surname</th>
                           <th className="product-subtotal">Phone</th>
-                          {/* <th className="product-subtotal">Email</th> */}
-                          {/* <th className="product-subtotal">Status</th> */}
 
                           <th className="product-subtotal"></th>
                         </tr>

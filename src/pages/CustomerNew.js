@@ -1,110 +1,24 @@
-import React, { useEffect, useState } from "react";
-import NavBannerTop from "../components/navBannerTop/NavBannerTop";
+import { useEffect, useState } from "react";
 import NavBar from "../components/navBar/NavBar";
-import ProductComponent from "../components/product/ProductComponent";
 import FooterPage from "../components/footer/FooterComponent";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { supabase } from "../utils/supabase";
-import Select from "react-select";
-import DraftEditor from "./DraftEditor";
-import { EditorState, convertToRaw } from "draft-js";
-import { stateToHTML } from "draft-js-export-html";
-import axios from "axios";
 import PageTitle from "../components/titles/PageTitle";
 import BigLoading from "../components/spinners/Loading";
 import ErrorMessage from "../components/spinners/ErrorMessage";
 import { Link } from "react-router-dom";
 
 const CustomerNew = () => {
-  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [product, setProduct] = useState({});
-  const [form, setForm] = useState({
-    type: { value: "Basic", label: "Basic" },
-    featured: { label: "True", value: "True" },
-    best_sales: { label: "True", value: "True" },
-    lay_by_availability_status: { label: "False", value: "false" },
-  });
-  const [images, setImages] = useState([]);
-  const [imagesUrls, setImagesUrls] = useState([]);
-  const [docs, setDocs] = useState([]);
-  const [docsUrls, setDocsUrls] = useState([]);
+
+  const [form, setForm] = useState({});
 
   const navigate = useNavigate();
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
-
-  const [pricingAdditionalInformation, setPricingAdditionalInformation] =
-    useState(() => EditorState.createEmpty());
-
-  const [deliveryInformation, setDeliveryInformation] = useState(() =>
-    EditorState.createEmpty()
-  );
-
-  const [technicalSpecifications, setTechnicalSpecifications] = useState(() =>
-    EditorState.createEmpty()
-  );
-
-  const [keyFeatures, setKeyFeatures] = useState(() =>
-    EditorState.createEmpty()
-  );
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!id) return;
-
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      if (error) {
-        console.error("Error:", error);
-      } else {
-        setProduct(data);
-      }
-    };
-
-    fetchData();
-  }, [id]);
-
-  const fetchCategories = async (tableName) => {
-    try {
-      const { data, error } = await supabase.from(tableName).select("*");
-
-      if (error) {
-        console.error("Error fetching data:", error.message);
-        setError({
-          message:
-            "Error fetching categories, please check your internet and refresh the page",
-        });
-        return null;
-      }
-
-      return data;
-    } catch (err) {
-      console.error("Unexpected error:", err);
-      setError(error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const getData = async () => {
-      const result = await fetchCategories("categories");
-      if (result) setCategories(result);
-    };
-
-    getData();
-  }, []);
 
   const handleSave = async () => {
     try {

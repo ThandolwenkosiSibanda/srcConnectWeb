@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useNavigate, useLocation } from "react-router-dom";
 
 const ErrorScreen = ({ message = "Something went wrong!" }) => {

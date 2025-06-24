@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import LoginComponent from "../components/login/LoginComponent";
 import FooterPage from "../components/footer/FooterComponent";
 import LoginNav from "../components/navigation/LoginNav";
@@ -9,9 +9,7 @@ const Home = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { login, user } = useContext(UserContext);
-
-  // console.log("error", errorMessage);
+  const { login } = useContext(UserContext);
 
   const handleChange = (e) => {
     setErrorMessage("");

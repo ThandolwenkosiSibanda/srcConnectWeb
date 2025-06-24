@@ -27,7 +27,6 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 
 import { BrowserRouter } from "react-router-dom";
-import { CartProvider } from "./context/cart";
 import { UserProvider } from "./context/user";
 
 const wsLink = new GraphQLWsLink(
@@ -64,9 +63,7 @@ root.render(
     <ApolloProvider client={client}>
       <BrowserRouter>
         <UserProvider>
-          <CartProvider>
-            <App />
-          </CartProvider>
+          <App />
         </UserProvider>
       </BrowserRouter>
     </ApolloProvider>

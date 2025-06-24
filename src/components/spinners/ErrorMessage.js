@@ -1,4 +1,4 @@
-import React from "react";
+
 
 const ErrorMessage = ({
   message = "Failed to load content. Please try again.",

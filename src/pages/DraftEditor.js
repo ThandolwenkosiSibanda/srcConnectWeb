@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import {
   convertFromRaw,
@@ -10,10 +10,10 @@ import {
 import "draft-js/dist/Draft.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCode,
-  faQuoteLeft,
-  faQuoteRight,
-  faPaperclip,
+  // faCode,
+  // faQuoteLeft,
+  // faQuoteRight,
+  // faPaperclip,
   faListOl,
   faListUl,
   faAt,
