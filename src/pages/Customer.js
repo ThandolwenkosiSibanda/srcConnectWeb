@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import NavBar from "../components/navBar/NavBar";
 import FooterPage from "../components/footer/FooterComponent";
@@ -68,7 +68,9 @@ const Customer = () => {
     fetchData();
   }, [id]);
 
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
+    if (!id) return null;
+
     try {
       const { data, error } = await supabase
         .from("jobs")
@@ -86,10 +88,10 @@ const Customer = () => {
       return data;
     } catch (err) {
       console.error("Unexpected error:", err);
-      setError(error);
+      setError({ message: "Unexpected error occurred" });
       return null;
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     const getData = async () => {
@@ -98,7 +100,7 @@ const Customer = () => {
     };
 
     getData();
-  }, []);
+  }, [fetchJobs]); 
 
   return (
     <>
