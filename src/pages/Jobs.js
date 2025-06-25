@@ -110,7 +110,7 @@ const Jobs = () => {
                   }}
                 >
                   <Link
-                    to={`/shop`}
+                    to={`/`}
                     style={{ marginBottom: "20px" }}
                     className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                   >
@@ -203,7 +203,7 @@ const Jobs = () => {
                           <td colSpan="6" className="actions">
                             <div className="coupon">
                               <Link
-                                to={`/shop`}
+                                to={`/`}
                                 className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                               >
                                 <i className="ti ti-arrow-left"></i>Back To Home
