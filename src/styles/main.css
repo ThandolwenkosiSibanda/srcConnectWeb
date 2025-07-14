@@ -69,7 +69,7 @@ a:focus {
 }
 a:focus,
 a:hover {
-  color: #02112b;
+  color: #23513f;
   text-decoration: none;
 }
 a,
@@ -101,17 +101,17 @@ figure {
 }
 
 *::-moz-selection {
-  background: #02112b;
+  background: #23513f;
   color: #fff;
   text-shadow: none;
 }
 ::-moz-selection {
-  background: #02112b;
+  background: #23513f;
   color: #fff;
   text-shadow: none;
 }
 ::selection {
-  background: #02112b;
+  background: #23513f;
   color: #fff;
   text-shadow: none;
 }
@@ -149,7 +149,7 @@ select {
   background-color: #fff;
   text-transform: inherit;
   border: 1px solid #e9eef6;
-  font-size: 15px;
+  font-size: 13px;
   outline: none;
   line-height: inherit;
 }
@@ -193,7 +193,7 @@ input[type="url"]:focus,
 input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus {
-  border: 1px solid #02112b;
+  border: 1px solid #23513f;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -256,11 +256,11 @@ h4 {
   line-height: 30px;
 }
 h5 {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 25px;
 }
 h6 {
-  font-size: 16px;
+  font-size: 13px;
   line-height: 18px;
 }
 
@@ -850,7 +850,7 @@ a:hover,
 .ttm-single-product-details .compare:hover,
 #site-header-menu #site-navigation .menu ul > li:hover > a,
 #site-header-menu #site-navigation .menu ul li.active > a {
-  color: #02112b;
+  color: #23513f;
 }
 
 /** Skin-bg-color **/
@@ -902,7 +902,7 @@ ul.cart-list > li.total > .btn,
 .newsletter_main input[type="submit"],
 footer .tooltip:after,
 footer [data-tooltip]:after {
-  background-color: #02112b;
+  background-color: #23513f;
 }
 
 /** Skin-border-color **/
@@ -910,7 +910,7 @@ nav.menu li.mega-menu-item ul.mega-submenu,
 .ttm-tabs.tabs-for-products ul.tabs li.active a,
 footer .tooltip-top:before,
 footer .tooltip:before {
-  border-top-color: #02112b;
+  border-top-color: #23513f;
 }
 
 /** 1.highlight-color **/
@@ -934,7 +934,7 @@ header a:hover,
 .footer .widget ul.widget_info_text > li i,
 .footer .social-icons li > a:hover,
 .footer-nav-menu a:hover {
-  color: #bd2a2b;
+  color: #fff;
 }
 
 /** highlight-bg-color **/
@@ -953,7 +953,7 @@ header a:hover,
 .ttm-highlight-fid:before,
 a.checkout-button,
 #totop.top-visible {
-  background-color: #bd2a2b;
+  background-color: #23513f;
 }
 
 nav.menu {
@@ -1001,7 +1001,7 @@ ul.cart-list > li.total strong,
 .widget-price-filter .price_slider_wrapper h5,
 .tabs-for-single-products.ttm-tabs ul.tabs li.active a,
 #totop.top-visible {
-  color: #02112b;
+  color: #23513f;
 }
 
 /** DarkGrey-bg-color **/
@@ -1021,7 +1021,7 @@ a.checkout-button:hover,
 .action-button:hover,
 .form-submit input:hover,
 .newsletter_main input[type="submit"]:hover {
-  background-color: #02112b;
+  background-color: #23513f;
 }
 
 .ttm-icon_element-border.ttm-icon_element-color-darkgrey,
@@ -1032,7 +1032,7 @@ a.checkout-button:hover,
   .slick-dots
   li.slick-active
   button {
-  border-color: #02112b;
+  border-color: #23513f;
 }
 
 /** 3.White-color **/
@@ -1575,7 +1575,7 @@ ul.ttm_contact_widget_wrapper li,
 /** SiteBrand(logo) **/
 .site-branding {
   float: left;
-  padding: 26px 0;
+  /* padding: 26px 0; */
 }
 
 /** Headermain **/
@@ -2520,9 +2520,9 @@ table.cart_table thead tr {
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 table.cart_table th {
-  font-weight: 500;
+  font-weight: 400;
   padding: 14px 58px;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 20px;
   vertical-align: middle;
   border-bottom: 1px;
@@ -3252,7 +3252,7 @@ article.ttm-blog-classic blockquote:before {
   width: 5px;
   height: 100%;
   display: block;
-  background: #02112b;
+  background: #23513f;
 }
 article.ttm-blog-classic blockquote:after {
   content: '"';
@@ -3260,7 +3260,7 @@ article.ttm-blog-classic blockquote:after {
   font-size: 120px;
   line-height: 80px;
   font-weight: 400;
-  color: #02112b;
+  color: #23513f;
   position: absolute;
   right: 15%;
   top: 0;
@@ -3677,7 +3677,7 @@ section.error-404 .page-content p {
 }
 
 .product-btn div {
-  background-color: #02112b;
+  background-color: #23513f;
   display: block;
   height: 32px;
   width: 32px;

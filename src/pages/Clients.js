@@ -22,7 +22,7 @@ const Customers = () => {
   const fetchData = async () => {
     setError("");
     try {
-      const { data, error } = await supabase.from("customers").select("*");
+      const { data, error } = await supabase.from("clients").select("*");
 
       if (error) {
         console.error("Error fetching data:", error.message);
@@ -72,17 +72,19 @@ const Customers = () => {
   }, [sortBy, sortOrder]);
 
   useEffect(() => {
-    const filterByName = (items, searchQuery) => {
+    const filterByNameAndSurname = (items, searchQuery) => {
       if (!Array.isArray(items)) return [];
+      if (!searchQuery?.trim()) return items;
 
-      if (!searchQuery) return items; // Return all items if search query is empty
-
-      return items.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      return items.filter((item) => {
+        const fullName = `${item.name ?? ""} ${
+          item.surname ?? ""
+        }`.toLowerCase();
+        return fullName.includes(searchQuery.toLowerCase());
+      });
     };
 
-    setFilteredData(filterByName(data, searchQuery));
+    setFilteredData(filterByNameAndSurname(data, searchQuery));
   }, [searchQuery, data]);
 
   return (
@@ -90,7 +92,7 @@ const Customers = () => {
       <div className="page">
         <NavBar />
 
-        <PageTitle name={"Customers"} />
+        <PageTitle name={"Clients"} />
         {error && !loading && <ErrorMessage message={error.message} />}
 
         {loading ? (
@@ -121,7 +123,7 @@ const Customers = () => {
                         className="form-control"
                         type="text"
                         name="s"
-                        placeholder="Search by name"
+                        placeholder="Search by name and surname"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
@@ -129,11 +131,11 @@ const Customers = () => {
                   </div>
 
                   <Link
-                    to={`/newcustomer`}
+                    to={`/newpolicy`}
                     style={{ marginBottom: "20px" }}
                     className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                   >
-                    New Customer
+                    New Client And Policy
                   </Link>
                 </div>
 
@@ -172,7 +174,7 @@ const Customers = () => {
                             {/* <th className="product-subtotal"> {item.status}</th> */}
 
                             <th className="product-subtotal">
-                              <Link to={`/customers/${item.id}`}>View</Link>
+                              <Link to={`/clients/${item.id}`}>View</Link>
                             </th>
                           </tr>
                         ))}

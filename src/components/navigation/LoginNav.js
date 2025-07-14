@@ -9,9 +9,7 @@ const NavBar = () => {
             <div className="row">
               <div className="col-lg-6 col-sm-6 col-6 order-1">
                 <div className="site-branding">
-                  <h5 style={{ color: "#fff" }}>
-                    Auto ECU Job Management System
-                  </h5>
+                  <h5 style={{ color: "#fff" }}>Inokuthula Funeral Group</h5>
                 </div>
               </div>
             </div>

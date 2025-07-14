@@ -9,7 +9,7 @@ import PageTitle from "../components/titles/PageTitle";
 import ErrorMessage from "../components/spinners/ErrorMessage";
 import BigLoading from "../components/spinners/Loading";
 
-const Jobs = () => {
+const Users = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
@@ -22,13 +22,13 @@ const Jobs = () => {
   const fetchData = async () => {
     setError("");
     try {
-      const { data, error } = await supabase.from("jobs").select("*");
+      const { data, error } = await supabase.from("users").select("*");
 
       if (error) {
         console.error("Error fetching data:", error.message);
         setError({
           message:
-            "Error fetching jobs, please check your internet and refresh the page",
+            "Error fetching customers, please check your internet and refresh the page",
         });
         return null;
       }
@@ -49,18 +49,17 @@ const Jobs = () => {
         let sortedData = [...result];
 
         sortedData.sort((a, b) => {
-          if (sortBy === "vehicle_registration_number") {
+          if (sortBy === "name") {
             return sortOrder === "asc"
-              ? a?.vehicle_registration_number?.localeCompare(
-                  b?.vehicle_registration_number
-                )
-              : b?.vehicle_registration_number?.localeCompare(
-                  a?.vehicle_registration_number
-                );
+              ? a?.name?.localeCompare(b?.name)
+              : b?.name?.localeCompare(a?.name);
+          } else if (sortBy === "surname") {
+            return sortOrder === "asc"
+              ? a?.surname?.localeCompare(b?.surname)
+              : b?.surname?.localeCompare(a?.surname);
           }
 
-          // Add additional sorting logic for other fields if needed here
-          return 0; // no sorting if field is not matched
+          return 0; // Default return to avoid lint warning
         });
 
         setData(sortedData);
@@ -73,19 +72,19 @@ const Jobs = () => {
   }, [sortBy, sortOrder]);
 
   useEffect(() => {
-    const filterByName = (items, searchQuery) => {
+    const filterByNameAndSurname = (items, searchQuery) => {
       if (!Array.isArray(items)) return [];
+      if (!searchQuery?.trim()) return items;
 
-      if (!searchQuery) return items; // Return all items if search query is empty
-
-      return items.filter((item) =>
-        item.vehicle_registration_number
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase())
-      );
+      return items.filter((item) => {
+        const fullName = `${item.name ?? ""} ${
+          item.surname ?? ""
+        }`.toLowerCase();
+        return fullName.includes(searchQuery.toLowerCase());
+      });
     };
 
-    setFilteredData(filterByName(data, searchQuery));
+    setFilteredData(filterByNameAndSurname(data, searchQuery));
   }, [searchQuery, data]);
 
   return (
@@ -93,7 +92,7 @@ const Jobs = () => {
       <div className="page">
         <NavBar />
 
-        <PageTitle name={"Jobs"} />
+        <PageTitle name={"System Users"} />
         {error && !loading && <ErrorMessage message={error.message} />}
 
         {loading ? (
@@ -124,7 +123,7 @@ const Jobs = () => {
                         className="form-control"
                         type="text"
                         name="s"
-                        placeholder="Search by Vehicle Registration Number"
+                        placeholder="Search by name and surname"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
@@ -132,11 +131,12 @@ const Jobs = () => {
                   </div>
 
                   <Link
-                    to={`/newjob`}
+                    to={`/newuser`}
                     style={{ marginBottom: "20px" }}
                     className="ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-icon-btn-left ttm-btn-color-skincolor"
                   >
-                    New Job
+                    New System User
+                    <i className="ti ti-plus"></i>
                   </Link>
                 </div>
 
@@ -146,12 +146,12 @@ const Jobs = () => {
                       <thead>
                         <tr>
                           <th className="product-subtotal">Created</th>
-                          <th className="product-subtotal">VRN</th>
-                          <th className="product-subtotal">Make</th>
-                          <th className="product-subtotal">Model</th>
-                          <th className="product-subtotal">Status</th>
 
-                          <th className="product-subtotal"></th>
+                          <th className="product-subtotal">Name</th>
+                          <th className="product-subtotal">Surname</th>
+                          <th className="product-subtotal">Email</th>
+                          <th className="product-subtotal">Phone</th>
+
                           <th className="product-subtotal"></th>
                         </tr>
                       </thead>
@@ -162,39 +162,22 @@ const Jobs = () => {
                               {" "}
                               {format(item.created_at, "dd-MMM-yyyy")}
                             </th>
+
+                            <th className="product-subtotal"> {item.name}</th>
+
                             <th className="product-subtotal">
                               {" "}
-                              {item.vehicle_registration_number}
-                            </th>
-                            <th className="product-subtotal">
-                              {" "}
-                              {item.vehicle_make}
+                              {item.surname}
                             </th>
 
-                            <th className="product-subtotal">
-                              {item.vehicle_model}
-                            </th>
-                            {/* <th className="product-subtotal">
-                              {format(
-                                item.expected_delivery_time,
-                                "dd-MMM-yyyy HH:mm"
-                              )}
-                            </th> */}
-                            {/* <th className="product-subtotal">
-                              {item.delivery_time &&
-                                format(item.delivery_time, "dd-MMM-yyyy")}
-                              <br />
-                              {item.delivery_time &&
-                                format(item.delivery_time, "HH:mm")}
-                            </th> */}
+                            <th className="product-subtotal"> {item.email}</th>
 
-                            <th className="product-subtotal"> {item.status}</th>
+                            <th className="product-subtotal"> {item.phone}</th>
+
+                            {/* <th className="product-subtotal"> {item.status}</th> */}
 
                             <th className="product-subtotal">
-                              <Link to={`/jobs/${item.id}`}>View</Link>
-                            </th>
-                            <th className="product-subtotal">
-                              <Link to={`/jobs/${item.id}/edit`}>Edit</Link>
+                              <Link to={`/users/${item.id}`}>View</Link>
                             </th>
                           </tr>
                         ))}
@@ -226,4 +209,4 @@ const Jobs = () => {
   );
 };
 
-export default Jobs;
+export default Users;

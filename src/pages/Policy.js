@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../components/navBar/NavBar";
 import FooterPage from "../components/footer/FooterComponent";
-import { useNavigate } from "react-router";
+import { useParams } from "react-router";
 import { supabase } from "../utils/supabase";
 import PageTitle from "../components/titles/PageTitle";
 import BigLoading from "../components/spinners/Loading";
@@ -11,8 +11,11 @@ import Select from "react-select";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
-const CustomerNew = () => {
+const Policy = () => {
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("tab1");
@@ -21,23 +24,82 @@ const CustomerNew = () => {
     { id: "tab2", label: "Next Of Kin Details" },
     { id: "tab3", label: "Policy Details" },
     { id: "tab4", label: "Beneficiary Details" },
+    { id: "tab5", label: "Subscriptions" },
+    { id: "tab6", label: "Claims" },
   ];
   const [form, setForm] = useState({});
-  const [beneficiaries, setBeneficiaries] = useState([
-    {
-      title: "",
-      alt_title: "",
-      name: "",
-      middle_name: "",
-      surname: "",
-      dob: null,
-      id_number: "",
-      passport_number: "",
-      relationship: "",
-    },
-  ]);
 
-  const navigate = useNavigate();
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [claims, setClaims] = useState([]);
+  const [beneficiaries, setBeneficiaries] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!id) return;
+
+      setLoading(true);
+      try {
+        // Fetch policy + client info
+        const { data: policyData, error: policyError } = await supabase
+          .from("policies")
+          .select("*, client_id(*)")
+          .eq("id", id)
+          .single();
+
+        if (policyError) throw policyError;
+
+        // Set flattened form data
+        setForm((prev) => ({
+          ...prev,
+          ...policyData,
+          ...(policyData.client_id || {}),
+        }));
+
+        // Fetch beneficiaries for this policy
+        const { data: beneficiaryData, error: beneficiaryError } =
+          await supabase.from("beneficiaries").select("*").eq("policy_id", id);
+
+        if (beneficiaryError) throw beneficiaryError;
+
+        setBeneficiaries(beneficiaryData || []);
+
+        // Fetch subscriptions for this policy
+        const { data: subscriptionsData, error: subscriptionsError } =
+          await supabase
+            .from("subscriptions")
+            .select("*")
+            .eq("policy_id", id)
+            .order("created_at", { ascending: false });
+
+        if (subscriptionsError) throw subscriptionsError;
+
+        setSubscriptions(subscriptionsData || []);
+
+        // Fetch subscriptions for this policy
+        const { data: claimsData, error: claimsError } = await supabase
+          .from("claims")
+          .select("*")
+          .eq("policy_id", id)
+          .order("created_at", { ascending: false });
+
+        if (claimsError) throw claimsError;
+
+        setClaims(claimsData || []);
+      } catch (error) {
+        console.error("Error fetching policy or beneficiaries:", error);
+        setError({
+          message:
+            "Error fetching policy data. Please check your internet and try again.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  // const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -50,26 +112,26 @@ const CustomerNew = () => {
     }));
   };
 
-  const addBeneficiary = () => {
-    if (beneficiaries.length >= 6) return alert("Max 6 beneficiaries");
+  // const addBeneficiary = () => {
+  //   if (beneficiaries.length >= 6) return alert("Max 6 beneficiaries");
 
-    if (window.confirm("add new beneficiary?")) {
-      setBeneficiaries((prev) => [
-        ...prev,
-        {
-          title: "",
-          alt_title: "",
-          name: "",
-          middle_name: "",
-          surname: "",
-          dob: null,
-          id_number: "",
-          passport_number: "",
-          relationship: "",
-        },
-      ]);
-    }
-  };
+  //   if (window.confirm("add new beneficiary?")) {
+  //     setBeneficiaries((prev) => [
+  //       ...prev,
+  //       {
+  //         title: "",
+  //         alt_title: "",
+  //         name: "",
+  //         middle_name: "",
+  //         surname: "",
+  //         dob: null,
+  //         id_number: "",
+  //         passport_number: "",
+  //         relationship: "",
+  //       },
+  //     ]);
+  //   }
+  // };
 
   const handleBeneficiaryChange = (index, key, value) => {
     const updated = [...beneficiaries];
@@ -77,76 +139,77 @@ const CustomerNew = () => {
     setBeneficiaries(updated);
   };
 
-  const handleDeleteBeneficiary = (indexToDelete) => {
-    if (window.confirm("Remove beneficiary?")) {
-      setBeneficiaries((prev) => prev.filter((_, i) => i !== indexToDelete));
-    }
-  };
+  // const handleDeleteBeneficiary = (indexToDelete) => {
+  //   if (window.confirm("Remove beneficiary?")) {
+  //     setBeneficiaries((prev) => prev.filter((_, i) => i !== indexToDelete));
+  //   }
+  // };
 
-  const handleSave = async () => {
-    try {
-      setLoading(true);
+  // const handleSave = async () => {
+  //   try {
+  //     setLoading(true);
 
-      // Prepare data for the transaction
-      const clientData = {
-        title: form.title,
-        name: form.name,
-        surname: form.surname,
-        phone: form.phone,
-        email: form.email,
-        dob: form.dob,
-        id_number: form.id_number,
-        address: form.address,
-        city: form.city,
-        region: form.region,
-        nok_title: form.nok_title,
-        nok_name: form.nok_name,
-        nok_surname: form.nok_surname,
-        nok_phone: form.nok_phone,
-      };
+  //     // Prepare data for the transaction
+  //     const clientData = {
+  //       title: form.title,
+  //       name: form.name,
+  //       surname: form.surname,
+  //       phone: form.phone,
+  //       email: form.email,
+  //       dob: form.dob,
+  //       id_number: form.id_number,
+  //       address: form.address,
+  //       city: form.city,
+  //       region: form.region,
+  //       nok_title: form.nok_title,
+  //       nok_name: form.nok_name,
+  //       nok_surname: form.nok_surname,
+  //       nok_phone: form.nok_phone,
+  //     };
 
-      const policyData = {
-        policy_name: form.policy?.name,
-        start_date: form.start_date,
-        payment_frequency: form.payment_frequency,
-      };
+  //     const policyData = {
+  //       policy_name: form.policy?.name,
+  //       start_date: form.start_date,
+  //       payment_frequency: form.payment_frequency,
+  //     };
 
-      const beneficiariesData = beneficiaries.map((b) => ({
-        title: b.title,
-        name: b.name,
-        surname: b.surname,
-        dob: b.dob,
-        relationship: b.relationship,
-        id_number: b.id_number,
-      }));
+  //     const beneficiariesData = beneficiaries.map((b) => ({
+  //       title: b.title,
+  //       name: b.name,
+  //       surname: b.surname,
+  //       dob: b.dob,
+  //       relationship: b.relationship,
+  //       id_number: b.id_number,
+  //     }));
 
-      // Execute the transaction
-      const { data: newClientId, error } = await supabase.rpc(
-        "create_client_with_policy_and_beneficiaries",
-        {
-          client_data: clientData,
-          policy_data: policyData,
-          beneficiaries_data: beneficiariesData,
-        }
-      );
+  //     // Execute the transaction
+  //     const { data: newClientId, error } = await supabase.rpc(
+  //       "create_client_with_policy_and_beneficiaries",
+  //       {
+  //         client_data: clientData,
+  //         policy_data: policyData,
+  //         beneficiaries_data: beneficiariesData,
+  //       }
+  //     );
 
-      if (error) throw error;
+  //     if (error) throw error;
 
-      navigate(`/customers/${newClientId}`);
-      return { success: true };
-    } catch (err) {
-      console.error("Transaction failed:", err);
-      setError(err.message || "Failed to save. Please try again.");
-      return { success: false };
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     navigate(`/policies/${newClientId}`);
+  //     return { success: true };
+  //   } catch (err) {
+  //     console.error("Transaction failed:", err);
+  //     setError(err.message || "Failed to save. Please try again.");
+  //     return { success: false };
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   return (
     <>
       <NavBar />
 
-      <PageTitle name={"New Policy And Member"} />
+      <PageTitle name={"View Policy"} />
       {error.message && <ErrorMessage message={error.message} />}
 
       {loading ? (
@@ -156,10 +219,13 @@ const CustomerNew = () => {
           <div
             style={{
               paddingBottom: "100px",
-              marginTop: "20px",
+              // marginTop: "20px",
             }}
           >
-            <div className="row" style={{ marginBottom: "-1px" }}>
+            <div
+              className="row"
+              style={{ marginBottom: "-1px", marginTop: "15px" }}
+            >
               {tabs.map((tab) => (
                 <div
                   key={tab.id}
@@ -167,14 +233,14 @@ const CustomerNew = () => {
                   style={{
                     padding: "10px 15px",
                     cursor: "pointer",
-                    marginLeft: "15px",
+                    marginLeft: "5px",
                     borderBottom:
                       activeTab === tab.id
                         ? "2px solid #23513f"
-                        : "2px solid transparent",
+                        : "1px solid #23513f",
                     // borderRight: "3px solid #23513f",
                     fontWeight: activeTab === tab.id ? "600" : "400",
-                    fontSize: "16px",
+                    fontSize: "14px",
                     color: activeTab === tab.id ? "#23513f" : "#555",
                     userSelect: "none",
                     transition: "color 0.3s, border-bottom-color 0.3s",
@@ -186,18 +252,13 @@ const CustomerNew = () => {
               ))}
             </div>
 
-            <div style={{ border: "1px solid #23513f", padding: "30px" }}>
+            <div style={{ padding: "30px" }}>
               {activeTab === "tab1" && (
                 <div>
-                  <div
-                    id="ttm-contactform"
-                    className="ttm-contactform wrap-form clearfix"
-                  >
+                  <div id="ttm-contactform" className="wrap-form clearfix">
                     <div className="row">
                       <div className="col-lg-6">
-                        <h5 style={{ marginTop: "20px" }}>
-                          SECTION A : Main Member Information
-                        </h5>
+                        <h5>SECTION A : Main Member Information</h5>
                       </div>
                     </div>
                     <div className="row">
@@ -215,6 +276,15 @@ const CustomerNew = () => {
                                 label: `${c.name}`,
                                 data: c.name,
                               }))}
+                              value={
+                                form.region
+                                  ? {
+                                      value: form.region,
+                                      label: form.region,
+                                      data: form.region,
+                                    }
+                                  : null
+                              }
                               onChange={(selected) =>
                                 setForm((prev) => ({
                                   ...prev,
@@ -222,8 +292,9 @@ const CustomerNew = () => {
                                   region: selected?.data,
                                 }))
                               }
-                              placeholder="Select title"
+                              placeholder="-"
                               isSearchable={true}
+                              isDisabled={true}
                             />
                           </span>
                         </label>
@@ -243,14 +314,24 @@ const CustomerNew = () => {
                                 label: `${c.label}`,
                                 data: c.name,
                               }))}
+                              value={
+                                form.gender
+                                  ? {
+                                      value: form.gender,
+                                      label: form.gender,
+                                      data: form.gender,
+                                    }
+                                  : null
+                              }
                               onChange={(selected) =>
                                 setForm((prev) => ({
                                   ...prev,
                                   gender: selected?.data,
                                 }))
                               }
-                              placeholder="Select Gender"
+                              placeholder="-"
                               isSearchable={true}
+                              isDisabled={true}
                             />
                           </span>
                         </label>
@@ -272,6 +353,15 @@ const CustomerNew = () => {
                                 label: `${c.name}`,
                                 data: c.name,
                               }))}
+                              value={
+                                form.title
+                                  ? {
+                                      value: form.title,
+                                      label: form.title,
+                                      data: form.title,
+                                    }
+                                  : null
+                              }
                               onChange={(selected) =>
                                 setForm((prev) => ({
                                   ...prev,
@@ -282,8 +372,9 @@ const CustomerNew = () => {
                                       : prev.alt_title,
                                 }))
                               }
-                              placeholder="Select title"
+                              placeholder="-"
                               isSearchable={true}
+                              isDisabled={true}
                             />
                           </span>
                         </label>
@@ -301,6 +392,7 @@ const CustomerNew = () => {
                                 name={"alt_title"}
                                 value={form?.alt_title}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -315,11 +407,11 @@ const CustomerNew = () => {
                           <span className="text-input">
                             <input
                               type="text"
-                              placeholder="Name"
                               required="required"
                               name={"name"}
                               value={form?.name}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -334,6 +426,7 @@ const CustomerNew = () => {
                               name={"middle_name"}
                               value={form?.middle_name}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -345,11 +438,11 @@ const CustomerNew = () => {
                           <span className="text-input">
                             <input
                               type="text"
-                              placeholder="Surname"
                               required="required"
                               name={"surname"}
                               value={form?.surname}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -370,9 +463,9 @@ const CustomerNew = () => {
                               dropdownMode="select"
                               className="form-control"
                               style={{ zIndex: 1000 }}
-                              placeholderText="Select Date of Birth"
                               popperClassName="datepicker-zindex"
                               inputProps={{ readOnly: true }}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -388,6 +481,7 @@ const CustomerNew = () => {
                               name={"id_number"}
                               value={form?.id_number}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -402,6 +496,7 @@ const CustomerNew = () => {
                               name={"passport_number"}
                               value={form?.passport_number}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -414,11 +509,11 @@ const CustomerNew = () => {
                           <span className="text-input">
                             <input
                               type="text"
-                              placeholder="Phone"
                               required="required"
                               name={"phone"}
                               value={form?.phone}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -429,11 +524,12 @@ const CustomerNew = () => {
                           <span className="text-input">
                             <input
                               type="text"
-                              placeholder="Other Phone"
+                              placeholder="-"
                               required="required"
                               name={"alt_phone"}
                               value={form?.alt_phone}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -444,11 +540,12 @@ const CustomerNew = () => {
                           <span className="text-input">
                             <input
                               type="text"
-                              placeholder="Email"
+                              placeholder="-"
                               required="required"
                               name={"email"}
                               value={form?.email}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -466,6 +563,7 @@ const CustomerNew = () => {
                               name={"address"}
                               value={form?.address}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -477,10 +575,11 @@ const CustomerNew = () => {
                             <input
                               type="text"
                               required="required"
-                              placeholder="City"
+                              placeholder="-"
                               name={"city"}
                               value={form?.city}
                               onChange={handleChange}
+                              readOnly
                             />
                           </span>
                         </label>
@@ -498,9 +597,7 @@ const CustomerNew = () => {
                     >
                       <div className="row">
                         <div className="col-lg-6">
-                          <h5 style={{ marginTop: "20px" }}>
-                            Next of Kin Information
-                          </h5>
+                          <h5>Next of Kin Information</h5>
                         </div>
                       </div>
 
@@ -522,6 +619,21 @@ const CustomerNew = () => {
                                   label: `${c.name}`,
                                   data: c.name,
                                 }))}
+                                value={
+                                  form.nok_title === "Other"
+                                    ? {
+                                        value: form.alt_nok_title,
+                                        label: form.alt_nok_title,
+                                        data: "Other",
+                                      }
+                                    : form.nok_title
+                                    ? {
+                                        value: form.nok_title,
+                                        label: form.nok_title,
+                                        data: form.nok_title,
+                                      }
+                                    : null
+                                }
                                 onChange={(selected) =>
                                   setForm((prev) => ({
                                     ...prev,
@@ -531,8 +643,9 @@ const CustomerNew = () => {
                                         : prev.nok_title,
                                   }))
                                 }
-                                placeholder="Select title"
+                                placeholder="-"
                                 isSearchable={true}
+                                isDisabled={true}
                               />
                             </span>
                           </label>
@@ -545,7 +658,7 @@ const CustomerNew = () => {
                               <span className="text-input">
                                 <input
                                   type="text"
-                                  placeholder="Title"
+                                  placeholder="-"
                                   required="required"
                                   name={"nok_alt_title"}
                                   value={form?.nok_alt_title}
@@ -564,11 +677,12 @@ const CustomerNew = () => {
                             <span className="text-input">
                               <input
                                 type="text"
-                                placeholder="Name"
+                                placeholder="-"
                                 required="required"
                                 name={"nok_name"}
                                 value={form?.nok_name}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -583,6 +697,7 @@ const CustomerNew = () => {
                                 name={"nok_middle_name"}
                                 value={form?.nok_middle_name}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -593,11 +708,12 @@ const CustomerNew = () => {
                             <span className="text-input">
                               <input
                                 type="text"
-                                placeholder="Surname"
+                                placeholder="-"
                                 required="required"
                                 name={"nok_surname"}
                                 value={form?.nok_surname}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -613,6 +729,7 @@ const CustomerNew = () => {
                                 name={"nok_id_number"}
                                 value={form?.nok_id_number}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -627,6 +744,7 @@ const CustomerNew = () => {
                                 name={"nok_passport_number"}
                                 value={form?.nok_passport_number}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -640,11 +758,12 @@ const CustomerNew = () => {
                             <span className="text-input">
                               <input
                                 type="text"
-                                placeholder="Phone"
+                                placeholder="-"
                                 required="required"
                                 name={"nok_phone"}
                                 value={form?.nok_phone}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -655,11 +774,12 @@ const CustomerNew = () => {
                             <span className="text-input">
                               <input
                                 type="text"
-                                placeholder="Other Phone"
+                                placeholder="-"
                                 required="required"
                                 name={"nok_alt_phone"}
                                 value={form?.nok_alt_phone}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -670,11 +790,12 @@ const CustomerNew = () => {
                             <span className="text-input">
                               <input
                                 type="text"
-                                placeholder="Email"
+                                placeholder="-"
                                 required="required"
                                 name={"nok_email"}
                                 value={form?.nok_email}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -692,6 +813,7 @@ const CustomerNew = () => {
                                 name={"nok_address"}
                                 value={form?.nok_address}
                                 onChange={handleChange}
+                                readOnly
                               />
                             </span>
                           </label>
@@ -711,9 +833,7 @@ const CustomerNew = () => {
                     >
                       <div className="row">
                         <div className="col-lg-6">
-                          <h5 style={{ marginTop: "20px" }}>
-                            SECTION B : Policy
-                          </h5>
+                          <h5>SECTION B : Policy</h5>
                         </div>
                       </div>
 
@@ -749,14 +869,24 @@ const CustomerNew = () => {
                                   label: `${c.name}`,
                                   data: c,
                                 }))}
+                                value={
+                                  form.policy_name
+                                    ? {
+                                        value: form.policy_name,
+                                        label: form.policy_name,
+                                        data: form.policy_name,
+                                      }
+                                    : null
+                                }
                                 onChange={(selected) =>
                                   setForm((prev) => ({
                                     ...prev,
                                     policy: selected?.data,
                                   }))
                                 }
-                                placeholder="Select Policy"
+                                placeholder="-"
                                 isSearchable={true}
+                                isDisabled
                               />
                             </span>
                           </label>
@@ -783,7 +913,7 @@ const CustomerNew = () => {
                                 dropdownMode="select"
                                 className="form-control"
                                 style={{ zIndex: 1000 }}
-                                placeholderText="Select Date of Birth"
+                                placeholderText="-"
                                 popperClassName="datepicker-zindex"
                                 inputProps={{ readOnly: true }}
                               />
@@ -810,14 +940,24 @@ const CustomerNew = () => {
                                   label: `${c.name}`,
                                   data: c.name,
                                 }))}
+                                value={
+                                  form.payment_frequency
+                                    ? {
+                                        value: form.payment_frequency,
+                                        label: form.payment_frequency,
+                                        data: form.payment_frequency,
+                                      }
+                                    : null
+                                }
                                 onChange={(selected) =>
                                   setForm((prev) => ({
                                     ...prev,
                                     payment_frequency: selected?.data,
                                   }))
                                 }
-                                placeholder="Select Payment Frequency"
+                                placeholder="-"
                                 isSearchable={true}
+                                isDisabled
                               />
                             </span>
                           </label>
@@ -838,9 +978,7 @@ const CustomerNew = () => {
                     >
                       <div className="row">
                         <div className="col-lg-6">
-                          <h5 style={{ marginTop: "30px" }}>
-                            SECTION C: Beneficiaries Information
-                          </h5>
+                          <h5>SECTION C: Beneficiaries Information</h5>
                         </div>
                       </div>
 
@@ -878,6 +1016,15 @@ const CustomerNew = () => {
                                     label: c.name,
                                     data: c.name,
                                   }))}
+                                  value={
+                                    form.title
+                                      ? {
+                                          value: form.title,
+                                          label: form.title,
+                                          data: form.title,
+                                        }
+                                      : null
+                                  }
                                   onChange={(selected) =>
                                     handleBeneficiaryChange(
                                       index,
@@ -885,8 +1032,9 @@ const CustomerNew = () => {
                                       selected?.data
                                     )
                                   }
-                                  placeholder="Select title"
+                                  placeholder="-"
                                   isSearchable
+                                  isDisabled
                                 />
                               </div>
 
@@ -897,7 +1045,7 @@ const CustomerNew = () => {
                                   </h6>
                                   <input
                                     type="text"
-                                    placeholder="Title"
+                                    placeholder="-"
                                     name="alt_title"
                                     value={form.alt_title}
                                     onChange={(e) =>
@@ -919,7 +1067,7 @@ const CustomerNew = () => {
                                 </h6>
                                 <input
                                   type="text"
-                                  placeholder="Name"
+                                  placeholder="-"
                                   name="name"
                                   value={form.name}
                                   onChange={(e) =>
@@ -929,6 +1077,7 @@ const CustomerNew = () => {
                                       e.target.value
                                     )
                                   }
+                                  readOnly
                                 />
                               </div>
 
@@ -947,6 +1096,7 @@ const CustomerNew = () => {
                                       e.target.value
                                     )
                                   }
+                                  readOnly
                                 />
                               </div>
 
@@ -954,7 +1104,7 @@ const CustomerNew = () => {
                                 <h6 style={{ marginTop: "20px" }}>Last Name</h6>
                                 <input
                                   type="text"
-                                  placeholder="Surname"
+                                  placeholder="-"
                                   name="surname"
                                   value={form.surname}
                                   onChange={(e) =>
@@ -964,6 +1114,7 @@ const CustomerNew = () => {
                                       e.target.value
                                     )
                                   }
+                                  readOnly
                                 />
                               </div>
 
@@ -983,7 +1134,7 @@ const CustomerNew = () => {
                                   showMonthDropdown
                                   dropdownMode="select"
                                   className="form-control"
-                                  placeholderText="Select Date of Birth"
+                                  placeholderText="-"
                                   // readOnly
                                 />
                               </div>
@@ -1003,6 +1154,7 @@ const CustomerNew = () => {
                                       e.target.value
                                     )
                                   }
+                                  readOnly
                                 />
                               </div>
 
@@ -1021,6 +1173,7 @@ const CustomerNew = () => {
                                       e.target.value
                                     )
                                   }
+                                  readOnly
                                 />
                               </div>
                             </div>
@@ -1043,6 +1196,15 @@ const CustomerNew = () => {
                                     label: c.name,
                                     data: c.name,
                                   }))}
+                                  value={
+                                    form.relationship
+                                      ? {
+                                          value: form.relationship,
+                                          label: form.relationship,
+                                          data: form.relationship,
+                                        }
+                                      : null
+                                  }
                                   onChange={(selected) =>
                                     handleBeneficiaryChange(
                                       index,
@@ -1050,8 +1212,9 @@ const CustomerNew = () => {
                                       selected?.data
                                     )
                                   }
-                                  placeholder="Select Relationship"
+                                  placeholder="-"
                                   isSearchable
+                                  isDisabled
                                 />
                               </div>
 
@@ -1076,7 +1239,7 @@ const CustomerNew = () => {
                               )}
                             </div>
                           </div>
-                          <div className="col-lg-1">
+                          {/* <div className="col-lg-1">
                             <button
                               type="button"
                               className="btn btn-danger btn-sm"
@@ -1085,11 +1248,11 @@ const CustomerNew = () => {
                             >
                               Delete
                             </button>
-                          </div>
+                          </div> */}
                         </div>
                       ))}
 
-                      <div className="col-lg-3 pl-100">
+                      {/* <div className="col-lg-3 pl-100">
                         <input
                           style={{ marginBottom: "20px" }}
                           name="submit"
@@ -1099,6 +1262,150 @@ const CustomerNew = () => {
                           value="New Beneficiary"
                           onClick={addBeneficiary}
                         />
+                      </div> */}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {activeTab === "tab5" && (
+                <div>
+                  {" "}
+                  <div>
+                    <div
+                      id="ttm-contactform"
+                      className="ttm-contactform wrap-form clearfix"
+                    >
+                      <div className="row">
+                        <div className="col-lg-6">
+                          <h5>SECTION D: Subscriptions</h5>
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="col-lg-12">
+                          <table className="table cart_table shop_table_responsive">
+                            <thead>
+                              <tr>
+                                <th className="product-subtotal">Created</th>
+                                <th className="product-subtotal">Amount</th>
+                                <th className="product-subtotal">Platform</th>
+                                <th className="product-subtotal">Ref</th>
+                                <th className="product-subtotal"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {subscriptions?.map((item, index) => (
+                                <tr key={index}>
+                                  <th className="product-subtotal">
+                                    {" "}
+                                    {format(item.created_at, "dd-MMM-yyyy")}
+                                  </th>
+
+                                  <th className="product-subtotal">
+                                    {" "}
+                                    {item.amount} {item.currency}
+                                  </th>
+
+                                  <th className="product-subtotal">
+                                    {" "}
+                                    {item.platform}
+                                  </th>
+
+                                  <th className="product-subtotal">
+                                    {" "}
+                                    {item.ref}
+                                  </th>
+
+                                  <th className="product-subtotal">
+                                    <Link to={`/payments/${item.id}`}>
+                                      View
+                                    </Link>
+                                  </th>
+                                </tr>
+                              ))}
+
+                              <tr>
+                                <td colSpan="6" className="actions">
+                                  <div className="coupon"></div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {activeTab === "tab6" && (
+                <div>
+                  {" "}
+                  <div>
+                    <div
+                      id="ttm-contactform"
+                      className="ttm-contactform wrap-form clearfix"
+                    >
+                      <div className="row">
+                        <div className="col-lg-6">
+                          <h5>SECTION D: Claims</h5>
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="col-lg-12">
+                          <table className="table cart_table shop_table_responsive">
+                            <thead>
+                              <tr>
+                                <th className="product-subtotal">Created</th>
+                                <th className="product-subtotal">Amount</th>
+                                <th className="product-subtotal">Platform</th>
+                                <th className="product-subtotal">Ref</th>
+                                <th className="product-subtotal">Status</th>
+                                <th className="product-subtotal"></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {claims?.map((item, index) => (
+                                <tr key={index}>
+                                  <th className="product-subtotal">
+                                    {" "}
+                                    {format(item.created_at, "dd-MMM-yyyy")}
+                                  </th>
+
+                                  <th className="product-subtotal">
+                                    {" "}
+                                    {item.amount} {item.currency}
+                                  </th>
+
+                                  <th className="product-subtotal">
+                                    {" "}
+                                    {item.platform}
+                                  </th>
+
+                                  <th className="product-subtotal">
+                                    {" "}
+                                    {item.ref}
+                                  </th>
+
+                                  <th className="product-subtotal">
+                                    {" "}
+                                    {item.status}
+                                  </th>
+
+                                  <th className="product-subtotal">
+                                    <Link to={`/claims/${item.id}`}>View</Link>
+                                  </th>
+                                </tr>
+                              ))}
+
+                              <tr>
+                                <td colSpan="6" className="actions">
+                                  <div className="coupon"></div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1107,7 +1414,7 @@ const CustomerNew = () => {
             </div>
           </div>
 
-          <input
+          {/* <input
             style={{ marginBottom: "20px" }}
             name="submit"
             type="submit"
@@ -1115,7 +1422,7 @@ const CustomerNew = () => {
             className="submit ttm-btn ttm-btn-size-md ttm-btn-shape-square ttm-btn-style-fill ttm-btn-color-skincolor"
             value="Save New Client"
             onClick={handleSave}
-          />
+          /> */}
         </div>
       )}
 
@@ -1124,4 +1431,4 @@ const CustomerNew = () => {
   );
 };
 
-export default CustomerNew;
+export default Policy;

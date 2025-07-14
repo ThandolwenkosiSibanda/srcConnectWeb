@@ -12,7 +12,14 @@ import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const CustomerNew = () => {
+const customStyles = {
+  menu: (provided) => ({
+    ...provided,
+    zIndex: 9999, // Adjust this value as needed
+  }),
+};
+
+const PolicyNew = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("tab1");
@@ -23,6 +30,9 @@ const CustomerNew = () => {
     { id: "tab4", label: "Beneficiary Details" },
   ];
   const [form, setForm] = useState({});
+
+  console.log("form", form);
+
   const [beneficiaries, setBeneficiaries] = useState([
     {
       title: "",
@@ -89,24 +99,34 @@ const CustomerNew = () => {
 
       // Prepare data for the transaction
       const clientData = {
+        gender: form.gender,
         title: form.title,
         name: form.name,
+        middle_name: form?.middle_name,
         surname: form.surname,
         phone: form.phone,
+        alt_phone: form?.alt_phone,
         email: form.email,
         dob: form.dob,
         id_number: form.id_number,
+        passport_number: form?.passport_number,
         address: form.address,
         city: form.city,
         region: form.region,
         nok_title: form.nok_title,
         nok_name: form.nok_name,
         nok_surname: form.nok_surname,
+        nok_middle_name: form?.nok_middle_name,
         nok_phone: form.nok_phone,
+        nok_email: form.nok_email,
+        nok_id_number: form?.nok_id_number,
+        nok_passport_number: form?.nok_passport_number,
+        nok_alt_phone: form?.nok_alt_phone,
+        nok_address: form?.nok_address,
       };
 
       const policyData = {
-        policy_name: form.policy?.name,
+        policy_name: form.policy_name,
         start_date: form.start_date,
         payment_frequency: form.payment_frequency,
       };
@@ -115,9 +135,11 @@ const CustomerNew = () => {
         title: b.title,
         name: b.name,
         surname: b.surname,
+        middle_name: b.middle_name,
         dob: b.dob,
         relationship: b.relationship,
         id_number: b.id_number,
+        passport_number: b.passport_number,
       }));
 
       // Execute the transaction
@@ -132,7 +154,7 @@ const CustomerNew = () => {
 
       if (error) throw error;
 
-      navigate(`/customers/${newClientId}`);
+      navigate(`/policies/${newClientId}`);
       return { success: true };
     } catch (err) {
       console.error("Transaction failed:", err);
@@ -174,7 +196,7 @@ const CustomerNew = () => {
                         : "2px solid transparent",
                     // borderRight: "3px solid #23513f",
                     fontWeight: activeTab === tab.id ? "600" : "400",
-                    fontSize: "16px",
+                    fontSize: "14px",
                     color: activeTab === tab.id ? "#23513f" : "#555",
                     userSelect: "none",
                     transition: "color 0.3s, border-bottom-color 0.3s",
@@ -186,7 +208,7 @@ const CustomerNew = () => {
               ))}
             </div>
 
-            <div style={{ border: "1px solid #23513f", padding: "30px" }}>
+            <div style={{ borderTop: "1px solid #23513f", padding: "30px" }}>
               {activeTab === "tab1" && (
                 <div>
                   <div
@@ -215,10 +237,18 @@ const CustomerNew = () => {
                                 label: `${c.name}`,
                                 data: c.name,
                               }))}
+                              value={
+                                form.region
+                                  ? {
+                                      value: form.region,
+                                      label: form.region,
+                                      data: form.region,
+                                    }
+                                  : null
+                              }
                               onChange={(selected) =>
                                 setForm((prev) => ({
                                   ...prev,
-                                  title: selected?.data,
                                   region: selected?.data,
                                 }))
                               }
@@ -243,6 +273,15 @@ const CustomerNew = () => {
                                 label: `${c.label}`,
                                 data: c.name,
                               }))}
+                              value={
+                                form.gender
+                                  ? {
+                                      value: form.gender,
+                                      label: form.gender,
+                                      data: form.gender,
+                                    }
+                                  : null
+                              }
                               onChange={(selected) =>
                                 setForm((prev) => ({
                                   ...prev,
@@ -272,6 +311,15 @@ const CustomerNew = () => {
                                 label: `${c.name}`,
                                 data: c.name,
                               }))}
+                              value={
+                                form.title
+                                  ? {
+                                      value: form.title,
+                                      label: form.title,
+                                      data: form.title,
+                                    }
+                                  : null
+                              }
                               onChange={(selected) =>
                                 setForm((prev) => ({
                                   ...prev,
@@ -522,13 +570,19 @@ const CustomerNew = () => {
                                   label: `${c.name}`,
                                   data: c.name,
                                 }))}
+                                value={
+                                  form.nok_title
+                                    ? {
+                                        value: form.nok_title,
+                                        label: form.nok_title,
+                                        data: form.nok_title,
+                                      }
+                                    : null
+                                }
                                 onChange={(selected) =>
                                   setForm((prev) => ({
                                     ...prev,
-                                    nok_title:
-                                      selected?.data === "Other"
-                                        ? ""
-                                        : prev.nok_title,
+                                    nok_title: selected?.data,
                                   }))
                                 }
                                 placeholder="Select title"
@@ -538,7 +592,7 @@ const CustomerNew = () => {
                           </label>
                         </div>
 
-                        {form.title === "Other" && (
+                        {form.nok_title === "Other" && (
                           <div className="col-lg-4">
                             <h6 style={{ marginTop: "20px" }}>Title</h6>
                             <label>
@@ -723,6 +777,7 @@ const CustomerNew = () => {
                           <label>
                             <span className="text-input">
                               <Select
+                                styles={customStyles}
                                 options={[
                                   {
                                     id: 1,
@@ -747,12 +802,21 @@ const CustomerNew = () => {
                                 ].map((c) => ({
                                   value: c.id,
                                   label: `${c.name}`,
-                                  data: c,
+                                  data: c.name,
                                 }))}
+                                value={
+                                  form.policy_name
+                                    ? {
+                                        value: form.policy_name,
+                                        label: form.policy_name,
+                                        data: form.policy_name,
+                                      }
+                                    : null
+                                }
                                 onChange={(selected) =>
                                   setForm((prev) => ({
                                     ...prev,
-                                    policy: selected?.data,
+                                    policy_name: selected?.data,
                                   }))
                                 }
                                 placeholder="Select Policy"
@@ -798,6 +862,7 @@ const CustomerNew = () => {
                           <label>
                             <span className="text-input">
                               <Select
+                                styles={customStyles}
                                 options={[
                                   { id: 1, name: "Monthly" },
                                   { id: 2, name: "Quarterly" },
@@ -810,6 +875,15 @@ const CustomerNew = () => {
                                   label: `${c.name}`,
                                   data: c.name,
                                 }))}
+                                value={
+                                  form.payment_frequency
+                                    ? {
+                                        value: form.payment_frequency,
+                                        label: form.payment_frequency,
+                                        data: form.payment_frequency,
+                                      }
+                                    : null
+                                }
                                 onChange={(selected) =>
                                   setForm((prev) => ({
                                     ...prev,
@@ -866,6 +940,7 @@ const CustomerNew = () => {
                               <div className="col-lg-3">
                                 <h6 style={{ marginTop: "20px" }}>Title</h6>
                                 <Select
+                                  styles={customStyles}
                                   options={[
                                     { id: 1, name: "Mr" },
                                     { id: 2, name: "Miss" },
@@ -878,6 +953,15 @@ const CustomerNew = () => {
                                     label: c.name,
                                     data: c.name,
                                   }))}
+                                  value={
+                                    form.title
+                                      ? {
+                                          value: form.title,
+                                          label: form.title,
+                                          data: form.title,
+                                        }
+                                      : null
+                                  }
                                   onChange={(selected) =>
                                     handleBeneficiaryChange(
                                       index,
@@ -1031,6 +1115,7 @@ const CustomerNew = () => {
                                   Relationship to Policy Holder
                                 </h6>
                                 <Select
+                                  styles={customStyles}
                                   options={[
                                     { id: 1, name: "Child" },
                                     { id: 2, name: "Guardian" },
@@ -1043,6 +1128,15 @@ const CustomerNew = () => {
                                     label: c.name,
                                     data: c.name,
                                   }))}
+                                  value={
+                                    form.relationship
+                                      ? {
+                                          value: form.relationship,
+                                          label: form.relationship,
+                                          data: form.relationship,
+                                        }
+                                      : null
+                                  }
                                   onChange={(selected) =>
                                     handleBeneficiaryChange(
                                       index,
@@ -1124,4 +1218,4 @@ const CustomerNew = () => {
   );
 };
 
-export default CustomerNew;
+export default PolicyNew;

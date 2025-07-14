@@ -458,14 +458,6 @@ const JobEdit = () => {
                 <h6 style={{ marginTop: "20px" }}>Start Date</h6>
                 <label>
                   <span className="text-input">
-                    {/* <input
-                      type="text"
-                      required="required"
-                      name={"start_date"}
-                      value={form?.start_date}
-                      onChange={handleChange}
-                      readOnly
-                    /> */}
                     <DatePicker
                       selected={
                         form?.start_date ? new Date(form.start_date) : null

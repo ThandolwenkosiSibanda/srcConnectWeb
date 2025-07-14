@@ -241,26 +241,6 @@ const JobNew = () => {
                 <h6 style={{ marginTop: "20px" }}>Select Customer</h6>
                 <label>
                   <span className="text-input">
-                    {/* <select
-                      value={form?.customer_id?.id || ""}
-                      onChange={(e) => {
-                        const selected = customers.find(
-                          (c) => c.id === e.target.value
-                        );
-
-                        setForm((prev) => ({ ...prev, customer_id: selected }));
-                      }}
-                      isSearchable={true}
-                      required
-                    >
-                      <option value="">-- Select Customer --</option>
-                      {customers.map((customer) => (
-                        <option key={customer.id} value={customer.id}>
-                          {customer.name} {customer.surname}
-                        </option>
-                      ))}
-                    </select> */}
-
                     <Select
                       options={customers.map((c) => ({
                         value: c.id,

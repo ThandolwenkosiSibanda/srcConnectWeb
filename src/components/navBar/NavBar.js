@@ -2,14 +2,15 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { UserContext } from "../../context/user";
-
+import logo from "./logo.jpg";
 const NavBar = () => {
-  const [shopByCategoryStatus, setShopByCategoryStatus] = useState("off");
   const [signinStatus, setSigninStatus] = useState("");
 
   const [menuBarStatus, setMenuBarStatus] = useState("");
 
   const { user, logout } = useContext(UserContext);
+
+  console.log("user in navbar", user);
 
   return (
     <React.Fragment>
@@ -19,9 +20,8 @@ const NavBar = () => {
             <div className="row">
               <div className="col-lg-6 col-sm-6 col-6 order-1">
                 <div className="site-branding">
-                  <h5 style={{ color: "#fff" }}>
-                    Auto ECU Job Management System
-                  </h5>
+                  <img src={logo} alt="Logo" style={{ width: "100px" }} />
+                  {/* <h5 style={{ color: "#fff" }}>Inokuthula Funeral Group</h5> */}
                 </div>
               </div>
 
@@ -34,7 +34,7 @@ const NavBar = () => {
                       </div>
                       <div className="account_content">
                         <div className="account_text">
-                          {user ? `${user?.email}` : "Signin"}
+                          {user ? user.email.split("@")[0] : "Signin"}
                         </div>
                       </div>
                     </div>
@@ -94,24 +94,6 @@ const NavBar = () => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="main_nav_content d-flex flex-row">
-                    <div className="cat_menu_container">
-                      <div
-                        className="cat_menu d-flex flex-row align-items-center "
-                        onClick={() =>
-                          shopByCategoryStatus === "on"
-                            ? setShopByCategoryStatus("")
-                            : setShopByCategoryStatus("on")
-                        }
-                      >
-                        <div className="cat_icon">
-                          <i className="fa fa-bars"></i>
-                        </div>
-                        <div className="cat_text">
-                          <span>Sections</span>
-                        </div>
-                      </div>
-                    </div>
-
                     <div id="site-navigation" className="site-navigation">
                       <div
                         className={`btn-show-menu-mobile menubar menubar--squeeze ${
@@ -136,14 +118,47 @@ const NavBar = () => {
                       >
                         <ul className="nav">
                           <li className="" style={{ zIndex: 1000 }}>
-                            <Link to={`/customers`} className="mega-menu-link">
-                              Customers
+                            <Link to={`/clients`} className="mega-menu-link">
+                              Clients
                             </Link>
                           </li>
 
                           <li className="" style={{ zIndex: 1000 }}>
-                            <Link to={`/jobs`} className="mega-menu-link">
-                              Jobs
+                            <Link to={`/policies`} className="mega-menu-link">
+                              Policies
+                            </Link>
+                          </li>
+
+                          <li className="" style={{ zIndex: 1000 }}>
+                            <Link
+                              to={`/subscriptions`}
+                              className="mega-menu-link"
+                            >
+                              Subscriptions
+                            </Link>
+                          </li>
+
+                          <li className="" style={{ zIndex: 1000 }}>
+                            <Link to={`/claims`} className="mega-menu-link">
+                              Claims
+                            </Link>
+                          </li>
+
+                          {/* <li className="" style={{ zIndex: 1000 }}>
+                            <Link to={`/policies`} className="mega-menu-link">
+                              Payments
+                            </Link>
+                          </li> */}
+
+                          <li className="" style={{ zIndex: 1000 }}>
+                            <Link to={`/policies`} className="mega-menu-link">
+                              Reports
+                            </Link>
+                          </li>
+
+                          <li className="" style={{ zIndex: 1000 }}>
+                            <Link to={`/users`} className="mega-menu-link">
+                              Users
                             </Link>
                           </li>
                         </ul>

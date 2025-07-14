@@ -4,7 +4,7 @@ const PageTitle = ({ name }) => {
       <div
         className="ttm-page-title-row"
         style={{
-          backgroundColor: "#bd2a2b",
+          backgroundColor: "#cbaa53",
           height: "40px",
           display: "flex",
           alignItems: "center",

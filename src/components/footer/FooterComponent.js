@@ -1,5 +1,3 @@
-
-
 const FooterPage = () => {
   return (
     <>
@@ -13,11 +11,21 @@ const FooterPage = () => {
         </div>
         <div className="bottom-footer-text">
           <div className="container">
-            <div className="row copyright">
-              <div className="col-md-12 col-lg-6 ttm-footer2-left">
-                <span>
-                  © 2025 Designed and Developed by Continuum Creative Agency{" "}
-                </span>
+            <div
+              className="row copyright"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                // backgroundColor: "red",
+                paddingBottom: "40px",
+                paddingTop: "40px",
+              }}
+            >
+              <div className="col-md-12 col-lg-12 ttm-footer2-center center">
+                <span>© 2025 Inokuthula Financial Group</span>
+              </div>
+              <div className="col-md-12 col-lg-12 ttm-footer2-center center">
+                <span>Powered by Continuum Creative Agency</span>
               </div>
             </div>
           </div>
