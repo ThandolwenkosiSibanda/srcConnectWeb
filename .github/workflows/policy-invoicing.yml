@@ -1,25 +1,31 @@
-name: Monthly Policy Billing
+name: Monthly Anniversary Invoice Job
 
 on:
   schedule:
-    - cron: "0 3 * * *" # every day at 3 AM UTC
-  workflow_dispatch:
+    - cron: "0 1 * * *" # Runs daily at 1:00 AM UTC
+  workflow_dispatch: # Optional: allows manual trigger
 
 jobs:
-  run-invoicing:
+  run-monthly-invoice:
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+    defaults:
+      run:
+        working-directory: backend # Ensure the working directory is set to the backend
 
-      - name: Set up Node.js
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "18"
 
-      - run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Run monthly invoice script
+      - name: Run invoice script
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
