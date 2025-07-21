@@ -19,6 +19,7 @@ const UserNew = () => {
   const tabs = [
     { id: "tab1", label: "User Information" },
     { id: "tab2", label: "Permissions" },
+    { id: "tab3", label: "Email and Password" },
   ];
   const [form, setForm] = useState({});
   const [beneficiaries, setBeneficiaries] = useState([
@@ -35,12 +36,10 @@ const UserNew = () => {
     },
   ]);
 
-  const [permissions, setPermissions] = useState({});
   const [groupedPermissions, setGroupedPermissions] = useState({});
 
   console.log("Grouped Permissions", groupedPermissions);
-
-  console.log("Permissions", permissions);
+  console.log("Form Data", form);
 
   const navigate = useNavigate();
 
@@ -96,51 +95,36 @@ const UserNew = () => {
       setLoading(true);
 
       // Prepare data for the transaction
-      const clientData = {
-        title: form.title,
-        name: form.name,
-        surname: form.surname,
-        phone: form.phone,
-        email: form.email,
-        dob: form.dob,
-        id_number: form.id_number,
-        address: form.address,
-        city: form.city,
-        region: form.region,
-        nok_title: form.nok_title,
-        nok_name: form.nok_name,
-        nok_surname: form.nok_surname,
-        nok_phone: form.nok_phone,
-      };
-
-      const policyData = {
-        policy_name: form.policy?.name,
-        start_date: form.start_date,
-        payment_frequency: form.payment_frequency,
-      };
-
-      const beneficiariesData = beneficiaries.map((b) => ({
-        title: b.title,
-        name: b.name,
-        surname: b.surname,
-        dob: b.dob,
-        relationship: b.relationship,
-        id_number: b.id_number,
-      }));
 
       // Execute the transaction
-      const { data: newClientId, error } = await supabase.rpc(
-        "create_client_with_policy_and_beneficiaries",
-        {
-          client_data: clientData,
-          policy_data: policyData,
-          beneficiaries_data: beneficiariesData,
-        }
-      );
+
+      // const { data, error } = await supabase.rpc(
+      //   "create_system_user_with_permissions",
+      //   {
+      //     user_data: form,
+      //     permissions_data: groupedPermissions,
+      //   }
+      // );
+
+      const response = await fetch("http://localhost:4000/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userData: form,
+          permissionsData: groupedPermissions,
+        }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log("Created user ID:", result.userId);
+      } else {
+        console.error("Error:", result.error);
+      }
 
       if (error) throw error;
 
-      navigate(`/customers/${newClientId}`);
+      navigate(`/users`);
       return { success: true };
     } catch (err) {
       console.error("Transaction failed:", err);
@@ -631,6 +615,48 @@ const UserNew = () => {
                           </div>
                         </div>
                       </div> */}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "tab3" && (
+                <div>
+                  <div
+                    id="ttm-contactform"
+                    className="ttm-contactform wrap-form clearfix"
+                  >
+                    <div className="row">
+                      <div className="col-lg-4">
+                        <h6 style={{ marginTop: "20px" }}>Email</h6>
+                        <label>
+                          <span className="text-input">
+                            <input
+                              type="text"
+                              placeholder="Email"
+                              required="required"
+                              name={"email"}
+                              value={form?.email}
+                              onChange={handleChange}
+                            />
+                          </span>
+                        </label>
+                      </div>
+                      <div className="col-lg-4">
+                        <h6 style={{ marginTop: "20px" }}>Password</h6>
+                        <label>
+                          <span className="text-input">
+                            <input
+                              type="text"
+                              placeholder="password"
+                              required="required"
+                              name={"password"}
+                              value={form?.password}
+                              onChange={handleChange}
+                            />
+                          </span>
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
