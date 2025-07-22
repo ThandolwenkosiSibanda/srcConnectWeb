@@ -35,6 +35,7 @@ async function generateMonthlyAnniversaryInvoices() {
   for (const policy of duePolicies) {
     const invoicePayload = {
       policy_id: policy.id,
+      client_id: policy.client_id,
       amount: policy.monthly_premium,
       currency: policy.currency,
       status: "unpaid",
