@@ -137,15 +137,15 @@ async function generateMonthlyAnniversaryInvoices() {
       }
 
       // Log transaction (optional)
-      //   await supabase.from("wallet_transactions").insert([
-      //     {
-      //       client_id: policy.client_id,
-      //       amount: -invoiceAmount,
-      //       type: "debit",
-      //       invoice_id: invoiceData.id,
-      //       created_at: new Date().toISOString(),
-      //     },
-      //   ]);
+      await supabase.from("wallet_transactions").insert([
+        {
+          client_id: policy.client_id,
+          amount: -invoiceAmount,
+          type: "debit",
+          invoice_id: invoiceData.id,
+          created_at: new Date().toISOString(),
+        },
+      ]);
 
       console.log(
         `💰 Invoice ${invoiceData.id} auto-paid for client ${policy.client_id}`
