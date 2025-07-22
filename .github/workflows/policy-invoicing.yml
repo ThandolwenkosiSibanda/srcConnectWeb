@@ -2,7 +2,7 @@ name: Monthly Anniversary Invoice Job
 
 on:
   schedule:
-    - cron: "07 12 * * *" # Runs daily at 1:00 AM UTC
+    - cron: "21 12 * * *" # Runs daily at 14:21 Zimbabwe time (12:21 UTC)
   workflow_dispatch: # Optional: allows manual trigger
 
 jobs:
