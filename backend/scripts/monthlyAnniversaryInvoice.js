@@ -20,7 +20,7 @@ async function generateMonthlyAnniversaryInvoices() {
     .eq("status", "active");
 
   if (policyError) {
-    console.error("Error fetching policies:", policyError);
+    console.error("Error fetching policies: now", policyError);
     return;
   }
 
