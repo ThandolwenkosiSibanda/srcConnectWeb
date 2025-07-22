@@ -58,6 +58,6 @@ async function generateMonthlyAnniversaryInvoices() {
 }
 
 // Run the script if executed directly (node monthlyAnniversaryInvoice.js)
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   generateMonthlyAnniversaryInvoices().catch(console.error);
 }
