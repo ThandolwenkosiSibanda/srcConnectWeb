@@ -105,7 +105,10 @@ async function generateMonthlyAnniversaryInvoices() {
       // Deduct wallet balance
       const { error: walletUpdateError } = await supabase
         .from("wallets")
-        .update({ balance: balance - invoiceAmount })
+        .update({
+          balance: balance - invoiceAmount,
+          last_updated: new Date().toISOString(),
+        })
         .eq("client_id", policy.client_id);
 
       if (walletUpdateError) {
@@ -136,7 +139,7 @@ async function generateMonthlyAnniversaryInvoices() {
       // Log transaction (optional)
       //   await supabase.from("wallet_transactions").insert([
       //     {
-      //       user_id: policy.client_id,
+      //       client_id: policy.client_id,
       //       amount: -invoiceAmount,
       //       type: "debit",
       //       invoice_id: invoiceData.id,
