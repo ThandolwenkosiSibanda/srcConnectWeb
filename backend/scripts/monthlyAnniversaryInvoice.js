@@ -17,7 +17,7 @@ async function generateMonthlyAnniversaryInvoices() {
   const { data: policies, error: policyError } = await supabase
     .from("policies")
     .select("*")
-    .eq("is_active", true);
+    .eq("status", "active");
 
   if (policyError) {
     console.error("Error fetching policies:", policyError);
@@ -36,6 +36,7 @@ async function generateMonthlyAnniversaryInvoices() {
     const invoicePayload = {
       policy_id: policy.id,
       amount: policy.monthly_premium,
+      currency: policy.currency,
       status: "unpaid",
       issued_at: new Date().toISOString(),
     };
