@@ -20,6 +20,9 @@ const PasswordReset = () => {
       const at = params.get("access_token");
       const rt = params.get("refresh_token");
 
+      console.log("Access Token:", at);
+      console.log("Refresh Token:", rt);
+
       if (at && rt) {
         setAccessToken(at);
         setRefreshToken(rt);
@@ -27,6 +30,7 @@ const PasswordReset = () => {
         supabase.auth
           .setSession({ access_token: at, refresh_token: rt })
           .then(({ error }) => {
+            console.log("Session error", error);
             if (error) setError("Invalid or expired token.");
           });
       } else {
