@@ -22,7 +22,7 @@ const FooterPage = () => {
               }}
             >
               <div className="col-md-12 col-lg-12 ttm-footer2-center center">
-                <span>© 2025 Inokuthula Financial Group</span>
+                <span>© 2025 SRC Connect</span>
               </div>
               <div className="col-md-12 col-lg-12 ttm-footer2-center center">
                 <span>Powered by Continuum Creative Agency</span>

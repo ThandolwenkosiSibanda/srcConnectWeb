@@ -69,7 +69,7 @@ a:focus {
 }
 a:focus,
 a:hover {
-  color: #23513f;
+  color: #cf2e2e;
   text-decoration: none;
 }
 a,
@@ -101,17 +101,17 @@ figure {
 }
 
 *::-moz-selection {
-  background: #23513f;
+  background: #cf2e2e;
   color: #fff;
   text-shadow: none;
 }
 ::-moz-selection {
-  background: #23513f;
+  background: #cf2e2e;
   color: #fff;
   text-shadow: none;
 }
 ::selection {
-  background: #23513f;
+  background: #cf2e2e;
   color: #fff;
   text-shadow: none;
 }
@@ -193,7 +193,7 @@ input[type="url"]:focus,
 input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus {
-  border: 1px solid #23513f;
+  border: 1px solid #cf2e2e;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -850,7 +850,7 @@ a:hover,
 .ttm-single-product-details .compare:hover,
 #site-header-menu #site-navigation .menu ul > li:hover > a,
 #site-header-menu #site-navigation .menu ul li.active > a {
-  color: #23513f;
+  color: #cf2e2e;
 }
 
 /** Skin-bg-color **/
@@ -902,7 +902,7 @@ ul.cart-list > li.total > .btn,
 .newsletter_main input[type="submit"],
 footer .tooltip:after,
 footer [data-tooltip]:after {
-  background-color: #23513f;
+  background-color: #cf2e2e;
 }
 
 /** Skin-border-color **/
@@ -910,7 +910,7 @@ nav.menu li.mega-menu-item ul.mega-submenu,
 .ttm-tabs.tabs-for-products ul.tabs li.active a,
 footer .tooltip-top:before,
 footer .tooltip:before {
-  border-top-color: #23513f;
+  border-top-color: #cf2e2e;
 }
 
 /** 1.highlight-color **/
@@ -953,7 +953,7 @@ header a:hover,
 .ttm-highlight-fid:before,
 a.checkout-button,
 #totop.top-visible {
-  background-color: #23513f;
+  background-color: #cf2e2e;
 }
 
 nav.menu {
@@ -1001,7 +1001,7 @@ ul.cart-list > li.total strong,
 .widget-price-filter .price_slider_wrapper h5,
 .tabs-for-single-products.ttm-tabs ul.tabs li.active a,
 #totop.top-visible {
-  color: #23513f;
+  color: #cf2e2e;
 }
 
 /** DarkGrey-bg-color **/
@@ -1021,7 +1021,7 @@ a.checkout-button:hover,
 .action-button:hover,
 .form-submit input:hover,
 .newsletter_main input[type="submit"]:hover {
-  background-color: #23513f;
+  background-color: #cf2e2e;
 }
 
 .ttm-icon_element-border.ttm-icon_element-color-darkgrey,
@@ -1032,7 +1032,7 @@ a.checkout-button:hover,
   .slick-dots
   li.slick-active
   button {
-  border-color: #23513f;
+  border-color: #cf2e2e;
 }
 
 /** 3.White-color **/
@@ -3252,7 +3252,7 @@ article.ttm-blog-classic blockquote:before {
   width: 5px;
   height: 100%;
   display: block;
-  background: #23513f;
+  background: #cf2e2e;
 }
 article.ttm-blog-classic blockquote:after {
   content: '"';
@@ -3260,7 +3260,7 @@ article.ttm-blog-classic blockquote:after {
   font-size: 120px;
   line-height: 80px;
   font-weight: 400;
-  color: #23513f;
+  color: #cf2e2e;
   position: absolute;
   right: 15%;
   top: 0;
@@ -3677,7 +3677,7 @@ section.error-404 .page-content p {
 }
 
 .product-btn div {
-  background-color: #23513f;
+  background-color: #cf2e2e;
   display: block;
   height: 32px;
   width: 32px;
@@ -3699,4 +3699,14 @@ section.error-404 .page-content p {
 
 .datepicker-zindex {
   z-index: 9999 !important;
+}
+
+.status-paid {
+  color: green;
+  font-weight: bold;
+}
+
+.status-warning {
+  color: orange;
+  font-weight: bold;
 }
