@@ -15,8 +15,18 @@ const PasswordReset = () => {
     const hash = window.location.hash;
     if (hash) {
       const params = new URLSearchParams(hash.substring(1));
-      const token = params.get("access_token");
-      setAccessToken(token);
+      const access_token = params.get("access_token");
+      const refresh_token = params.get("refresh_token");
+
+      if (access_token && refresh_token) {
+        supabase.auth
+          .setSession({ access_token, refresh_token })
+          .then(({ error }) => {
+            if (error) setError("Invalid or expired token.");
+          });
+      } else {
+        setError("Missing access or refresh token.");
+      }
     }
   }, []);
 
