@@ -10,17 +10,22 @@ const PasswordReset = () => {
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
 
+  // Extract tokens from URL and set session
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
       const params = new URLSearchParams(hash.substring(1));
-      const access_token = params.get("access_token");
-      const refresh_token = params.get("refresh_token");
+      const at = params.get("access_token");
+      const rt = params.get("refresh_token");
 
-      if (access_token && refresh_token) {
+      if (at && rt) {
+        setAccessToken(at);
+        setRefreshToken(rt);
+
         supabase.auth
-          .setSession({ access_token, refresh_token })
+          .setSession({ access_token: at, refresh_token: rt })
           .then(({ error }) => {
             if (error) setError("Invalid or expired token.");
           });
@@ -29,16 +34,6 @@ const PasswordReset = () => {
       }
     }
   }, []);
-
-  useEffect(() => {
-    if (accessToken) {
-      supabase.auth
-        .setSession({ access_token: accessToken })
-        .then(({ error }) => {
-          if (error) setError("Invalid or expired token.");
-        });
-    }
-  }, [accessToken]);
 
   const handlePasswordReset = async () => {
     setError(null);
@@ -52,7 +47,7 @@ const PasswordReset = () => {
       setError("Passwords do not match.");
       return;
     }
-    if (!accessToken) {
+    if (!accessToken || !refreshToken) {
       setError("No valid reset token found.");
       return;
     }
