@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "../components/navBar/NavBar";
 import FooterPage from "../components/footer/FooterComponent";
 import { supabase } from "../utils/supabase";
@@ -9,6 +9,26 @@ const PasswordReset = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [accessToken, setAccessToken] = useState(null);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1));
+      const token = params.get("access_token");
+      setAccessToken(token);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (accessToken) {
+      supabase.auth
+        .setSession({ access_token: accessToken })
+        .then(({ error }) => {
+          if (error) setError("Invalid or expired token.");
+        });
+    }
+  }, [accessToken]);
 
   const handlePasswordReset = async () => {
     setError(null);
@@ -20,6 +40,10 @@ const PasswordReset = () => {
     }
     if (password !== passwordConfirm) {
       setError("Passwords do not match.");
+      return;
+    }
+    if (!accessToken) {
+      setError("No valid reset token found.");
       return;
     }
 
@@ -43,7 +67,6 @@ const PasswordReset = () => {
   return (
     <>
       <NavBar />
-
       <div
         className="container"
         style={{
@@ -120,7 +143,6 @@ const PasswordReset = () => {
           </p>
         )}
       </div>
-
       <FooterPage />
     </>
   );

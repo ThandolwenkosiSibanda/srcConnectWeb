@@ -8,21 +8,36 @@ const EmailVerification = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Parse access_token from URL hash and set session
   useEffect(() => {
-    const fetchUser = async () => {
+    const init = async () => {
       setLoading(true);
       setError(null);
-      try {
-        const { data, error } = await supabase.auth.getUser();
 
-        if (error) {
-          setError(error.message);
-          console.error("Error fetching user:", error);
-          setLoading(false);
-          return;
+      try {
+        const hash = window.location.hash;
+        if (hash) {
+          const params = new URLSearchParams(hash.substring(1));
+          const token = params.get("access_token");
+          if (token) {
+            // Authenticate the session with the token
+            const { error: sessionError } = await supabase.auth.setSession({
+              access_token: token,
+            });
+            if (sessionError) {
+              setError("Invalid or expired verification token.");
+              setLoading(false);
+              return;
+            }
+          }
         }
 
-        if (data?.user) {
+        // Fetch the user info
+        const { data, error: userError } = await supabase.auth.getUser();
+
+        if (userError) {
+          setError(userError.message);
+        } else if (data?.user) {
           const firstName = data.user.user_metadata?.first_name || "";
           const lastName = data.user.user_metadata?.last_name || "";
           setDisplayName(`${firstName} ${lastName}`.trim());
@@ -31,13 +46,12 @@ const EmailVerification = () => {
         }
       } catch (err) {
         setError(err.message || "An unexpected error occurred.");
-        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUser();
+    init();
   }, []);
 
   return (
