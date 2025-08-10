@@ -9,34 +9,33 @@ const PasswordReset = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [accessToken, setAccessToken] = useState(null);
-  const [refreshToken, setRefreshToken] = useState(null);
+  const [isSessionValid, setIsSessionValid] = useState(false);
+  const [displayName, setDisplayName] = useState("");
 
-  // Extract tokens from URL and set session
+  // Check if we have a valid Supabase session + get user name
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      const params = new URLSearchParams(hash.substring(1));
-      const at = params.get("access_token");
-      const rt = params.get("refresh_token");
+    const checkSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
 
-      console.log("Access Token:", at);
-      console.log("Refresh Token:", rt);
-
-      if (at && rt) {
-        setAccessToken(at);
-        setRefreshToken(rt);
-
-        supabase.auth
-          .setSession({ access_token: at, refresh_token: rt })
-          .then(({ error }) => {
-            console.log("Session error", error);
-            if (error) setError("Invalid or expired token.");
-          });
+      if (error || !data.session) {
+        setError("Invalid or expired reset link.");
+        setIsSessionValid(false);
       } else {
-        setError("Missing access or refresh token.");
+        setIsSessionValid(true);
+
+        // Fetch user profile
+        const { data: userData } = await supabase.auth.getUser();
+        if (userData?.user) {
+          const meta = userData.user.user_metadata || {};
+          setDisplayName(
+            meta.display_name ||
+              `${meta.first_name || ""} ${meta.last_name || ""}`.trim() ||
+              userData.user.email
+          );
+        }
       }
-    }
+    };
+    checkSession();
   }, []);
 
   const handlePasswordReset = async () => {
@@ -51,8 +50,8 @@ const PasswordReset = () => {
       setError("Passwords do not match.");
       return;
     }
-    if (!accessToken || !refreshToken) {
-      setError("No valid reset token found.");
+    if (!isSessionValid) {
+      setError("No valid reset session found.");
       return;
     }
 
@@ -92,49 +91,63 @@ const PasswordReset = () => {
           🔑 Reset Your Password
         </h5>
 
-        <input
-          type="password"
-          placeholder="New password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{
-            padding: "0.5rem",
-            marginBottom: "0.5rem",
-            width: "250px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
-          disabled={loading}
-        />
-        <input
-          type="password"
-          placeholder="Confirm new password"
-          value={passwordConfirm}
-          onChange={(e) => setPasswordConfirm(e.target.value)}
-          style={{
-            padding: "0.5rem",
-            marginBottom: "0.5rem",
-            width: "250px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
-          disabled={loading}
-        />
+        {isSessionValid ? (
+          <>
+            {displayName && (
+              <p style={{ fontWeight: "bold", marginBottom: "1rem" }}>
+                Hello, {displayName}
+              </p>
+            )}
 
-        <button
-          onClick={handlePasswordReset}
-          disabled={loading}
-          style={{
-            backgroundColor: "#2d3748",
-            color: "#fff",
-            padding: "0.5rem 1rem",
-            borderRadius: "5px",
-            border: "none",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
-        >
-          {loading ? "Updating..." : "Update Password"}
-        </button>
+            <input
+              type="password"
+              placeholder="New password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                padding: "0.5rem",
+                marginBottom: "0.5rem",
+                width: "250px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+              }}
+              disabled={loading}
+            />
+            <input
+              type="password"
+              placeholder="Confirm new password"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+              style={{
+                padding: "0.5rem",
+                marginBottom: "0.5rem",
+                width: "250px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+              }}
+              disabled={loading}
+            />
+
+            <button
+              onClick={handlePasswordReset}
+              disabled={loading}
+              style={{
+                backgroundColor: "#2d3748",
+                color: "#fff",
+                padding: "0.5rem 1rem",
+                borderRadius: "5px",
+                border: "none",
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
+            >
+              {loading ? "Updating..." : "Update Password"}
+            </button>
+          </>
+        ) : (
+          <p style={{ color: "#e53e3e", fontWeight: "bold" }}>
+            ❌ Invalid or expired reset link.
+          </p>
+        )}
 
         {error && (
           <p
