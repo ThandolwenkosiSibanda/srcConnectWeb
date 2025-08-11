@@ -84,7 +84,7 @@ const Home = () => {
             }}
           >
             <a
-              href="/src-connect.apk"
+              href="https://drive.google.com/file/d/1LdxI1_CjnIYhI6d-8pBVWvpk_5waKKM9/view?usp=drive_link"
               target="_blank"
               rel="noopener noreferrer"
               style={{
