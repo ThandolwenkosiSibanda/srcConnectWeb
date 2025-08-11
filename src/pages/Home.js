@@ -84,7 +84,7 @@ const Home = () => {
             }}
           >
             <a
-              href="https://your-app-download-link.com"
+              href="/src-connect.apk"
               target="_blank"
               rel="noopener noreferrer"
               style={{
