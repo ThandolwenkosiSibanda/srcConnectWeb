@@ -84,7 +84,7 @@ const Home = () => {
             }}
           >
             <a
-              href="https://github.com/ThandolwenkosiSibanda/srcConnectWeb/releases/download/v1.0.0/src-connect.apk"
+              href="https://github.com/ThandolwenkosiSibanda/srcConnectWeb/releases/download/v1.0.1/src-connect.apk"
               target="_blank"
               rel="noopener noreferrer"
               style={{
